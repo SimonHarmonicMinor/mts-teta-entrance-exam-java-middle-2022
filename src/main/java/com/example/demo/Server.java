@@ -1,51 +1,71 @@
 package com.example.demo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.ServerSocket;
-import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+
+import static com.example.demo.Configure.buildPort;
+
 public class Server {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
-  private ServerSocket serverSocket;
+    private ServerSocket serverSocket;
+    private ThreadServerSocket serverThread;
 
-  public void start() throws IOException {
-    serverSocket = new ServerSocket(9090);
-    Thread serverThread = new Thread(() -> {
-      while (true) {
-        try {
-          Socket connection = serverSocket.accept();
-          try (
-              BufferedReader serverReader = new BufferedReader(
-                  new InputStreamReader(connection.getInputStream()));
-              Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
-          ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
-            serverWriter.flush();
-          }
-        } catch (Exception e) {
-          LOG.error("Error during request proceeding", e);
-          break;
+    public void start() throws IOException {
+        serverSocket = new ServerSocket(buildPort("9090"), -1, InetAddress.getLocalHost());
+        serverSocket.setSoTimeout(90000);
+        serverThread = new ThreadServerSocket();
+        serverThread.setDaemon(true);
+        serverThread.start();
+    }
+
+    public void stop() {
+        serverThread.interrupt();
+    }
+
+    class ThreadServerSocket extends Thread {
+        @Override
+        public void interrupt() {
+            try {
+                serverSocket.close();
+            } catch (IOException ignored) {
+            } finally {
+                super.interrupt();
+            }
         }
-      }
-    });
-    serverThread.setDaemon(true);
-    serverThread.start();
-  }
 
-  public void stop() throws Exception {
-    serverSocket.close();
-  }
+        @Override
+        public void run() {
+            while (!serverSocket.isClosed()) {
+                try {
+                    Socket connection = serverSocket.accept();
+                    try (
+                            BufferedReader serverReader = new BufferedReader(
+                                    new InputStreamReader(connection.getInputStream()));
+                            Writer serverWriter = new BufferedWriter(
+                                    new OutputStreamWriter(connection.getOutputStream()));
+                    ) {
+                        String line = serverReader.readLine();
+                        LOG.debug("Request captured: " + line);
+                        // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
+                        serverWriter.write(line);
+                        serverWriter.flush();
+                    }
+                } catch (Exception e) {
+                    if (!(e instanceof SocketException && isInterrupted()))
+                        LOG.error("Error during request proceeding", e);
+                    break;
+                }
+            }
+        }
+
+    }
+
 }
