@@ -3,14 +3,11 @@ package com.example.demo.impl;
 import com.example.demo.ICommand;
 import com.example.demo.enums.ECommands;
 import com.example.demo.enums.EResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class Command implements ICommand {
-    private static final Logger LOG = LoggerFactory.getLogger(Command.class);
     private final String user;
     private final String command;
     private String args;
@@ -22,7 +19,7 @@ public class Command implements ICommand {
             throw new Exception(String.valueOf(EResult.WRONG_FORMAT));
         }
 
-        if (parts[0].toUpperCase() != parts[0] || parts[1].toUpperCase() != parts[1]) {
+        if (!parts[0].toUpperCase().equals(parts[0]) || !parts[1].toUpperCase().equals(parts[1])) {
             throw new Exception(String.valueOf(EResult.WRONG_FORMAT));
         }
 
@@ -50,7 +47,7 @@ public class Command implements ICommand {
 
     private void checkCommand(String command) throws Exception {
         try {
-            List commands = Arrays.asList(ECommands.values());
+            List<ECommands> commands = Arrays.asList(ECommands.values());
             commands.contains(ECommands.valueOf(command));
         } catch (Exception e) {
             throw new Exception(String.valueOf(EResult.ERROR));
