@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import static com.example.demo.Configure.buildPort;
+import static com.example.demo.Configure.buildSocketTimeout;
 
 public class Server {
 
@@ -19,8 +20,8 @@ public class Server {
     private ThreadServerSocket serverThread;
 
     public void start() throws IOException {
-        serverSocket = new ServerSocket(buildPort("9090"), -1, InetAddress.getLocalHost());
-        serverSocket.setSoTimeout(90000);
+        serverSocket = new ServerSocket(buildPort(), -1, InetAddress.getLocalHost());
+        serverSocket.setSoTimeout(buildSocketTimeout());
         serverThread = new ThreadServerSocket();
         serverThread.setDaemon(true);
         serverThread.start();
