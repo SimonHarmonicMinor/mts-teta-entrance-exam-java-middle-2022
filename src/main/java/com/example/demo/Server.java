@@ -19,20 +19,23 @@ public class Server {
 
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
+    CommandProcessor cProc = new CommandProcessor();
     Thread serverThread = new Thread(() -> {
       while (true) {
         try {
           Socket connection = serverSocket.accept();
+
           try (
               BufferedReader serverReader = new BufferedReader(
                   new InputStreamReader(connection.getInputStream()));
               Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
+                  new OutputStreamWriter(connection.getOutputStream()))
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            // передаем получненную компаде процессору команд
+            //  полученный ответ выдаем обратно
+            serverWriter.write(cProc.processCommand(line ,cProc.tasklist));
             serverWriter.flush();
           }
         } catch (Exception e) {
