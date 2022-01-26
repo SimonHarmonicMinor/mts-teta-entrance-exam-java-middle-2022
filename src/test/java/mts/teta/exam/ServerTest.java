@@ -1,4 +1,4 @@
-package com.example.demo;
+package mts.teta.exam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
