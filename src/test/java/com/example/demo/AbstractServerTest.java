@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 public class AbstractServerTest {
+  private static final String SERVER_ADDRESS = "localhost";
+  private static final int SERVER_PORT = 9090;
 
   private static Socket clientSocket;
   private static PrintWriter out;
@@ -20,12 +22,12 @@ public class AbstractServerTest {
   @BeforeAll
   static void beforeAll() throws Exception {
     server = new Server();
-    server.start();
+    server.start(SERVER_PORT);
   }
 
   @BeforeEach
   void beforeEach() throws Exception {
-    clientSocket = new Socket("localhost", 9090);
+    clientSocket = new Socket(SERVER_ADDRESS, SERVER_PORT);
     out = new PrintWriter(clientSocket.getOutputStream(), true);
     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
   }
