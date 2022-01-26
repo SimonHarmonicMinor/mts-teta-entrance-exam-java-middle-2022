@@ -26,20 +26,44 @@ public class Server {
       while (true) {
         try {
           Socket connection = serverSocket.accept();
-          try (
-              BufferedReader serverReader = new BufferedReader(
-                  new InputStreamReader(connection.getInputStream()));
-              Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
-          ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
 
-            serverWriter.write(commandProcessor.ProcessCommandText(line));
-            serverWriter.flush();
-          }
+          Thread connectionThread = new Thread( () -> {
+            try (
+                    BufferedReader serverReader = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()));
+                    Writer serverWriter = new BufferedWriter(
+                            new OutputStreamWriter(connection.getOutputStream()))
+            ) {
+              LOG.debug("New client connected");
+              String line;
+              while ((line = serverReader.readLine()) != null) {
+                LOG.debug("Request captured: " + line);
+
+                try {
+                  synchronized (commandProcessor) {
+                    var response=commandProcessor.ProcessCommandText(line);
+                    serverWriter.write(response+"\r\n");
+                    serverWriter.flush();
+                    LOG.debug("Response sent: " + response);
+                  }
+                } catch (Exception e) {
+                  LOG.error("Error during request proceeding 1", e);
+                  serverWriter.write(ResultType.ERROR.name());
+                  serverWriter.flush();
+                }
+              }
+              LOG.debug("Client disconnected");
+            }
+            catch (Exception e) {
+              LOG.error("Error during request proceeding 2", e);
+            }
+          });
+
+          connectionThread.setDaemon(true);
+          connectionThread.start();
+
         } catch (Exception e) {
-          LOG.error("Error during request proceeding", e);
+          //LOG.error("Error during request proceeding 3", e);
           break;
         }
       }

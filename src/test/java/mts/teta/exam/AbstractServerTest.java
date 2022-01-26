@@ -18,13 +18,14 @@ public class AbstractServerTest {
   private static Server server;
 
   @BeforeAll
-  static void beforeAll() throws Exception {
-    server = new Server();
-    server.start();
+  static void beforeAll() {
   }
 
   @BeforeEach
   void beforeEach() throws Exception {
+    server = new Server();
+    server.start();
+
     clientSocket = new Socket("localhost", 9090);
     out = new PrintWriter(clientSocket.getOutputStream(), true);
     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -35,11 +36,11 @@ public class AbstractServerTest {
     in.close();
     out.close();
     clientSocket.close();
+    server.stop();
   }
 
   @AfterAll
-  static void afterAll() throws Exception {
-    server.stop();
+  static void afterAll() {
   }
 
   protected String sendMessage(String msg) {

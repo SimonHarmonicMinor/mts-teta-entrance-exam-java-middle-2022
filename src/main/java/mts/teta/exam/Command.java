@@ -1,7 +1,7 @@
 package mts.teta.exam;
 
 class Command {
-    public enum CommandType {
+    enum CommandType {
         CREATE_TASK,
         CLOSE_TASK,
         REOPEN_TASK,
@@ -44,6 +44,10 @@ class Command {
         return resultArgument;
     }
 
+    /**
+     * Получить результат в текстовом виде для ответа
+     * @return строковое представление ответа для отправки клиенту
+     */
     String getResponse() {
         var res = result.name();
         if (resultArgument != null && !resultArgument.isEmpty()) {
@@ -52,6 +56,11 @@ class Command {
         return res;
     }
 
+    /**
+     * Разбор команды из строки
+     * @param commandText текст команды
+     * @throws InvalidSyntaxCommandException неверная команда
+     */
     void Parse(String commandText) throws InvalidSyntaxCommandException {
         try {
 
