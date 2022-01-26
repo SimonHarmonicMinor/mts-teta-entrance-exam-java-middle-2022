@@ -3,7 +3,6 @@ package com.example.demo.utils;
 import com.example.demo.enums.Command;
 import com.example.demo.exceptions.WrongFormatException;
 import com.example.demo.model.Request;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Pattern;
 
@@ -22,19 +21,10 @@ public class Mapper {
     public Request inputToRequest(String input) {
         try {
             input = input.trim();
-            String user = null;
-            String command = null;
-            String arg = null;
-
-            if (hasNoArg(input)) {
-                user = StringUtils.substringBefore(input, " ");
-                command = StringUtils.substringAfter(input, user + " ");
-            } else {
-                user = StringUtils.substringBefore(input, " ");
-                command = StringUtils.substringBetween(input, user + " ", " ");
-                arg = StringUtils.substringAfter(input, command + " ");
-            }
-
+            String[] tokens = input.split(" ");
+            String user = tokens[0];
+            String command = tokens[1];
+            String arg = tokens.length > 2 ? tokens[2] : null;
             return new Request(user, Command.valueOf(command), arg);
         } catch (Exception e) {
             throw new WrongFormatException("bad input: " + input);

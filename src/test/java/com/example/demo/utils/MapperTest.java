@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapperTest {
     private final Mapper mapper = new Mapper();
     private final String INPUT_ONE = "USER CREATE_TASK ARRRRG";
-    private final String INPUT_TWO = "VASYA DELETE_TASK ARG AND SOME OTHER STUFF";
-    private final String INPUT_THREE = "lowerCaseTest REOPEN_TASK arg and justice";
+    private final String INPUT_TWO = "VASYA DELETE_TASK ARG_AND_SOME_OTHER_STUFF";
+    private final String INPUT_THREE = "lowerCaseTest REOPEN_TASK arg_and_justice";
     private final String INPUT_FOUR = "lowerCaseTest LIST_TASK";
 
     @Test
@@ -50,12 +50,12 @@ class MapperTest {
         Request r2 = mapper.inputToRequest(INPUT_TWO);
         assertEquals("VASYA", r2.getUser());
         assertEquals(Command.DELETE_TASK, r2.getCommand());
-        assertEquals("ARG AND SOME OTHER STUFF", r2.getArg());
+        assertEquals("ARG_AND_SOME_OTHER_STUFF", r2.getArg());
 
         Request r3 = mapper.inputToRequest(INPUT_THREE);
         assertEquals("lowerCaseTest", r3.getUser());
         assertEquals(Command.REOPEN_TASK, r3.getCommand());
-        assertEquals("arg and justice", r3.getArg());
+        assertEquals("arg_and_justice", r3.getArg());
 
         Request r4 = mapper.inputToRequest(INPUT_FOUR);
         assertEquals("lowerCaseTest", r4.getUser());

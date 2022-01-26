@@ -24,68 +24,68 @@ class ServerTest extends AbstractServerTest {
         String response = sendMessage("PETYA CREATE_TASK CleanRoom");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("PETYA CREATE_TASK Clean another Room");
+        response = sendMessage("PETYA CREATE_TASK Clean_another_Room");
         assertEquals(Result.CREATED.name(), response);
 
         response = sendMessage("NOT_PETYA CREATE_TASK CleanCar");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("NOT_PETYA CREATE_TASK Wash Car");
+        response = sendMessage("NOT_PETYA CREATE_TASK Wash_Car");
         assertEquals(Result.CREATED.name(), response);
     }
 
     @Test
     void create_already_existed_tasks_must_return_error() {
-        String response = sendMessage("NADIA CREATE_TASK Cook borsh");
+        String response = sendMessage("NADIA CREATE_TASK Cook_borsh");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("NADIA CREATE_TASK Cook borsh");
+        response = sendMessage("NADIA CREATE_TASK Cook_borsh");
         assertEquals(Result.ERROR.name(), response);
 
-        response = sendMessage("NOT_NADIA CREATE_TASK Cook borsh");
+        response = sendMessage("NOT_NADIA CREATE_TASK Cook_borsh");
         assertEquals(Result.ERROR.name(), response);
     }
 
     @Test
     void create_and_immediately_delete_task_must_be_error() {
-        String response = sendMessage("SVETA CREATE_TASK To babysit");
+        String response = sendMessage("SVETA CREATE_TASK To_babysit");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("SVETA DELETE_TASK To babysit");
+        response = sendMessage("SVETA DELETE_TASK To_babysit");
         assertEquals(Result.ERROR.name(), response);
 
-        response = sendMessage("SVETA CREATE_TASK To babysit");
+        response = sendMessage("SVETA CREATE_TASK To_babysit");
         assertEquals(Result.ERROR.name(), response);
     }
 
     @Test
     void create_close_delete_and_create_again_tasks_must_be_ok() {
-        String response = sendMessage("VANIA CREATE_TASK To drink");
+        String response = sendMessage("VANIA CREATE_TASK To_drink");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("VANIA CLOSE_TASK To drink");
+        response = sendMessage("VANIA CLOSE_TASK To_drink");
         assertEquals(Result.CLOSED.name(), response);
 
-        response = sendMessage("VANIA DELETE_TASK To drink");
+        response = sendMessage("VANIA DELETE_TASK To_drink");
         assertEquals(Result.DELETED.name(), response);
 
-        response = sendMessage("VANIA CREATE_TASK To drink");
+        response = sendMessage("VANIA CREATE_TASK To_drink");
         assertEquals(Result.CREATED.name(), response);
     }
 
     @Test
     void list_tasks_must_be_ok() {
-        String response = sendMessage("IVAN CREATE_TASK To smile");
+        String response = sendMessage("IVAN CREATE_TASK To_smile");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("IVAN CREATE_TASK To laugh");
+        response = sendMessage("IVAN CREATE_TASK To_laugh");
         assertEquals(Result.CREATED.name(), response);
 
         response = sendMessage("IVAN LIST_TASK IVAN");
-        assertEquals("TASKS [To smile, To laugh]", response);
+        assertEquals("TASKS [To_smile, To_laugh]", response);
 
         response = sendMessage("PETIA LIST_TASK IVAN");
-        assertEquals("TASKS [To smile, To laugh]", response);
+        assertEquals("TASKS [To_smile, To_laugh]", response);
 
         response = sendMessage("PETIA LIST_TASK ROMA");
         assertEquals("TASKS []", response);
@@ -120,25 +120,25 @@ class ServerTest extends AbstractServerTest {
 
     @Test
     void reopen_task_status_must_be_ok() {
-        String response = sendMessage("PETIA CREATE_TASK To pray");
+        String response = sendMessage("PETIA CREATE_TASK To_pray");
         assertEquals(Result.CREATED.name(), response);
 
-        response = sendMessage("PETIA CLOSE_TASK To pray");
+        response = sendMessage("PETIA CLOSE_TASK To_pray");
         assertEquals(Result.CLOSED.name(), response);
 
-        response = sendMessage("PETIA REOPEN_TASK To pray");
+        response = sendMessage("PETIA REOPEN_TASK To_pray");
         assertEquals(Result.REOPENED.name(), response);
     }
 
     @Test
     void wrong_request_format_must_be_error() {
-        String response = sendMessage("PETIA TASK_MNE_ZAPILI To pray");
+        String response = sendMessage("PETIA TASK_MNE_ZAPILI To_pray");
         assertEquals(Result.WRONG_FORMAT.name(), response);
 
-        response = sendMessage("PETIA 1 To pray");
+        response = sendMessage("PETIA 1 To_pray");
         assertEquals(Result.WRONG_FORMAT.name(), response);
 
-        response = sendMessage("PETIA  To pray");
+        response = sendMessage("PETIA  To_pray");
         assertEquals(Result.WRONG_FORMAT.name(), response);
 
         response = sendMessage(null);
