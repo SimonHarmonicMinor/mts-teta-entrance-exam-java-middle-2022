@@ -39,6 +39,7 @@ public class AbstractServerTest {
 
   @AfterAll
   static void afterAll() throws Exception {
+    clientSocket.close();
     server.stop();
   }
 
