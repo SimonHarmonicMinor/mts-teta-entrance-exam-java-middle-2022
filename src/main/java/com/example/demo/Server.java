@@ -5,47 +5,175 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Server {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
-  private ServerSocket serverSocket;
+    private ServerSocket serverSocket;
 
-  public void start() throws IOException {
-    serverSocket = new ServerSocket(9090);
-    Thread serverThread = new Thread(() -> {
-      while (true) {
-        try {
-          Socket connection = serverSocket.accept();
-          try (
-              BufferedReader serverReader = new BufferedReader(
-                  new InputStreamReader(connection.getInputStream()));
-              Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
-          ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
-            serverWriter.flush();
-          }
-        } catch (Exception e) {
-          LOG.error("Error during request proceeding", e);
-          break;
+    ClientParams clientParams;
+
+    String clientName, result, clientRequest;
+
+    ArrayList<String> userNames = new ArrayList<>();
+
+    HashMap<String, ClientParams> clientInfo = new HashMap<>();
+
+    HashMap<String, String> taskList = new HashMap<>();
+
+    public void start() throws IOException {
+        serverSocket = new ServerSocket(6060);
+        Thread serverThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Socket connection = serverSocket.accept();
+                    try (
+                            BufferedReader serverReader = new BufferedReader(
+                                    new InputStreamReader(connection.getInputStream()));
+                            BufferedWriter serverWriter = new BufferedWriter(
+                                    new OutputStreamWriter(connection.getOutputStream()))
+                    ) {
+                        while (true) {
+                            serverWriter.write("Введите имя (Формат: USERNAME):\n");
+                            serverWriter.flush();
+                            clientName = serverReader.readLine();
+                            if (!userNames.contains(clientName)) {
+                                userNames.add(clientName);
+                                clientParams = new ClientParams();
+                                clientInfo.put(clientName, clientParams);
+                            }
+                            while (true) {
+                                clientRequest = serverReader.readLine();
+                                if (clientRequest.equals("HELP")) {
+                                    result = "Список команд: CREATE_TASK, DELETE_TASK, CLOSE_TASK, REOPEN_TASK, " +
+                                            "LIST_TASK.";
+                                } else {
+                                    try {
+                                        String[] request = clientRequest.split(" ");
+                                        String userName = request[0];
+                                        String command = request[1];
+                                        String taskName = request[2];
+
+                                        switch (command) {
+                                            case "CREATE_TASK" -> createTask(clientName, userName, taskName);
+                                            case "DELETE_TASK" -> deleteTask(clientName, taskName);
+                                            case "CLOSE_TASK" -> closeTask(clientName, taskName);
+                                            case "REOPEN_TASK" -> reOpenTask(clientName, taskName);
+                                            case "LIST_TASK" -> getListTask(taskName);
+                                            default -> result = "ERROR_UNKNOWN_COMMAND";
+                                        }
+                                    } catch (ArrayIndexOutOfBoundsException e) {
+                                        result = "ERROR_UNKNOWN_COMMAND";
+                                    }
+                                }
+                                serverWriter.write(result);
+                                serverWriter.newLine();
+                                serverWriter.flush();
+                            }
+                        }
+                    }
+
+                } catch (SocketException ex) {
+                    LOG.error("Error during close clientSocket proceeding", ex);
+                } catch (Exception e) {
+                    LOG.error("Error during request proceeding", e);
+                    break;
+                }
+            }
+        });
+        serverThread.setDaemon(false);
+        serverThread.start();
+    }
+
+
+    public void stop() throws Exception {
+        serverSocket.close();
+    }
+
+    public void createTask(String clientName, String userName, String taskName) {
+        if (userName.equals(clientName)) {
+            clientParams = clientInfo.get(clientName);
+            if (!taskList.containsKey(taskName)) {
+                clientParams.createTaskInfo(taskName, "CREATED");
+                taskList.put(taskName, userName);
+                result = "CREATED";
+            } else {
+                result = "ERROR_NAME_ALREADY_EXIST";
+            }
+        } else {
+            result = "ACCESS_DENIED";
         }
-      }
-    });
-    serverThread.setDaemon(true);
-    serverThread.start();
-  }
+    }
 
-  public void stop() throws Exception {
-    serverSocket.close();
-  }
+    public void closeTask(String clientName, String taskName) {
+        if (taskList.containsKey(taskName)) {
+            if (taskList.get(taskName).equals(clientName)) {
+                clientParams = clientInfo.get(clientName);
+                if (clientParams.getTaskInfo().containsKey(taskName)
+                        && clientParams.getTaskInfo().get(taskName).equals("CREATED")) {
+                    clientParams.updateTaskInfo(taskName, "CLOSED");
+                    result = "CLOSED";
+                } else {
+                    result = "ERROR_TASK_CURRENT_STAGE_SHOULD_BE_CREATED";
+                }
+            } else {
+                result = "ACCESS_DENIED";
+            }
+        } else {
+            result = "ERROR_TASK_DONT_EXIST";
+        }
+    }
+
+    public void deleteTask(String clientName, String taskName) {
+        if (taskList.containsKey(taskName)) {
+            if (taskList.get(taskName).equals(clientName)) {
+                clientParams = clientInfo.get(clientName);
+                if (clientParams.getTaskInfo().containsKey(taskName)
+                        && clientParams.getTaskInfo().get(taskName).equals("CLOSED")) {
+                    clientParams.updateTaskInfo(taskName, "DELETED");
+                    taskList.remove(taskName);
+                    result = "DELETED";
+                } else {
+                    result = "ERROR_TASK_CURRENT_STAGE_SHOULD_BE_CLOSED";
+                }
+            } else {
+                result = "ACCESS_DENIED";
+            }
+        } else {
+            result = "ERROR_TASK_DONT_EXIST";
+        }
+    }
+
+    public void reOpenTask(String clientName, String taskName) {
+        if (taskList.containsKey(taskName)) {
+            if (taskList.get(taskName).equals(clientName)) {
+                clientParams = clientInfo.get(clientName);
+                if (clientParams.getTaskInfo().containsKey(taskName)
+                        && clientParams.getTaskInfo().get(taskName).equals("CLOSED")) {
+                    clientParams.updateTaskInfo(taskName, "CREATED");
+                    result = "REOPENED";
+                } else {
+                    result = "ERROR_TASK_CURRENT_STAGE_SHOULD_BE_CLOSED";
+                }
+            } else {
+                result = "ACCESS_DENIED";
+            }
+        } else {
+            result = "ERROR_TASK_DONT_EXIST";
+        }
+    }
+
+    public void getListTask(String userName) {
+        clientParams = clientInfo.get(userName);
+        result = clientParams.getTaskInfo().keySet().toString();
+    }
 }
