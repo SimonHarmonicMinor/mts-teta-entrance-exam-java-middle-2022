@@ -5,6 +5,7 @@ class TaskStorageException extends ErrorResponseException{
 }
 
 class InvalidAccessRightsException extends ErrorResponseException{
+    @Override
     String getErrorResponse()
     {
         return ResultType.ACCESS_DENIED.name();

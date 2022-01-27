@@ -1,6 +1,6 @@
 package mts.teta.exam;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -9,11 +9,7 @@ import static java.util.stream.Collectors.toList;
  * Хранилище задач
  */
 class TaskStorage {
-    private final List<Task> tasks = new LinkedList<>();
-
-    String getTaskOwner(String taskName) {
-        return tasks.stream().filter(t -> t.name.equals(taskName)).findFirst().map(t -> t.user).orElse(null);
-    }
+    private final List<Task> tasks = new ArrayList<>();
 
     void checkCommandAccessRights(Command command) throws ErrorResponseException {
         switch (command.getType()) {
@@ -34,7 +30,6 @@ class TaskStorage {
     }
 
     void executeCommand(Command command) throws TaskStorageException {
-        ResultType result;
         switch (command.getType()) {
             case CREATE_TASK:
                 createTask(command.getUser(), command.getArgument());
@@ -64,18 +59,6 @@ class TaskStorage {
     private List<String> getUserTasks(String userName)
     {
         return tasks.stream().filter(t -> t.user.equals(userName) && t.status != TaskStatus.DELETED).map(t -> t.name).collect(toList());
-    }
-
-    private Task getTask(String taskName) throws TaskNotFoundException {
-        var task=tasks.stream().filter(t -> t.name.equalsIgnoreCase(taskName)).findFirst();
-        if (task.isEmpty())
-        {
-            throw new TaskNotFoundException();
-        }
-        else
-        {
-            return task.get();
-        }
     }
 
     private Task getNonDeletedTask(String taskName) throws TaskNotFoundException {
