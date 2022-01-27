@@ -55,7 +55,7 @@ public class Client {
             clientWriter.close();
             clientReader.close();
             clientSocket.close();
-        }catch (IOException io){
+        } catch (IOException io) {
             LOG.error("Error when close connection ", io);
         }
     }

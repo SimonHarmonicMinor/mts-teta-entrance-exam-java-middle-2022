@@ -1,25 +1,31 @@
 package com.example.demo.database;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface IDatabase {
 
-    public boolean checkUsers(String userName);
+    boolean checkUsers(String userName);
 
-    public boolean addUser(String userName);
+    boolean addUser(String userName);
 
-    public boolean checkTasks(String taskName);
+    boolean checkTasks(String taskName);
 
-    public boolean addTask(String userName, String taskName);
+    boolean addTask(String userName, String taskName);
 
-    public boolean closeTask(String userName, String taskName);
+    boolean closeTask(String userName, String taskName);
 
-    public boolean reopenTask(String userName, String taskName);
+    boolean reopenTask(String userName, String taskName);
 
-    public boolean deleteTask(String userName, String taskName);
+    boolean deleteTask(String userName, String taskName);
 
-    public List<String> getTasks(String userName);
+    Set<String> getTasks(String userName);
 
-    public List<String> getUsers();
+    Set<String> getUsers();
 
+    Map<String, Set<String>> getCreatedTasks();
+
+    Map<String, Set<String>> getClosedTasks();
+
+    Map<String, Set<String>> getDeletedTasks();
 }

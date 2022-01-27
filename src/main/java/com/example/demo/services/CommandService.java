@@ -12,16 +12,16 @@ import com.example.demo.validators.CheckAuthorization;
 import com.example.demo.validators.CheckSyntax;
 
 public class CommandService {
-    IDatabase db;
+    private final IDatabase db;
 
-    CheckAuthorization checkAuthorization;
-    CheckSyntax checkSyntax;
+    private final CheckAuthorization checkAuthorization;
+    private final CheckSyntax checkSyntax;
 
-    IHandler createHandler;
-    IHandler closeHandler;
-    IHandler reopenHandler;
-    IHandler deleteHandler;
-    IHandler taskListHandler;
+    private final IHandler createHandler;
+    private final IHandler closeHandler;
+    private final IHandler reopenHandler;
+    private final IHandler deleteHandler;
+    private final IHandler taskListHandler;
 
     public CommandService() {
         db = new InMemoryDatabase();
@@ -36,7 +36,7 @@ public class CommandService {
 
     public Response execute(String userCommand) {
 
-        if(!checkSyntax.checkSyntax(userCommand)){
+        if (!checkSyntax.checkSyntax(userCommand)) {
             return new Response(Result.WRONG_FORMAT);
         }
 
@@ -48,17 +48,17 @@ public class CommandService {
                 return createHandler.execute(request, db);
 
             case CLOSE_TASK:
-                return checkAuthorization.checkAuthorize(userCommand, db) ?
+                return checkAuthorization.checkAuthorize(request, db) ?
                         closeHandler.execute(request, db) :
                         new Response(Result.ACCESS_DENIED);
 
             case REOPEN_TASK:
-                return checkAuthorization.checkAuthorize(userCommand, db) ?
+                return checkAuthorization.checkAuthorize(request, db) ?
                         reopenHandler.execute(request, db) :
                         new Response(Result.ACCESS_DENIED);
 
             case DELETE_TASK:
-                return checkAuthorization.checkAuthorize(userCommand, db) ?
+                return checkAuthorization.checkAuthorize(request, db) ?
                         deleteHandler.execute(request, db) :
                         new Response(Result.ACCESS_DENIED);
 

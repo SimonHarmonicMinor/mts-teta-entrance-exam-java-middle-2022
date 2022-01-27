@@ -1,50 +1,47 @@
 package com.example.demo.database;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InMemoryDatabase implements IDatabase{
-    private List<String> users;
-    private Map<String, List<String>> createdTasks;
-    private Map<String, List<String>> closedTasks;
-    private Map<String, List<String>> deletedTasks;
+public class InMemoryDatabase implements IDatabase {
+    private final Set<String> users;
+    private final Map<String, Set<String>> createdTasks;
+    private final Map<String, Set<String>> closedTasks;
+    private final Map<String, Set<String>> deletedTasks;
 
-    public InMemoryDatabase(){
-        users = new ArrayList<>();
+    public InMemoryDatabase() {
+        users = new LinkedHashSet<>();
         createdTasks = new HashMap<>();
         closedTasks = new HashMap<>();
         deletedTasks = new HashMap<>();
     }
 
     @Override
-    public boolean checkUsers(String userName){
+    public boolean checkUsers(String userName) {
         return users.contains(userName);
     }
 
     @Override
-    public boolean addUser(String userName){
-        createdTasks.put(userName, new ArrayList<>());
-        closedTasks.put(userName, new ArrayList<>());
-        deletedTasks.put(userName, new ArrayList<>());
+    public boolean addUser(String userName) {
+        createdTasks.put(userName, new LinkedHashSet<>());
+        closedTasks.put(userName, new LinkedHashSet<>());
+        deletedTasks.put(userName, new LinkedHashSet<>());
         return users.add(userName);
     }
 
     @Override
-    public boolean checkTasks(String taskName){
+    public boolean checkTasks(String taskName) {
         boolean taskFind = false;
-        for (List<String> taskList : createdTasks.values()){
-            if (taskList.contains(taskName)) {
+        for (Set<String> taskSet : createdTasks.values()) {
+            if (taskSet.contains(taskName)) {
                 taskFind = true;
                 break;
             }
         }
 
-        for (List<String> taskList : closedTasks.values()){
-            if (taskList.contains(taskName)) {
+        for (Set<String> taskSet : closedTasks.values()) {
+            if (taskSet.contains(taskName)) {
                 taskFind = true;
                 break;
             }
@@ -54,9 +51,9 @@ public class InMemoryDatabase implements IDatabase{
     }
 
     @Override
-    public boolean addTask(String userName, String taskName){
-        if(!createdTasks.containsKey(userName)){
-            createdTasks.put(userName, new ArrayList<>());
+    public boolean addTask(String userName, String taskName) {
+        if (!createdTasks.containsKey(userName)) {
+            createdTasks.put(userName, new LinkedHashSet<>());
         }
 
         return createdTasks.get(userName).add(taskName);
@@ -64,42 +61,66 @@ public class InMemoryDatabase implements IDatabase{
 
     @Override
     public boolean closeTask(String userName, String taskName) {
-        if(createdTasks.get(userName).remove(taskName)){
+        if(!users.contains(userName)){
+            return false;
+        }else if (createdTasks.get(userName).remove(taskName)) {
             return closedTasks.get(userName).add(taskName);
-        }else{
+        } else {
             return false;
         }
     }
 
     @Override
     public boolean reopenTask(String userName, String taskName) {
-        if(closedTasks.get(userName).remove(taskName)){
+        if(!users.contains(userName)){
+            return false;
+        }else if (closedTasks.get(userName).remove(taskName)) {
             return createdTasks.get(userName).add(taskName);
-        }else{
+        } else {
             return false;
         }
     }
 
     @Override
     public boolean deleteTask(String userName, String taskName) {
-        if(closedTasks.get(userName).remove(taskName)){
+        if(!users.contains(userName)){
+            return false;
+        }else if (closedTasks.get(userName).remove(taskName)) {
             return deletedTasks.get(userName).add(taskName);
-        }else{
+        } else {
             return false;
         }
     }
 
     @Override
-    public List<String> getTasks(String userName) {
+    public Set<String> getTasks(String userName) {
 
-        return Stream.concat(createdTasks.get(userName).stream(),
-                closedTasks.get(userName).stream())
-                .collect(Collectors.toList());
+        if (!users.contains(userName)) {
+            return Collections.emptySet();
+        } else {
+            return Stream.concat(createdTasks.get(userName).stream(),
+                            closedTasks.get(userName).stream())
+                    .collect(Collectors.toSet());
+        }
     }
 
     @Override
-    public List<String> getUsers() {
+    public Set<String> getUsers() {
         return users;
     }
 
+    @Override
+    public Map<String, Set<String>> getCreatedTasks() {
+        return createdTasks;
+    }
+
+    @Override
+    public Map<String, Set<String>> getClosedTasks() {
+        return closedTasks;
+    }
+
+    @Override
+    public Map<String, Set<String>> getDeletedTasks() {
+        return deletedTasks;
+    }
 }

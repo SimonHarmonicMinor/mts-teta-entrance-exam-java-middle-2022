@@ -5,17 +5,22 @@ import com.example.demo.enums.Result;
 import com.example.demo.models.Request;
 import com.example.demo.models.Response;
 
-public class CloseHandler implements IHandler{
+public class CloseHandler implements IHandler {
 
     @Override
     public Response execute(Request request, IDatabase db) {
         String userName = request.getUser();
         String taskName = request.getArg();
 
-        if(db.closeTask(userName, taskName)){
+        if (!db.getTasks(userName).contains(taskName)) {
+            LOG.debug("Task " + taskName + " missing from the user " + userName);
+            return new Response(Result.ACCESS_DENIED);
+        }
+
+        if (db.closeTask(userName, taskName)) {
             LOG.debug("Closed task " + taskName);
             return new Response(Result.CLOSED);
-        }else {
+        } else {
             LOG.debug("Failed closed task " + taskName);
             return new Response(Result.ERROR);
         }
