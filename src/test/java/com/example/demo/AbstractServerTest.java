@@ -43,8 +43,9 @@ public class AbstractServerTest {
   }
 
   protected String sendMessage(String msg) {
-    out.println(msg);
     try {
+      out.println(msg);
+      out.flush();
       return in.readLine();
     } catch (IOException e) {
       throw new RuntimeException(e);

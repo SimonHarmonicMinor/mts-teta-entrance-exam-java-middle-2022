@@ -13,39 +13,42 @@ import org.slf4j.LoggerFactory;
 
 public class Server {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Server.class);
+    private static final SWPHandler swpHandler = new SWPHandler();
 
-  private ServerSocket serverSocket;
+    private ServerSocket serverSocket;
 
-  public void start() throws IOException {
-    serverSocket = new ServerSocket(9090);
-    Thread serverThread = new Thread(() -> {
-      while (true) {
-        try {
-          Socket connection = serverSocket.accept();
-          try (
-              BufferedReader serverReader = new BufferedReader(
-                  new InputStreamReader(connection.getInputStream()));
-              Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
-          ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
-            serverWriter.flush();
-          }
-        } catch (Exception e) {
-          LOG.error("Error during request proceeding", e);
-          break;
-        }
-      }
-    });
-    serverThread.setDaemon(true);
-    serverThread.start();
-  }
+    public void start() throws IOException {
+        LOG.info("start");
+        serverSocket = new ServerSocket(9090);
+        Thread serverThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Socket connection = serverSocket.accept();
+                    try (
+                            Writer serverWriter = new BufferedWriter(
+                                    new OutputStreamWriter(connection.getOutputStream()));
+                            BufferedReader in = new BufferedReader(
+                                    new InputStreamReader(connection.getInputStream()))) {
+                        String request = in.readLine();
+                        LOG.info(request);
+                        String response = swpHandler.requestHandler(request);
+                        LOG.info(response);
+                        serverWriter.write(response);
+                        serverWriter.flush();
 
-  public void stop() throws Exception {
-    serverSocket.close();
-  }
+                    }
+                } catch (Exception e) {
+                    LOG.error("Error during request proceeding", e);
+                    break;
+                }
+            }
+        });
+        serverThread.setDaemon(true);
+        serverThread.start();
+    }
+
+    public void stop() throws IOException {
+        serverSocket.close();
+    }
 }
