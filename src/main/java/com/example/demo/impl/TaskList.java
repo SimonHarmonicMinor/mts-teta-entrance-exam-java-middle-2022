@@ -26,7 +26,12 @@ public class TaskList {
     }
 
     public void addTask(String user, String taskName) throws Exception {
+        if (Task.isNameExists(taskName)) {
+            throw new Exception(String.valueOf(Result.ERROR));
+        }
+
         var task = new Task(taskName);
+        activeTasks.put(task.getName(), user);
 
         if (taskList.containsKey(user)) {
             var userTaskList = taskList.get(user);
@@ -37,9 +42,7 @@ public class TaskList {
 
         var newArrayList = new ArrayList<Task>();
         newArrayList.add(task);
-
         taskList.put(user, newArrayList);
-        activeTasks.put(task.getName(), user);
     }
 
     public void deleteTask(String user, String taskName) throws Exception {
@@ -96,6 +99,6 @@ public class TaskList {
     }
 
     private boolean isTaskBelongToUser(String user, String taskName) {
-        return !activeTasks.containsKey(taskName) && Objects.equals(activeTasks.get(taskName), user);
+        return activeTasks.containsKey(taskName) && Objects.equals(activeTasks.get(taskName), user);
     }
 }

@@ -14,27 +14,25 @@ public class Server {
     private ServerSocket serverSocket;
     protected static CommandProcessor command;
 
-    public void start() throws IOException {
-        serverSocket = new ServerSocket(9090);
+    public void start(int port) throws IOException {
+        serverSocket = new ServerSocket(port);
         command = new CommandProcessor();
 
-        LOG.info("started");
         Thread serverThread = new Thread(() -> {
             while (true) {
                 try {
                     Socket connection = serverSocket.accept();
-                    BufferedReader serverReader = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-                    Writer serverWriter = new BufferedWriter(
-                            new OutputStreamWriter(connection.getOutputStream()));
-                    try {
+                    try (
+                            BufferedReader serverReader = new BufferedReader(
+                                    new InputStreamReader(connection.getInputStream()));
+                            Writer serverWriter = new BufferedWriter(
+                                    new OutputStreamWriter(connection.getOutputStream()))
+                    ) {
                         String line = serverReader.readLine();
-                        LOG.info("Request captured: " + line);
+                        LOG.debug("Request captured: " + line);
                         var result = command.processCommand(line);
+                        LOG.info("result is: " + result);
                         serverWriter.write(result);
-                        serverWriter.flush();
-                    } catch (Exception e) {
-                        serverWriter.write(e.getMessage());
                         serverWriter.flush();
                     }
                 } catch (Exception e) {
@@ -43,6 +41,7 @@ public class Server {
                 }
             }
         });
+        serverThread.setDaemon(true);
         serverThread.start();
     }
 

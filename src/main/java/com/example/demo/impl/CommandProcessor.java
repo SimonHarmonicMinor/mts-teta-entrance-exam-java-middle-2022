@@ -15,23 +15,20 @@ public final class CommandProcessor {
         String[] parts = input.split(" ");
 
         if (parts.length > 3) {
-            throw new Exception(String.valueOf(Result.WRONG_FORMAT));
+            return String.valueOf(Result.WRONG_FORMAT);
         }
 
         if (!parts[0].toUpperCase().equals(parts[0]) || !parts[1].toUpperCase().equals(parts[1])) {
-            throw new Exception(String.valueOf(Result.WRONG_FORMAT));
+            return String.valueOf(Result.WRONG_FORMAT);
         }
 
         String user = parts[0];
-
         Commands command = mapCommand(parts[1]);
         String args = "";
 
         if (parts.length == 3) {
             args = parts[2];
         }
-
-        LOG.info(command.toString());
 
         switch (command) {
             case LIST_TASK:
@@ -67,24 +64,43 @@ public final class CommandProcessor {
         return Result.TASKS + " [" + result + "]";
     }
 
-    private static String processAddTask(String user, String taskName) throws Exception {
-        taskList.addTask(user, taskName);
+    private static String processAddTask(String user, String taskName) {
+        try {
+            taskList.addTask(user, taskName);
 
-        return Result.CREATED.toString();
+            return Result.CREATED.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     private static String processDeleteTask(String user, String taskName) throws Exception {
-        taskList.deleteTask(user, taskName);
-        return Result.DELETED.toString();
+        try {
+            taskList.deleteTask(user, taskName);
+
+            return Result.DELETED.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     private static String processReopenTask(String user, String taskName) throws Exception {
-        taskList.reopenTask(user, taskName);
-        return Result.REOPENED.toString();
+        try {
+            taskList.reopenTask(user, taskName);
+
+            return Result.REOPENED.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     private static String processCloseTask(String user, String taskName) throws Exception {
-        taskList.closeTask(user, taskName);
-        return Result.CLOSED.toString();
+        try {
+            taskList.closeTask(user, taskName);
+
+            return Result.CLOSED.toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 }

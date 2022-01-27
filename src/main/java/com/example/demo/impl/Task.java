@@ -10,11 +10,7 @@ public class Task {
     private final String name;
     protected static HashSet<String> activeTaskNames = new HashSet<>();
 
-    public Task(String name) throws Exception {
-        if (isNameExists(name)) {
-            throw new Exception(String.valueOf(Result.ERROR));
-        }
-
+    public Task(String name) {
         this.status = TaskStatus.CREATED;
         this.name = name;
         activeTaskNames.add(name);
