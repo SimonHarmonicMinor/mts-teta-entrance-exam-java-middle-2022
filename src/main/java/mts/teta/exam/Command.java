@@ -70,13 +70,13 @@ class Command {
             var parts = commandText.split(" ");
 
             if (parts.length < 2 || parts.length > 3) {
-                throw new InvalidSyntaxCommandException();
+                throw new InvalidSyntaxCommandException(commandText);
             }
 
             type = CommandType.valueOf(parts[1]);
 
             if (type != CommandType.LIST_TASK && parts.length < 3) {
-                throw new InvalidSyntaxCommandException();
+                throw new InvalidSyntaxCommandException(commandText);
             }
 
             user = parts[0];
@@ -95,7 +95,7 @@ class Command {
                     break;
             }
         } catch (IllegalArgumentException e) {
-            throw new InvalidSyntaxCommandException();
+            throw new InvalidSyntaxCommandException(commandText);
         }
     }
 }

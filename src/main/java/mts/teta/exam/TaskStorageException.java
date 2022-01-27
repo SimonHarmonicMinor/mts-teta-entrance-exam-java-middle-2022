@@ -1,28 +1,36 @@
 package mts.teta.exam;
 
-class TaskStorageException extends ErrorResponseException{
-
+class TaskStorageException extends ErrorResponseException {
+    TaskStorageException(String message) {
+        super(message);
+    }
 }
 
-class InvalidAccessRightsException extends ErrorResponseException{
+class InvalidAccessRightsException extends ErrorResponseException {
+    InvalidAccessRightsException() {
+        super("Unauthorized operation");
+    }
+
     @Override
-    String getErrorResponse()
-    {
+    String getErrorResponse() {
         return ResultType.ACCESS_DENIED.name();
     }
 }
 
-class TaskAlreadyExistsException extends TaskStorageException
-{
-
+class TaskAlreadyExistsException extends TaskStorageException {
+    TaskAlreadyExistsException() {
+        super("Task already exists");
+    }
 }
 
-class TaskNotFoundException extends TaskStorageException
-{
-
+class TaskNotFoundException extends TaskStorageException {
+    TaskNotFoundException() {
+        super("Task not found");
+    }
 }
 
-class InvalidTaskStateException extends TaskStorageException
-{
-
+class InvalidTaskStateException extends TaskStorageException {
+    InvalidTaskStateException() {
+        super("Unable apply command to task in it's current state");
+    }
 }

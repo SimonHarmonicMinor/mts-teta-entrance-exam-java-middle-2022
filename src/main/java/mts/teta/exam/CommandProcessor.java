@@ -21,7 +21,7 @@ class CommandProcessor {
             return command.getResponse();
 
         } catch (ErrorResponseException e) {
-            LOG.debug(String.format("Error during command proceeding: %s", e.getClass().getSimpleName()));
+            LOG.debug(String.format("Error during command proceeding: %s", e.getMessage()));
             return e.getErrorResponse();
         } catch (Exception e) {
             LOG.error("Error during command proceeding", e);
