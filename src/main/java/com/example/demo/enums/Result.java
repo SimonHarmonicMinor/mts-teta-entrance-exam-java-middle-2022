@@ -1,6 +1,6 @@
 package com.example.demo.enums;
 
-public enum EResult {
+public enum Result {
     CREATED,
     DELETED,
     CLOSED,

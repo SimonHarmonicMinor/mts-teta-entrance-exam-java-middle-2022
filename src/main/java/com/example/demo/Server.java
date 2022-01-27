@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.impl.Command;
+import com.example.demo.impl.CommandProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,14 +9,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-
     private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
     private ServerSocket serverSocket;
-    private Command command;
+    protected static CommandProcessor command;
 
     public void start() throws IOException {
         serverSocket = new ServerSocket(9090);
+        command = new CommandProcessor();
+
         LOG.info("started");
         Thread serverThread = new Thread(() -> {
             while (true) {
@@ -29,11 +30,9 @@ public class Server {
                     try {
                         String line = serverReader.readLine();
                         LOG.info("Request captured: " + line);
-                        command = new Command(line);
-                        LOG.info("user is: " + command.getUser());
-
+                        var result = command.processCommand(line);
                         // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-                        serverWriter.write(line);
+                        serverWriter.write(result);
                         serverWriter.flush();
                     } catch (Exception e) {
                         serverWriter.write(e.getMessage());
