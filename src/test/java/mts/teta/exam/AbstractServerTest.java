@@ -17,6 +17,8 @@ public class AbstractServerTest {
   private static BufferedReader in;
   private static Server server;
 
+  final int port = 9090;
+
   @BeforeAll
   static void beforeAll() {
   }
@@ -24,9 +26,9 @@ public class AbstractServerTest {
   @BeforeEach
   void beforeEach() throws Exception {
     server = new Server();
-    server.start();
+    server.start(port);
 
-    clientSocket = new Socket("localhost", 9090);
+    clientSocket = new Socket("localhost", port);
     out = new PrintWriter(clientSocket.getOutputStream(), true);
     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
   }

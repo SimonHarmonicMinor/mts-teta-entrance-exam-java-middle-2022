@@ -64,7 +64,7 @@ class TaskStorage {
     }
 
     private Task GetTask(String taskName) throws TaskNotFoundException {
-        var task=tasks.stream().filter(t -> t.name.equals(taskName)).findFirst();
+        var task=tasks.stream().filter(t -> t.name.equalsIgnoreCase(taskName)).findFirst();
         if (task.isEmpty())
         {
             throw new TaskNotFoundException();
@@ -76,7 +76,7 @@ class TaskStorage {
     }
 
     private Task GetNonDeletedTask(String taskName) throws TaskNotFoundException {
-        var task=tasks.stream().filter(t -> t.name.equals(taskName) && t.status!=TaskStatus.DELETED).findFirst();
+        var task=tasks.stream().filter(t -> t.name.equalsIgnoreCase(taskName) && t.status!=TaskStatus.DELETED).findFirst();
         if (task.isEmpty())
         {
             throw new TaskNotFoundException();
@@ -88,7 +88,7 @@ class TaskStorage {
     }
 
     private void CreateTask(String userName, String taskName) throws TaskAlreadyExistsException {
-        if (tasks.stream().anyMatch(t -> t.name.equals(taskName) && t.status != TaskStatus.DELETED)) {
+        if (tasks.stream().anyMatch(t -> t.name.equalsIgnoreCase(taskName) && t.status != TaskStatus.DELETED)) {
             throw new TaskAlreadyExistsException();
         }
         else

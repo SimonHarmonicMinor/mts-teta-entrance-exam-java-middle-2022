@@ -17,8 +17,13 @@ public class Server {
 
   private ServerSocket serverSocket;
 
-  public void start() throws IOException {
-    serverSocket = new ServerSocket(9090);
+  public void start() throws IOException
+  {
+    start(9090);
+  }
+
+  public void start(int port) throws IOException {
+    serverSocket = new ServerSocket(port);
     Thread serverThread = new Thread(() -> {
 
       var commandProcessor=new CommandProcessor();
@@ -63,7 +68,7 @@ public class Server {
           connectionThread.start();
 
         } catch (Exception e) {
-          //LOG.error("Error during request proceeding 3", e);
+          LOG.warn("Accept socket closed, shutting down");
           break;
         }
       }
