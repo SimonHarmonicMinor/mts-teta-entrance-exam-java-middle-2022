@@ -61,7 +61,7 @@ class Command {
      * @param commandText текст команды
      * @throws InvalidSyntaxCommandException неверная команда
      */
-    void Parse(String commandText) throws InvalidSyntaxCommandException {
+    void parse(String commandText) throws InvalidSyntaxCommandException {
         try {
 
             var parts = commandText.split(" ");

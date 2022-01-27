@@ -26,7 +26,6 @@ public class Server {
       while (true) {
         try {
           Socket connection = serverSocket.accept();
-
           Thread connectionThread = new Thread( () -> {
             try (
                     BufferedReader serverReader = new BufferedReader(
@@ -40,19 +39,28 @@ public class Server {
 
                 try {
                   synchronized (commandProcessor) {
-                    var response=commandProcessor.ProcessCommandText(line);
+                    var response=commandProcessor.processCommandText(line);
                     serverWriter.println(response);
                     LOG.debug("Response sent: " + response);
                   }
                 } catch (Exception e) {
                   LOG.error("Error during request proceeding 1", e);
                   serverWriter.println(ResultType.ERROR.name());
+                  LOG.debug("Response sent: " + ResultType.ERROR.name());
                 }
               }
+
               LOG.debug("Client disconnected");
             }
             catch (Exception e) {
               LOG.error("Error during request proceeding 2", e);
+            }
+            finally {
+              try {
+                connection.close();
+              } catch (IOException e) {
+                // игнорируем ошибку закрытия сокета
+              }
             }
           });
 

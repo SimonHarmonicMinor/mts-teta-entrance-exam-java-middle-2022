@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.*;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 class ServerTest extends AbstractServerTest {
 
     private static String tasksListResponse(String... taskNames) {
@@ -22,7 +19,7 @@ class ServerTest extends AbstractServerTest {
      * Создание таска для user1
      */
     @Test
-    void CreateTaskUser1() {
+    void createTaskUser1() {
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name(), "task1"));
         assertEquals(ResultType.CREATED.name(), response);
         checkUserTasks("user1", "task1");
@@ -32,8 +29,8 @@ class ServerTest extends AbstractServerTest {
      * Попытка создания дубликата таска под тем же пользователем
      */
     @Test
-    void CreateDuplicateTaskUser1() {
-        CreateTaskUser1();
+    void createDuplicateTaskUser1() {
+        createTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name(), "task1"));
         assertEquals(ResultType.ERROR.name(), response);
     }
@@ -42,8 +39,8 @@ class ServerTest extends AbstractServerTest {
      * Попытка создания дубликата таска под другим пользователем
      */
     @Test
-    void CreateDuplicateTaskUser2() {
-        CreateTaskUser1();
+    void createDuplicateTaskUser2() {
+        createTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user2", Command.CommandType.CREATE_TASK.name(), "task1"));
         assertEquals(ResultType.ERROR.name(), response);
     }
@@ -52,8 +49,8 @@ class ServerTest extends AbstractServerTest {
      * Создание второго таска для user1
      */
     @Test
-    void CreateAnotherTaskUser1() {
-        CreateTaskUser1();
+    void createAnotherTaskUser1() {
+        createTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name(), "task2"));
         assertEquals(ResultType.CREATED.name(), response);
         checkUserTasks("user1", "task1", "task2");
@@ -63,8 +60,8 @@ class ServerTest extends AbstractServerTest {
      * Создание таска для user2
      */
     @Test
-    void CreateTaskUser2() {
-        CreateTaskUser1();
+    void createTaskUser2() {
+        createTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user2", Command.CommandType.CREATE_TASK.name(), "task1_user2"));
         assertEquals(ResultType.CREATED.name(), response);
         checkUserTasks("user2", "task1_user2");
@@ -74,8 +71,8 @@ class ServerTest extends AbstractServerTest {
      * Получение текущего списка тасков для user1 от user2
      */
     @Test
-    void GetTasksUser1ByUser2() {
-        CreateTaskUser2();
+    void getTasksUser1ByUser2() {
+        createTaskUser2();
         String response = sendMessage(String.format("%s %s %s", "user2", Command.CommandType.LIST_TASK.name(), "user1"));
         assertEquals(tasksListResponse("task1"), response);
     }
@@ -84,8 +81,8 @@ class ServerTest extends AbstractServerTest {
      * Закрытие таска
      */
     @Test
-    void CloseTasksUser1() {
-        CreateAnotherTaskUser1();
+    void closeTasksUser1() {
+        createAnotherTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CLOSE_TASK.name(), "task1"));
         assertEquals(ResultType.CLOSED.name(), response);
         checkUserTasks("user1", "task1", "task2");
@@ -95,8 +92,8 @@ class ServerTest extends AbstractServerTest {
      * Закрытие закрытого таска
      */
     @Test
-    void CloseClosedTasksUser1() {
-        CloseTasksUser1();
+    void closeClosedTasksUser1() {
+        closeTasksUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CLOSE_TASK.name(), "task1"));
         assertEquals(ResultType.ERROR.name(), response);
     }
@@ -105,8 +102,8 @@ class ServerTest extends AbstractServerTest {
      * Переоткрытие закрытого таска
      */
     @Test
-    void ReopenClosedTasksUser1() {
-        CloseTasksUser1();
+    void reopenClosedTasksUser1() {
+        closeTasksUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.REOPEN_TASK.name(), "task1"));
         assertEquals(ResultType.REOPENED.name(), response);
         checkUserTasks("user1", "task1", "task2");
@@ -116,8 +113,8 @@ class ServerTest extends AbstractServerTest {
      * Удаление открытого таска
      */
     @Test
-    void DeleteOpenTasksUser1() {
-        CreateAnotherTaskUser1();
+    void deleteOpenTasksUser1() {
+        createAnotherTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.DELETE_TASK.name(), "task1"));
         assertEquals(ResultType.ERROR.name(), response);
         checkUserTasks("user1", "task1", "task2");
@@ -127,8 +124,8 @@ class ServerTest extends AbstractServerTest {
      * Удаление закрытого таска
      */
     @Test
-    void DeleteClosedTasksUser1() {
-        CloseTasksUser1();
+    void deleteClosedTasksUser1() {
+        closeTasksUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.DELETE_TASK.name(), "task1"));
         assertEquals(ResultType.DELETED.name(), response);
         checkUserTasks("user1", "task2");
@@ -138,8 +135,8 @@ class ServerTest extends AbstractServerTest {
      * Создание таска после его удаления для user1
      */
     @Test
-    void CreateTaskAfterDeleteUser1() {
-        DeleteClosedTasksUser1();
+    void createTaskAfterDeleteUser1() {
+        deleteClosedTasksUser1();
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name(), "task1"));
         assertEquals(ResultType.CREATED.name(), response);
         checkUserTasks("user1", "task2", "task1");
@@ -149,8 +146,8 @@ class ServerTest extends AbstractServerTest {
      * Закрытие таска другим пользователем
      */
     @Test
-    void CloseTasksDiffUser() {
-        CreateAnotherTaskUser1();
+    void closeTasksDiffUser() {
+        createAnotherTaskUser1();
         String response = sendMessage(String.format("%s %s %s", "user2", Command.CommandType.CLOSE_TASK.name(), "task1"));
         assertEquals(ResultType.ACCESS_DENIED.name(), response);
         checkUserTasks("user1", "task1", "task2");
@@ -160,7 +157,7 @@ class ServerTest extends AbstractServerTest {
      * Проверка регистрозависимости команд
      */
     @Test
-    void CaseSensitiveCommands() {
+    void caseSensitiveCommands() {
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name().toLowerCase(), "task1"));
         assertEquals(ResultType.WRONG_FORMAT.name(), response);
         response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.LIST_TASK.name().toLowerCase(), "task1"));
@@ -177,7 +174,7 @@ class ServerTest extends AbstractServerTest {
      * Проверка регистрозависимости имени пользователя
      */
     @Test
-    void CaseSensitiveUsers() {
+    void caseSensitiveUsers() {
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name(), "task1"));
         assertEquals(ResultType.CREATED.name(), response);
         checkUserTasks("user1", "task1");
@@ -190,7 +187,7 @@ class ServerTest extends AbstractServerTest {
      * Проверка регистроНЕзависимости названия таска
      */
     @Test
-    void CaseInsensitiveTasks() {
+    void caseInsensitiveTasks() {
         String response = sendMessage(String.format("%s %s %s", "user1", Command.CommandType.CREATE_TASK.name(), "task1"));
         assertEquals(ResultType.CREATED.name(), response);
         checkUserTasks("user1", "task1");
@@ -206,7 +203,7 @@ class ServerTest extends AbstractServerTest {
      * Проверка неполных команд
      */
     @Test
-    void IncompleteCommands() {
+    void incompleteCommands() {
         String response = sendMessage(String.format("%s %s ", "user1", Command.CommandType.CREATE_TASK.name()));
         assertEquals(ResultType.WRONG_FORMAT.name(), response);
         response = sendMessage(String.format("%s %s", "user1", Command.CommandType.CREATE_TASK.name()));

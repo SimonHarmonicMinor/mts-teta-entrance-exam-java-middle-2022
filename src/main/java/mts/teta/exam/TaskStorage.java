@@ -8,11 +8,11 @@ import static java.util.stream.Collectors.toList;
 class TaskStorage {
     private final List<Task> tasks = new LinkedList<>();
 
-    String GetTaskOwner(String taskName) {
+    String getTaskOwner(String taskName) {
         return tasks.stream().filter(t -> t.name.equals(taskName)).findFirst().map(t -> t.user).orElse(null);
     }
 
-    void CheckCommandAccessRights(Command command) throws ErrorResponseException {
+    void checkCommandAccessRights(Command command) throws ErrorResponseException {
         switch (command.getType()) {
 
             case CREATE_TASK:
@@ -20,7 +20,7 @@ class TaskStorage {
             case CLOSE_TASK:
             case REOPEN_TASK:
             case DELETE_TASK:
-                var task=GetNonDeletedTask(command.getArgument());
+                var task= getNonDeletedTask(command.getArgument());
                 if (!task.user.equals(command.getUser())) {
                     throw new InvalidAccessRightsException();
                 }
@@ -30,40 +30,40 @@ class TaskStorage {
         }
     }
 
-    void ExecuteCommand(Command command) throws TaskStorageException {
+    void executeCommand(Command command) throws TaskStorageException {
         ResultType result;
         switch (command.getType()) {
             case CREATE_TASK:
-                CreateTask(command.getUser(), command.getArgument());
+                createTask(command.getUser(), command.getArgument());
                 command.setResult(ResultType.CREATED);
                 break;
             case CLOSE_TASK:
-                CloseTask(command.getArgument());
+                closeTask(command.getArgument());
                 command.setResult(ResultType.CLOSED);
                 break;
             case REOPEN_TASK:
-                ReopenTask(command.getArgument());
+                reopenTask(command.getArgument());
                 command.setResult(ResultType.REOPENED);
                 break;
             case DELETE_TASK:
-                DeleteTask(command.getArgument());
+                deleteTask(command.getArgument());
                 command.setResult(ResultType.DELETED);
                 break;
             case LIST_TASK:
                 var userName=command.getArgument()==null?command.getUser(): command.getArgument();
-                var tasks=GetUserTasks(userName);
+                var tasks= getUserTasks(userName);
                 command.setResult(ResultType.TASKS);
                 command.setResultArgument("["+String.join(",",tasks)+"]");
                 break;
         }
     }
 
-    private List<String> GetUserTasks(String userName)
+    private List<String> getUserTasks(String userName)
     {
         return tasks.stream().filter(t -> t.user.equals(userName) && t.status != TaskStatus.DELETED).map(t -> t.name).collect(toList());
     }
 
-    private Task GetTask(String taskName) throws TaskNotFoundException {
+    private Task getTask(String taskName) throws TaskNotFoundException {
         var task=tasks.stream().filter(t -> t.name.equalsIgnoreCase(taskName)).findFirst();
         if (task.isEmpty())
         {
@@ -75,7 +75,7 @@ class TaskStorage {
         }
     }
 
-    private Task GetNonDeletedTask(String taskName) throws TaskNotFoundException {
+    private Task getNonDeletedTask(String taskName) throws TaskNotFoundException {
         var task=tasks.stream().filter(t -> t.name.equalsIgnoreCase(taskName) && t.status!=TaskStatus.DELETED).findFirst();
         if (task.isEmpty())
         {
@@ -87,7 +87,7 @@ class TaskStorage {
         }
     }
 
-    private void CreateTask(String userName, String taskName) throws TaskAlreadyExistsException {
+    private void createTask(String userName, String taskName) throws TaskAlreadyExistsException {
         if (tasks.stream().anyMatch(t -> t.name.equalsIgnoreCase(taskName) && t.status != TaskStatus.DELETED)) {
             throw new TaskAlreadyExistsException();
         }
@@ -97,8 +97,8 @@ class TaskStorage {
         }
     }
 
-    private void CloseTask(String taskName) throws TaskStorageException {
-        var task=GetNonDeletedTask(taskName);
+    private void closeTask(String taskName) throws TaskStorageException {
+        var task= getNonDeletedTask(taskName);
         if (task.status != TaskStatus.CREATED)
         {
             throw new InvalidTaskStateException();
@@ -106,8 +106,8 @@ class TaskStorage {
         task.status=TaskStatus.CLOSED;
     }
 
-    private void ReopenTask(String taskName) throws TaskStorageException {
-        var task=GetNonDeletedTask(taskName);
+    private void reopenTask(String taskName) throws TaskStorageException {
+        var task= getNonDeletedTask(taskName);
         if (task.status != TaskStatus.CLOSED)
         {
             throw new InvalidTaskStateException();
@@ -115,8 +115,8 @@ class TaskStorage {
         task.status=TaskStatus.CREATED;
     }
 
-    private void DeleteTask(String taskName) throws TaskStorageException {
-        var task=GetNonDeletedTask(taskName);
+    private void deleteTask(String taskName) throws TaskStorageException {
+        var task= getNonDeletedTask(taskName);
         if (task.status != TaskStatus.CLOSED)
         {
             throw new InvalidTaskStateException();

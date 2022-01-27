@@ -12,12 +12,12 @@ public class CommandProcessor {
      * @param commandText команда в текстовом виде, полученная сервером
      * @return ответ в текстововм виде, готовый для отсылки
      */
-    String ProcessCommandText(String commandText) {
+    String processCommandText(String commandText) {
         try {
             var command = new Command();
-            command.Parse(commandText);
-            taskStorage.CheckCommandAccessRights(command);
-            taskStorage.ExecuteCommand(command);
+            command.parse(commandText);
+            taskStorage.checkCommandAccessRights(command);
+            taskStorage.executeCommand(command);
             return command.getResponse();
 
         } catch (ErrorResponseException e) {
