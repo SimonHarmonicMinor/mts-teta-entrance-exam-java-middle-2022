@@ -3,12 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>
+  <groupId>com.costa</groupId>
   <artifactId>demo</artifactId>
+  <packaging>pom</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <name>demo</name>
   <description>MTS Teta demo project</description>
-	<properties>
+  <properties>
 		<java.version>11</java.version>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
@@ -69,4 +70,10 @@
     </plugins>
   </build>
 
+  <modules>
+    <module>client</module>
+    <module>server</module>
+    <module>network-core</module>
+      <module>util</module>
+  </modules>
 </project>
