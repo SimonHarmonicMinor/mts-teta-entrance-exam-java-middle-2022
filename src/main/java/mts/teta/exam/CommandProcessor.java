@@ -3,12 +3,12 @@ package mts.teta.exam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CommandProcessor {
+class CommandProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(CommandProcessor.class);
     private final TaskStorage taskStorage = new TaskStorage();
 
     /**
-     * Обработать тест команды
+     * Обработать команду в виде текста, пришедшего от клиента
      * @param commandText команда в текстовом виде, полученная сервером
      * @return ответ в текстововм виде, готовый для отсылки
      */

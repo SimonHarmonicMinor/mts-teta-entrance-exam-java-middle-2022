@@ -1,5 +1,8 @@
 package mts.teta.exam;
 
+/**
+ * Класс, описывающий команду и содержиший ответ на неё
+ */
 class Command {
     enum CommandType {
         CREATE_TASK,
