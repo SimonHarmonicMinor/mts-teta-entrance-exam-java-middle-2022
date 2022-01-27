@@ -31,7 +31,6 @@ public class Server {
                         String line = serverReader.readLine();
                         LOG.info("Request captured: " + line);
                         var result = command.processCommand(line);
-                        // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
                         serverWriter.write(result);
                         serverWriter.flush();
                     } catch (Exception e) {

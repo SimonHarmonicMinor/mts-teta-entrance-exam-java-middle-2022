@@ -20,12 +20,12 @@ public class Task {
         activeTaskNames.add(name);
     }
 
-    public boolean isTaskDeleted() {
+    public boolean isDeleted() {
         return status.equals(TaskStatus.DELETED);
     }
 
     public void close() throws Exception {
-        if (isTaskDeleted()) {
+        if (isDeleted()) {
             throw new Exception(String.valueOf(Result.ERROR));
         }
 
@@ -42,7 +42,7 @@ public class Task {
     }
 
     public void reopen() throws Exception {
-        if (isTaskDeleted()) {
+        if (isDeleted()) {
             throw new Exception(String.valueOf(Result.ERROR));
         }
 

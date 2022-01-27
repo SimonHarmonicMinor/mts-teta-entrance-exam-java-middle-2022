@@ -62,11 +62,9 @@ public final class CommandProcessor {
 
         var result = userTaskList.stream()
                 .map(Task::getName)
-                .collect(Collectors.joining());
+                .collect(Collectors.joining(","));
 
-        LOG.info(result);
-
-        return Result.TASKS + result;
+        return Result.TASKS + " [" + result + "]";
     }
 
     private static String processAddTask(String user, String taskName) throws Exception {
@@ -75,15 +73,18 @@ public final class CommandProcessor {
         return Result.CREATED.toString();
     }
 
-    private static String processDeleteTask(String user, String taskName) {
+    private static String processDeleteTask(String user, String taskName) throws Exception {
+        taskList.deleteTask(user, taskName);
         return Result.DELETED.toString();
     }
 
-    private static String processReopenTask(String user, String taskName) {
+    private static String processReopenTask(String user, String taskName) throws Exception {
+        taskList.reopenTask(user, taskName);
         return Result.REOPENED.toString();
     }
 
-    private static String processCloseTask(String user, String taskName) {
+    private static String processCloseTask(String user, String taskName) throws Exception {
+        taskList.closeTask(user, taskName);
         return Result.CLOSED.toString();
     }
 }
