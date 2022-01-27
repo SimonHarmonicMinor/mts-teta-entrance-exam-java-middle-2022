@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +28,9 @@ public class Server {
                     Socket connection = serverSocket.accept();
                     try (
                             Writer serverWriter = new BufferedWriter(
-                                    new OutputStreamWriter(connection.getOutputStream()));
+                                    new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8));
                             BufferedReader in = new BufferedReader(
-                                    new InputStreamReader(connection.getInputStream()))) {
+                                    new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
                         String request = in.readLine();
                         LOG.info(request);
                         String response = swpHandler.requestHandler(request);
