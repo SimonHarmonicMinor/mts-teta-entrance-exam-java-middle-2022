@@ -5,6 +5,9 @@ public enum Result {
     CREATED,
     DELETED,
     CLOSED,
-    REOPENED;
+    REOPENED,
+    WRONG_FORMAT,
+    ACCESS_DENIED,
+    ERROR;
 
 }
