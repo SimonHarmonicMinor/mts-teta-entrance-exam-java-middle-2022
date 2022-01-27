@@ -4,7 +4,7 @@ import com.costa.core.config.BaseNetworkConfig;
 import com.costa.core.listener.ConnectionListener;
 import com.costa.core.model.SocketConnection;
 import com.costa.util.config.ConfigLoader;
-import com.costa.socket.server.listener.ServerListener;
+import com.costa.socket.server.listener.ServerConnectionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,7 @@ public class ServerRunner {
     private final ConnectionListener listener;
 
     public ServerRunner() {
-        this.listener = new ServerListener();
+        this.listener = new ServerConnectionListener();
     }
 
     public void start() {

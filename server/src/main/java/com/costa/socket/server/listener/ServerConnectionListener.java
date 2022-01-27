@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Listener for server connection handler
  */
-public class ServerListener implements ConnectionListener {
-    private static final Logger LOG = LoggerFactory.getLogger(ServerListener.class);
+public class ServerConnectionListener implements ConnectionListener {
+    private static final Logger LOG = LoggerFactory.getLogger(ServerConnectionListener.class);
 
     @Override
     public void onDisconnect(SocketConnection connection) {
