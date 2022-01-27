@@ -1,11 +1,6 @@
 package mts.teta.exam;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import org.slf4j.Logger;
@@ -36,8 +31,7 @@ public class Server {
             try (
                     BufferedReader serverReader = new BufferedReader(
                             new InputStreamReader(connection.getInputStream()));
-                    Writer serverWriter = new BufferedWriter(
-                            new OutputStreamWriter(connection.getOutputStream()))
+                    PrintWriter serverWriter = new PrintWriter(connection.getOutputStream(),true)
             ) {
               LOG.debug("New client connected");
               String line;
@@ -47,14 +41,12 @@ public class Server {
                 try {
                   synchronized (commandProcessor) {
                     var response=commandProcessor.ProcessCommandText(line);
-                    serverWriter.write(response+"\r\n");
-                    serverWriter.flush();
+                    serverWriter.println(response);
                     LOG.debug("Response sent: " + response);
                   }
                 } catch (Exception e) {
                   LOG.error("Error during request proceeding 1", e);
-                  serverWriter.write(ResultType.ERROR.name());
-                  serverWriter.flush();
+                  serverWriter.println(ResultType.ERROR.name());
                 }
               }
               LOG.debug("Client disconnected");
