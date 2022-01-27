@@ -14,7 +14,5 @@ public class RequiredFieldsChecker implements RequestChecker {
         if (isNull(request) || isNull(request.getCommand()) || isNull(request.getUser()) || isNull(request.getAdditionalParam())) {
             throw new FormatException("Необходимый параметр null");
         }
-        // имя юзера не существует в списке
-
     }
 }

@@ -6,7 +6,7 @@ public class User {
 
     private String name;
     private String right;
-    private List<Task> taskList;
+    private List<String> taskName;
 
     public User(String name, String right, List<Task> taskList) {
         this.name = name;
