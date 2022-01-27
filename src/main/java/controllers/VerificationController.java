@@ -1,6 +1,7 @@
 package controllers;
 
 import model.Task;
+import model.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +48,7 @@ public class VerificationController {
     public boolean validateUniqAndNonDeleted(String taskName, ArrayList<Task> tasksCollection) {
         for(Task task : tasksCollection) {
             if(taskName.equals(task.getName())){
-                if("DELETED".equals(task.getTaskStatus())) {
+                if(TaskStatus.DELETED.equals(task.getTaskStatus())) {
                     return true;
                 }
                 return false;
@@ -60,7 +61,7 @@ public class VerificationController {
 
         for(Task task : tasksCollection) {
             if(taskName.equals(task.getName()) &&
-                    !"DELETED".equals(task.getTaskStatus()) &&
+                    !TaskStatus.DELETED.equals(task.getTaskStatus()) &&
                         userName.equals(task.getCreator())) {
                 return true;
             }
