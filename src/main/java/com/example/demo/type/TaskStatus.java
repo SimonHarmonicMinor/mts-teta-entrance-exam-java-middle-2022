@@ -11,4 +11,13 @@ public enum TaskStatus {
     TaskStatus(String value) {
         this.value = value;
     }
+
+    public String getValue() {
+        return value;
+    }
+
+    public boolean equals(TaskStatus taskStatus) {
+        return this.value.equals(taskStatus.getValue());
+    }
+
 }

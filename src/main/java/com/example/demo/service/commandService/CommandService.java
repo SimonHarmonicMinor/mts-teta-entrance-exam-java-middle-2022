@@ -1,11 +1,12 @@
 package com.example.demo.service.commandService;
 
+import com.example.demo.exception.DemoException;
 import java.util.List;
 
 public interface CommandService {
 
-    void validateAction(List<String> commandArray);
-    String sendCommand(List<String> commandArray);
+    void validatePermission(String userName, String arg) throws DemoException;
+    String sendCommand(String userName, String arg);
     String getName();
 
 }

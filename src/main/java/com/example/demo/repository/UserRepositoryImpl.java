@@ -1,10 +1,15 @@
 package com.example.demo.repository;
 
+import static java.util.Objects.nonNull;
+
 import com.example.demo.db.Database;
+import com.example.demo.type.MyLittleBean;
 import com.example.demo.type.TaskStatus;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@MyLittleBean
 public class UserRepositoryImpl implements UserRepository {
 
     private Map<String, Set<String>> userTable;
@@ -14,16 +19,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void createUser(String userName) {
-    }
-
-    @Override
     public Set<String> readTasksForUser(String userName) {
         return null;
     }
 
     @Override
-    public void updateUserTasks(String userName, String taskName, TaskStatus taskStatus) {
-
+    public void updateUserTasks(String userName, String taskName) {
+        Set<String> taskSet = userTable.get(userName);
+        if(!nonNull(taskSet)) {
+            taskSet = new HashSet<>();
+            taskSet.add(taskName);
+            userTable.put(userName, taskSet);
+        } else {
+            taskSet.add(taskName);
+        }
     }
 }

@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.db.Database;
+import com.example.demo.type.MyLittleBean;
 import com.example.demo.type.TaskStatus;
 import java.util.Map;
 
+@MyLittleBean
 public class TaskRepositoryImpl implements TaskRepository {
 
     private Map<String, TaskStatus> taskTable;
@@ -31,5 +33,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public void removeTask(String taskName) {
         taskTable.remove(taskName);
     }
+
+
 
 }

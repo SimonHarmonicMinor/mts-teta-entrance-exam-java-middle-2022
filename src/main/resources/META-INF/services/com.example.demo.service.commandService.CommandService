@@ -1,0 +1,5 @@
+com.example.demo.service.commandService.CloseTask
+com.example.demo.service.commandService.CreateTask
+com.example.demo.service.commandService.DeleteTask
+com.example.demo.service.commandService.ReopenTask
+com.example.demo.service.commandService.ListTask

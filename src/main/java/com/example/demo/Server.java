@@ -1,5 +1,9 @@
 package com.example.demo;
 
+import static com.example.demo.Utils.Utils.getBean;
+
+import com.example.demo.service.facade.CommandFacade;
+import com.example.demo.service.facade.CommandFacadeImpl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -8,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +25,7 @@ public class Server {
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
+      CommandFacade facade = getBean(ServiceLoader.load(CommandFacade.class));
       while (true) {
         try {
           Socket connection = serverSocket.accept();
@@ -31,8 +37,8 @@ public class Server {
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            String response = facade.executeCommand(line);
+            serverWriter.write(response);
             serverWriter.flush();
           }
         } catch (Exception e) {
@@ -41,7 +47,7 @@ public class Server {
         }
       }
     });
-    serverThread.setDaemon(true);
+    //serverThread.setDaemon(true);
     serverThread.start();
   }
 
