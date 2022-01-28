@@ -17,6 +17,6 @@ public interface TaskRepository {
 
     Task getTaskByUser(User user);
 
-    List<Task> getAllTask();
+    List<Task> getAllTasks();
 
 }

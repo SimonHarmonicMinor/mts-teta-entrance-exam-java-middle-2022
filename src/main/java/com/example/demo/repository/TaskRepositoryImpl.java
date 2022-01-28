@@ -41,7 +41,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> getAllTask() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(taskMap.values());
     }
 }
