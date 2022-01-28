@@ -14,9 +14,12 @@ public class ReopenExecute implements CommandExecutor {
 
     @Override
     public String execute(Request request) {
+        Task currentTask = taskRepository.getTaskByName(request.getAdditionalParam());
+        if (!currentTask.getStatus().equals(Status.DELETED) || currentTask.getStatus().equals(Status.CREATED)) {
             Task task = taskRepository.getTaskByName(request.getAdditionalParam());
             task.setStatus(Status.CREATED);
             taskRepository.updateTask(task);
-        return Result.REOPENED.toString();
+        }
+        return Result.REOPENED.name();
     }
 }

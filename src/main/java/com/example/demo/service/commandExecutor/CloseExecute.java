@@ -18,7 +18,7 @@ public class CloseExecute implements CommandExecutor {
         if (!currentTask.getStatus().equals(Status.DELETED)) {
             currentTask.setStatus(Status.CLOSED);
             taskRepository.updateTask(currentTask);
-            return Result.CLOSED.toString();
-        } else return Result.ERROR.toString();
+            return Result.CLOSED.name();
+        } else return Result.ERROR.name();
     }
 }

@@ -15,13 +15,11 @@ public class CreateExecute implements CommandExecutor {
 
     @Override
     public String execute(Request request) {
-        if (request.getCommand().equals(Command.CREATE_TASK)) {
-            Task task = new Task();
-            task.setName(request.getAdditionalParam());
-            task.setStatus(Status.CREATED);
-            task.setName(request.getUserName());
-            taskRepository.addTask(task);
-        }
-        return Result.CREATED.toString();
+        Task task = new Task();
+        task.setName(request.getAdditionalParam());
+        task.setStatus(Status.CREATED);
+        task.setName(request.getUserName());
+        taskRepository.addTask(task);
+        return Result.CREATED.name();
     }
 }

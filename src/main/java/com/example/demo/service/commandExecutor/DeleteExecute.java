@@ -21,7 +21,7 @@ public class DeleteExecute implements CommandExecutor {
         if (currentTask.getStatus().equals(Status.CLOSED)) {
             currentTask.setStatus(Status.DELETED);
             taskRepository.updateTask(currentTask);
-            return Result.DELETED.toString();
-        } else return Result.ERROR.toString();
+            return Result.DELETED.name();
+        } else return Result.ERROR.name();
     }
 }

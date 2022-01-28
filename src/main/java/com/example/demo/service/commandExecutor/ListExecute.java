@@ -5,7 +5,10 @@ import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CommandExecutor;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 /**
  * Выполнение задачи LIST_TASK
@@ -14,12 +17,13 @@ import java.util.List;
 public class ListExecute implements CommandExecutor {
 
     UserRepository userRepository;
-    TaskRepository taskRepository;
 
     @Override
     public String execute(Request request) {
         User currentUser = userRepository.getUserByName(request.getUserName());
         List<String> taskName = currentUser.getTaskName();
-        return Result.TASKS.toString() + taskName;
+        if (nonNull(taskName)) {
+            return Result.TASKS.name() + taskName;
+        } else return Result.TASKS.name() + new ArrayList<>();
     }
 }
