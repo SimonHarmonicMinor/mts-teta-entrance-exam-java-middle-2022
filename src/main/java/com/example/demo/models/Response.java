@@ -3,7 +3,7 @@ package com.example.demo.models;
 import java.util.List;
 
 public class Response {
-    private Result result;
+    private final Result result;
     private List<String> args;
 
     public Response(Result result) {
@@ -15,15 +15,15 @@ public class Response {
         this.args = args;
     }
 
+    public static Response error() {
+        return new Response(Result.ERROR);
+    }
+
     public Result getResult() {
         return result;
     }
 
     public List<String> getArgs() {
         return args;
-    }
-
-    public static Response error() {
-        return new Response(Result.ERROR);
     }
 }

@@ -8,8 +8,6 @@ import java.util.Optional;
 public interface TaskRepository {
     Optional<Task> findByName(String name);
 
-    List<Task> findAll();
-
     List<Task> findAllNoDeletedByUserName(String userName);
 
     Task create(Task task);

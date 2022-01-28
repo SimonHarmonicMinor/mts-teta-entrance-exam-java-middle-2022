@@ -72,6 +72,7 @@ public class CommandProcessorImpl implements CommandProcessor {
         if (TaskStatus.CLOSED == task.getStatus()) {
             LOG.info("Task: {} deleted", task.getName());
             task.setStatus(TaskStatus.DELETED);
+            taskRepository.updateStatus(task);
             return new Response(DELETED);
         }
         return Response.error();
@@ -81,6 +82,7 @@ public class CommandProcessorImpl implements CommandProcessor {
         if (TaskStatus.CREATED == task.getStatus()) {
             LOG.info("Task: {} closed", task.getName());
             task.setStatus(TaskStatus.CLOSED);
+            taskRepository.updateStatus(task);
             return new Response(CLOSED);
         }
         return Response.error();
@@ -90,7 +92,8 @@ public class CommandProcessorImpl implements CommandProcessor {
         if (TaskStatus.CLOSED == task.getStatus()) {
             LOG.info("Task: {} reopened", task.getName());
             task.setStatus(TaskStatus.CREATED);
-            return new Response(CREATED);
+            taskRepository.updateStatus(task);
+            return new Response(REOPENED);
         }
         return Response.error();
     }
