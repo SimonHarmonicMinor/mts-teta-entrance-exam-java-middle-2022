@@ -9,30 +9,52 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация репозитория задач
+ */
+
 public class TaskRepositoryImpl implements TaskRepository {
 
+    /**
+     * HashMap для хранения задач, где ключ - название задачи, значение - задача
+     */
     Map<String, Task> taskMap = new HashMap<>();
 
+    /**
+     * Создание задачи
+     */
     @Override
     public void addTask(Task task) {
         taskMap.put(task.getName(), task);
     }
 
+    /**
+     * Удаление задачи
+     */
     @Override
     public void removeTask(Task task) {
         taskMap.remove(task.getName());
     }
 
+    /**
+     * Обновление задачи
+     */
     @Override
     public void updateTask(Task task) {
         taskMap.put(task.getName(), task);
     }
 
+    /**
+     * Получение задачи по ее имени
+     */
     @Override
     public Task getTaskByName(String taskName) {
         return taskMap.get(taskName);
     }
 
+    /**
+     * Получение задач по юзеру
+     */
     @Override
     public List<Task> getTasksByUser(User user) {
         // Переделать List и правильный поиск. ПОка не делать .
@@ -42,6 +64,9 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     }
 
+    /**
+     * Получение всех задач
+     */
     @Override
     public List<Task> getAllTasks() {
         return new ArrayList<>(taskMap.values());

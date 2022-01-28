@@ -1,7 +1,10 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+
+/**
+ * Репозиторий для юзеров
+ */
 
 import java.util.List;
 

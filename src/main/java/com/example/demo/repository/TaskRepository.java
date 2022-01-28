@@ -5,6 +5,10 @@ import com.example.demo.entity.User;
 
 import java.util.List;
 
+/**
+ * Репозиторий для задач
+ */
+
 public interface TaskRepository {
 
     void addTask(Task task);
