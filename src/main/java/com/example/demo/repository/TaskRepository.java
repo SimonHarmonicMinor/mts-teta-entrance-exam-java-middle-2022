@@ -3,6 +3,8 @@ package com.example.demo.repository;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 
+import java.util.List;
+
 public interface TaskRepository {
 
     void addTask(Task task);
@@ -11,8 +13,10 @@ public interface TaskRepository {
 
     void updateTask(Task task);
 
-    void getTaskByName(Task task);
+    Task getTaskByName(String taskName);
 
-    void getTaskByUser(User user);
+    Task getTaskByUser(User user);
+
+    List<Task> getAllTask();
 
 }
