@@ -50,4 +50,8 @@ public class AbstractServerTest {
       throw new RuntimeException(e);
     }
   }
+  protected void endMessage() throws Exception {
+    afterEach();
+    beforeEach();
+  }
 }

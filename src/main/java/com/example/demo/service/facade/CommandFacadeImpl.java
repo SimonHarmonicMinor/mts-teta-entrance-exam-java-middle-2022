@@ -11,10 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @MyLittleBean
 public class CommandFacadeImpl implements CommandFacade {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CommandFacadeImpl.class);
     Map<String, CommandService> serviceMap;
     private Validator validator;
     private Parser parser;
@@ -35,12 +38,21 @@ public class CommandFacadeImpl implements CommandFacade {
 
     @Override
     public String executeCommand(String command) throws DemoException {
-
-        List<String> commandArray = parser.parseToList(command);
-        validator.validateRequestFormat(commandArray, serviceMap);
-        CommandService service = serviceMap.get(commandArray.get(1));
-        service.validatePermission(commandArray.get(0), commandArray.get(2));
-        return service.sendCommand(commandArray.get(0), commandArray.get(2));
+        try {
+            //парсим команду
+            List<String> commandArray = parser.parseToList(command);
+            //проверяем формат
+            validator.validateRequestFormat(commandArray, serviceMap);
+            //определяем команду
+            CommandService service = serviceMap.get(commandArray.get(1));
+            //валидируем разрешения и прочие проверки
+            service.validatePermission(commandArray.get(0), commandArray.get(2));
+            //выполняем
+            return service.sendCommand(commandArray.get(0), commandArray.get(2));
+        }catch (DemoException e) {
+            LOG.debug(e.getMessage());
+            return e.getErrorResponse();
+        }
     }
 
 }

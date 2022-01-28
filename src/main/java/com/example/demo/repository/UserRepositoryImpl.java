@@ -6,6 +6,7 @@ import com.example.demo.db.Database;
 import com.example.demo.type.MyLittleBean;
 import com.example.demo.type.TaskStatus;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,14 +21,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Set<String> readTasksForUser(String userName) {
-        return null;
+        return userTable.get(userName);
     }
 
     @Override
     public void updateUserTasks(String userName, String taskName) {
         Set<String> taskSet = userTable.get(userName);
         if(!nonNull(taskSet)) {
-            taskSet = new HashSet<>();
+            taskSet = new LinkedHashSet<>();
             taskSet.add(taskName);
             userTable.put(userName, taskSet);
         } else {

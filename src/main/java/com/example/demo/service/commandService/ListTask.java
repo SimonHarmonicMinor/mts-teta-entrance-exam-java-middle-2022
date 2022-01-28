@@ -28,9 +28,9 @@ public class ListTask extends AbstractCommandService{
                     .filter(elem -> taskRepository.readStatus(elem) != TaskStatus.DELETED)
                     .forEach(elem -> {
                         response.append(elem);
-                        response.append(",  ");
+                        response.append(", ");
                     });
-            response.replace(response.length() - 2, response.length() - 1, "]");
+            response.replace(response.length() - 2, response.length(), "]");
         }
 
         return response.toString();

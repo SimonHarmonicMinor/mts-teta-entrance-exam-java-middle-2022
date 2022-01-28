@@ -33,7 +33,7 @@ abstract class AbstractCommandService implements CommandService {
         }
 
         Set<String> tasks = userRepository.readTasksForUser(userName);
-        if(!tasks.contains(taskName)) {
+        if(!nonNull(tasks) || !tasks.contains(taskName)) {
             throw new DemoException("Вы не можете редактировать чужие задачи","ACCESS_DENIED");
         }
 

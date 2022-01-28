@@ -38,6 +38,7 @@ public class Server {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
             String response = facade.executeCommand(line);
+            LOG.debug("Response: " + response);
             serverWriter.write(response);
             serverWriter.flush();
           }
@@ -47,7 +48,7 @@ public class Server {
         }
       }
     });
-    //serverThread.setDaemon(true);
+    serverThread.setDaemon(true);
     serverThread.start();
   }
 
