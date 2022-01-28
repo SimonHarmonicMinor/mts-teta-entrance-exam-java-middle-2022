@@ -59,6 +59,7 @@ class ServerTest extends AbstractServerTest {
         endMessage();
         sendMessage("PinkyPie CLOSE_TASK MakeMagic");
         endMessage();
+
         String deleted = "DELETED";
         assertEquals(deleted, sendMessage("PinkyPie DELETE_TASK MakeMagic"), "Таска должна удалиться в штатном режиме");
         endMessage();
@@ -83,6 +84,7 @@ class ServerTest extends AbstractServerTest {
         endMessage();
         sendMessage("CyrodiilChamp CLOSE_TASK lootHouse");
         endMessage();
+
         String reopened = "REOPENED";
         assertEquals(reopened, sendMessage("CyrodiilChamp REOPEN_TASK lootHouse"),
                 "Таска должна открыться в штатном режиме");
