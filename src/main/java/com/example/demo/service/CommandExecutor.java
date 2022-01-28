@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Request;
+import com.example.demo.entity.Result;
 
 public interface CommandExecutor {
 
 
-    void execute(Request request);
+    Result execute(Request request);
 }

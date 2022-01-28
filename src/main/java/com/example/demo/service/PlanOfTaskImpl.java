@@ -4,6 +4,10 @@ import com.example.demo.entity.Request;
 import com.example.demo.entity.Result;
 import com.example.demo.repository.PlanOfTask;
 
+/**
+ * Класс отвечает за проверки запроса и вызов команды
+ */
+
 public class PlanOfTaskImpl implements PlanOfTask {
 
     private CommandExecutor commandExecutor;
@@ -11,7 +15,8 @@ public class PlanOfTaskImpl implements PlanOfTask {
 
     public Result execute(Request request) {
         requestChecker.check(request);
-        commandExecutor.execute(request);
+      Result result = commandExecutor.execute(request);
+        return result;
     }
 
 }

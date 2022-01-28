@@ -11,7 +11,7 @@ public class UserNameChecker implements RequestChecker {
     // имя юзера написано с маленькой буквы(регистрозависимость) - команды и имена пользователей регистрозависимые
     @Override
     public void check(Request request) {
-        if (!request.getUser().getName().matches("[A-Z]")) {
+        if (!request.getUserName().matches("[A-Z]")) {
             throw new FormatException("Неправильный формат написания имени");
         }
     }

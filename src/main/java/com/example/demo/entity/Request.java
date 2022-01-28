@@ -2,30 +2,22 @@ package com.example.demo.entity;
 
 public class Request {
 
-    private User user;
-    private String additionalParam;
+    private String userName;
     private Command command;
+    private String additionalParam;
 
-    public Request(User user, String taskName, Command command) {
-        this.user = user;
-        this.additionalParam = taskName;
+    public Request(String userName, Command command, String additionalParam) {
+        this.userName = userName;
         this.command = command;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getAdditionalParam() {
-        return additionalParam;
-    }
-
-    public void setAdditionalParam(String additionalParam) {
         this.additionalParam = additionalParam;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Command getCommand() {
@@ -36,12 +28,20 @@ public class Request {
         this.command = command;
     }
 
+    public String getAdditionalParam() {
+        return additionalParam;
+    }
+
+    public void setAdditionalParam(String additionalParam) {
+        this.additionalParam = additionalParam;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
-                "user=" + user +
-                ", taskName='" + additionalParam + '\'' +
+                "userName='" + userName + '\'' +
                 ", command=" + command +
+                ", additionalParam='" + additionalParam + '\'' +
                 '}';
     }
 }

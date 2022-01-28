@@ -30,14 +30,16 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task getTaskByName(String taskName) {
-       return taskMap.get(taskName);
+        return taskMap.get(taskName);
     }
 
     @Override
-    public Task getTaskByUser(User user) {
+    public List<Task> getTasksByUser(User user) {
         // Переделать List и правильный поиск. ПОка не делать .
         // Если не будет использоваться то удалить
-        return taskMap.get(user.getName());
+//        return taskMap.get(user.getName());
+        return null;
+
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface TaskRepository {
 
     Task getTaskByName(String taskName);
 
-    Task getTaskByUser(User user);
+    List<Task> getTasksByUser(User user);
 
     List<Task> getAllTasks();
 

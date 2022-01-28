@@ -11,7 +11,7 @@ public class RequiredFieldsChecker implements RequestChecker {
     // проверка на заполнение обязательных полей
     @Override
     public void check(Request request) {
-        if (isNull(request) || isNull(request.getCommand()) || isNull(request.getUser()) || isNull(request.getAdditionalParam())) {
+        if (isNull(request) || isNull(request.getCommand()) || isNull(request.getUserName()) || isNull(request.getAdditionalParam())) {
             throw new FormatException("Необходимый параметр null");
         }
     }

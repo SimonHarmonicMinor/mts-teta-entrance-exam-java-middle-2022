@@ -8,10 +8,10 @@ public class User {
     private String right;
     private List<String> taskName;
 
-    public User(String name, String right, List<Task> taskList) {
+    public User(String name, String right, List<String> taskName) {
         this.name = name;
         this.right = right;
-        this.taskList = taskList;
+        this.taskName = taskName;
     }
 
     public String getName() {
@@ -30,12 +30,12 @@ public class User {
         this.right = right;
     }
 
-    public List<Task> getTaskList() {
-        return taskList;
+    public List<String> getTaskName() {
+        return taskName;
     }
 
-    public void setTaskList(List<Task> taskList) {
-        this.taskList = taskList;
+    public void setTaskName(List<String> taskName) {
+        this.taskName = taskName;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class User {
         return "User{" +
                 "name='" + name + '\'' +
                 ", right='" + right + '\'' +
-                ", taskList=" + taskList +
+                ", taskName=" + taskName +
                 '}';
     }
 }
