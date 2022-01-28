@@ -10,7 +10,7 @@ public interface TaskRepository {
 
     List<Task> findAll();
 
-    List<Task> findAllByUserName(String userName);
+    List<Task> findAllNoDeletedByUserName(String userName);
 
     Task create(Task task);
 

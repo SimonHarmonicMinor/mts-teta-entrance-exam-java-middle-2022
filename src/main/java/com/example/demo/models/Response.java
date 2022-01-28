@@ -10,19 +10,20 @@ public class Response {
         this.result = result;
     }
 
-    public Result getResult() {
-        return result;
+    public Response(Result result, List<String> args) {
+        this.result = result;
+        this.args = args;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public Result getResult() {
+        return result;
     }
 
     public List<String> getArgs() {
         return args;
     }
 
-    public void setArgs(List<String> args) {
-        this.args = args;
+    public static Response error() {
+        return new Response(Result.ERROR);
     }
 }

@@ -5,6 +5,8 @@ import com.example.demo.models.Task;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.demo.models.TaskStatus.DELETED;
+
 public class TaskRepositoryImpl implements TaskRepository {
     private static final Set<Task> tasks = new HashSet<>();
 
@@ -21,9 +23,10 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllByUserName(String userName) {
+    public List<Task> findAllNoDeletedByUserName(String userName) {
         return tasks.stream()
-                .filter(task -> userName.equals(task.getUser().getName()))
+                .filter(task -> userName.equals(task.getUser().getName()) &&
+                        DELETED != task.getStatus())
                 .collect(Collectors.toList());
     }
 

@@ -3,15 +3,20 @@ package com.example.demo.services;
 import com.example.demo.models.Command;
 import com.example.demo.models.Response;
 import com.example.demo.models.User;
+import com.example.demo.repositories.UserRepository;
+import com.example.demo.repositories.UserRepositoryImpl;
 import com.example.demo.validators.RequestValidator;
 import com.example.demo.validators.RequestValidatorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 import static com.example.demo.models.Result.WRONG_FORMAT;
 
 public class RequestHandlerImpl implements RequestHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RequestHandlerImpl.class);
+    private final UserRepository userRepository = new UserRepositoryImpl();
     private final RequestValidator requestValidator = new RequestValidatorImpl();
     private final CommandProcessor commandProcessor = new CommandProcessorImpl();
 
@@ -23,8 +28,10 @@ public class RequestHandlerImpl implements RequestHandler {
         String[] requestMembers = request.split(" ");
 
         Command command = getCommandFromRequest(requestMembers);
-        User user = getUserFromRequest(requestMembers);
+        String userName = getUserNameFromRequest(requestMembers);
         String arg = getArgFromRequest(requestMembers);
+
+        User user = getUser(userName);
 
         return commandProcessor.process(command, user, arg);
     }
@@ -33,11 +40,23 @@ public class RequestHandlerImpl implements RequestHandler {
         return Command.valueOf(requestMembers[1]);
     }
 
-    private User getUserFromRequest(String[] requestMembers) {
-        return new User(requestMembers[0]);
+    private String getUserNameFromRequest(String[] requestMembers) {
+        return requestMembers[0];
     }
 
     private String getArgFromRequest(String[] requestMembers) {
         return requestMembers[2];
+    }
+
+    private User getUser(String userName) {
+        User user;
+        Optional<User> optionalUser = userRepository.findByName(userName);
+        if (optionalUser.isPresent())
+            user = optionalUser.get();
+        else {
+            user = new User(userName);
+            userRepository.save(user);
+        }
+        return user;
     }
 }
