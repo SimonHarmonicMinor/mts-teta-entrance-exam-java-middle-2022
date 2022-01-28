@@ -1,5 +1,9 @@
 package com.example.demo.entity;
 
+/**
+ * Варианты команд
+ */
+
 public enum Command {
 
     CREATE_TASK,

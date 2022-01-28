@@ -1,5 +1,9 @@
 package com.example.demo.entity;
 
+/**
+ * Сущность Request
+ */
+
 public class Request {
 
     private String userName;

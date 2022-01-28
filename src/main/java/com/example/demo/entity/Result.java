@@ -1,5 +1,9 @@
 package com.example.demo.entity;
 
+/**
+ * Варианты результата
+ */
+
 public enum Result {
 
     CREATED,

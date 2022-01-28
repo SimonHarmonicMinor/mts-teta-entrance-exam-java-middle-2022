@@ -2,6 +2,10 @@ package com.example.demo.entity;
 
 import java.util.List;
 
+/**
+ * Сущность User
+ */
+
 public class User {
 
     private String name;

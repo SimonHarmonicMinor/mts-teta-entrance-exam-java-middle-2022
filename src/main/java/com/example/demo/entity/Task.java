@@ -1,5 +1,9 @@
 package com.example.demo.entity;
 
+/**
+ * Сущность Task
+ */
+
 public class Task {
 
     private String name;
