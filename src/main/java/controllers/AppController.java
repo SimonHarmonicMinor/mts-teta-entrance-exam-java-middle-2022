@@ -3,6 +3,7 @@ package controllers;
 import model.Task;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AppController {
     private ArrayList<Task> tasksCollection = new ArrayList<>();
@@ -62,7 +63,7 @@ public class AppController {
      * В случае, когда статус задачи DELETED, возвращает ACCESS_DENIED, так как доступа к этой задачи нет
      * @param userName
      * @param taskName
-     * @return
+     * @return appStatus
      */
     public  String closeTask(String userName, String taskName) {
         if (!verificationController.validateAccess(taskName, userName, tasksCollection)) {
@@ -87,7 +88,7 @@ public class AppController {
      * В случае, когда статус задачи DELETED, возвращает ACCESS_DENIED, так как доступа к этой задачи нет
      * @param userName
      * @param taskName
-     * @return
+     * @return appStatus
      */
     public  String reopenTask(String userName, String taskName) {
         if (!verificationController.validateAccess(taskName, userName, tasksCollection)) {
@@ -110,15 +111,19 @@ public class AppController {
      * Метод позволяет вернуть список задач конкретного пользователя
      * Возвращет только активные задачи, которые находятся не в статусе DELETED
      * @param creatorName
-     * @return
+     * @return userTasks
      */
     public List<String> showTasksList(String creatorName) {
-        List<String> userTasks = new ArrayList<>();
-        for(Task task : tasksCollection) {
-            if (!"DELETED".equals(task.getTaskStatus())  && task.getCreator().equals(creatorName)) {
-                userTasks.add(task.getName());
-            }
-        }
+        List<String> userTasks = tasksCollection.stream().filter(p -> p.getCreator().equals(creatorName))
+                                                         .filter(p -> !p.getTaskStatus().equals("DELETED"))
+                                                         .map(Task::getName)
+                                                         .collect(Collectors.toList());
+
+// for(Task task : tasksCollection) {
+//            if (!"DELETED".equals(task.getTaskStatus())  && task.getCreator().equals(creatorName)) {
+//                userTasks.add(task.getName());
+//            }
+//        }
         return userTasks;
     }
 }

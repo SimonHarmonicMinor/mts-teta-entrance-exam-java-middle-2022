@@ -19,6 +19,15 @@ public class VerificationController {
      */
     public boolean validateFormat(String input) {
         List<String> inputArr = Arrays.asList(input.split(" "));
+        List<String> appCommand = new ArrayList<>();
+        String commands = "CREATE_TASK,DELETE_TASK,CLOSE_TASK,REOPEN_TASK,LIST_TASK";
+        appCommand.add("CREATE_TASK");
+        appCommand.add("DELETE_TASK");
+        appCommand.add("CLOSE_TASK");
+        appCommand.add("REOPEN_TASK");
+        appCommand.add("LIST_TASK");
+
+
 
          //Первый if проверяет, что строка пришла с нужным количеством атрибутов
         if (inputArr.size() ==3) {
@@ -27,7 +36,7 @@ public class VerificationController {
             String arg = inputArr.get(2);
 
            //Далее проверяем что регистр соблюден
-            if(name.equals(name.toUpperCase()) && ("CREATE_TASK,DELETE_TASK,CLOSE_TASK,REOPEN_TASK,LIST_TASK").contains(command)) {
+            if(name.equals(name.toUpperCase()) &&  (commands).contains(command)) {
                 //Необходимо еще проверить, что при команде LIST_TASK, аргумент записан в верхнем регисте
                 if("LIST_TASK".equals(command)) {
                     if (!arg.equals(arg.toUpperCase())) {
