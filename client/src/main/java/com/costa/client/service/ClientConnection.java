@@ -3,7 +3,7 @@ package com.costa.client.service;
 import com.costa.client.controller.ViewController;
 import com.costa.core.config.BaseNetworkConfig;
 import com.costa.core.listener.ConnectionListener;
-import com.costa.core.model.SocketConnection;
+import com.costa.core.service.SocketConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

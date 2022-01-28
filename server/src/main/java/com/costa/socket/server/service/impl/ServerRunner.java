@@ -1,8 +1,10 @@
-package com.costa.socket.server.service;
+package com.costa.socket.server.service.impl;
 
 import com.costa.core.config.BaseNetworkConfig;
 import com.costa.core.listener.ConnectionListener;
-import com.costa.core.model.SocketConnection;
+import com.costa.core.service.SocketConnection;
+import com.costa.socket.server.model.ResultStatus;
+import com.costa.socket.server.service.CommandHandler;
 import com.costa.util.config.ConfigLoader;
 import com.costa.socket.server.listener.ServerConnectionListener;
 import org.slf4j.Logger;
@@ -18,8 +20,8 @@ public class ServerRunner {
     private static final Logger LOG = LoggerFactory.getLogger(ServerRunner.class);
     private final ConnectionListener listener;
 
-    public ServerRunner() {
-        this.listener = new ServerConnectionListener();
+    public ServerRunner(CommandHandler<ResultStatus> commandHandler) {
+        this.listener = new ServerConnectionListener<>(commandHandler);
     }
 
     public void start() {

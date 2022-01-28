@@ -1,7 +1,6 @@
 package com.costa.socket.server.mapper;
 
-import com.costa.socket.server.model.TaskCommand;
-import com.costa.socket.server.dto.UserRequest;
+import com.costa.socket.server.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,19 +13,22 @@ public class UserRequestMapper {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static Optional<UserRequest> toUserRequest(String command) {
+    public static Optional<UserRequest> toUserRequest(String command){
         try {
             String[] commandSplit = command.split(" ");
             if (commandSplit.length != 3)
                 throw new IllegalArgumentException("The size of the command line does not satisfy the conditions");
 
-            return Optional.of(new UserRequest(commandSplit[0],
-                    TaskCommand.valueOf(commandSplit[1]),
-                    commandSplit[2]));
+            User user = new User(commandSplit[0]);
+            AvailableCommand availableCommand = AvailableCommand.valueOf(commandSplit[1]);
+            String arg = commandSplit[2];
+
+            UserRequest userRequest = new UserRequest(user, availableCommand, arg);
+            return Optional.of(userRequest);
         } catch (IllegalArgumentException e) {
-            LOG.error("Entity mapping error. Command = {}", command, e);
+            LOG.error("UserRequest mapping error. Command = {}", command, e);
         }
 
-        return Optional.empty();
+      return Optional.empty();
     }
 }

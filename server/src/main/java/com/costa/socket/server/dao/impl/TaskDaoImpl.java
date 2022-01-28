@@ -16,19 +16,23 @@ public class TaskDaoImpl implements TaskDao {
     @Override
     public Optional<Task> findByDescription(String description) {
         return tasks.stream()
-                .filter(task -> task.getDescription().equals(description))
+                .filter(task -> task.getDescription().equals(description)
+                        && !task.getState().equals(TaskState.DELETED))
                 .findFirst();
     }
 
     @Override
     public List<Task> findAll() {
-        return tasks;
+        return tasks.stream()
+                .filter(task -> !task.getState().equals(TaskState.DELETED))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Task> findAllByUser(User user) {
         return tasks.stream()
-                .filter(task -> task.getUser().equals(user))
+                .filter(task -> task.getUser().equals(user)
+                        && !task.getState().equals(TaskState.DELETED))
                 .collect(Collectors.toList());
     }
 
@@ -36,12 +40,25 @@ public class TaskDaoImpl implements TaskDao {
     public List<Task> findAllByUserAndTaskState(User user, TaskState taskState) {
         return tasks.stream()
                 .filter(task -> task.getUser().equals(user)
-                && task.getState().equals(taskState))
+                        && task.getState().equals(taskState))
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean save(Task task) {
+        tasks.stream()
+                .filter(t -> !t.getState().equals(TaskState.DELETED))
+                .collect(Collectors.toList())
+                .remove(task);
+
         return tasks.add(task);
+    }
+
+    @Override
+    public List<Task> findAllByUserName(String userName) {
+        return tasks.stream()
+                .filter(task -> task.getUser().getName().equals(userName)
+                        && !task.getState().equals(TaskState.DELETED))
+                .collect(Collectors.toList());
     }
 }

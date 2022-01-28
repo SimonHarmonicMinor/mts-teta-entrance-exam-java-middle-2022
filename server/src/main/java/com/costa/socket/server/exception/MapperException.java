@@ -1,6 +1,6 @@
 package com.costa.socket.server.exception;
 
-public class MapperException extends Exception{
+public class MapperException extends Exception {
     public MapperException(String message, Throwable cause) {
         super(message, cause);
     }

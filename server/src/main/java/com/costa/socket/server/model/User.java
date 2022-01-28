@@ -1,7 +1,12 @@
 package com.costa.socket.server.model;
 
+import com.costa.socket.server.dao.UserDao;
+
 import java.util.Objects;
 
+/**
+ * User model, used on the dao layer {@link UserDao}
+ */
 public class User {
     private final String name;
 

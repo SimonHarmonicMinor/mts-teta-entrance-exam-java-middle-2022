@@ -1,7 +1,6 @@
-package com.costa.core.model;
+package com.costa.core.service;
 
 import com.costa.core.listener.ConnectionListener;
-import com.costa.core.service.ConnectionHandler;
 import com.costa.core.service.impl.AsyncConnectionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

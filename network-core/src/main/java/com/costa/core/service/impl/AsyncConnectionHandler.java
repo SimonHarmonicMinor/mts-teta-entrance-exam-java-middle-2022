@@ -1,6 +1,6 @@
 package com.costa.core.service.impl;
 
-import com.costa.core.model.SocketConnection;
+import com.costa.core.service.SocketConnection;
 import com.costa.core.service.ConnectionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

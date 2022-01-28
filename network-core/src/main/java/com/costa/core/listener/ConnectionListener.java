@@ -1,6 +1,6 @@
 package com.costa.core.listener;
 
-import com.costa.core.model.SocketConnection;
+import com.costa.core.service.SocketConnection;
 
 /**
  * Contract for standard features for work with {@link SocketConnection}

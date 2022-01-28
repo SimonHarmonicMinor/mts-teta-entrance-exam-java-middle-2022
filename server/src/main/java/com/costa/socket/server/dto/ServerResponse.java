@@ -1,39 +1,71 @@
 package com.costa.socket.server.dto;
 
 import com.costa.socket.server.model.ResultStatus;
+import com.costa.util.StringUtil;
 
-import java.util.List;
+public class ServerResponse<T> {
+    private T status;
+    private String arg;
 
-public class ServerResponse {
-    private final ResultStatus result;
-    private List<String> tasks;
-
-    public ServerResponse(ResultStatus result) {
-        this.result = result;
+    public ServerResponse(T status, String arg) {
+        this.status = status;
+        this.arg = arg;
     }
 
-    public ServerResponse(ResultStatus result, List<String> tasks) {
-        this.result = result;
-        this.tasks = tasks;
+    public ServerResponse(T status) {
+        this.status = status;
     }
 
-    public ResultStatus getResult() {
-        return result;
+    public ServerResponse(){}
+
+    public static ServerResponse<ResultStatus> error() {
+        ServerResponse<ResultStatus> response = new ServerResponse<>();
+        response.status = ResultStatus.ERROR;
+
+        return response;
     }
 
-    public List<String> getTasks() {
-        return tasks;
+    public static ServerResponse<ResultStatus> create(ResultStatus status) {
+        ServerResponse<ResultStatus> response = new ServerResponse<>();
+        response.status = status;
+
+        return response;
     }
 
-    public void setTasks(List<String> tasks) {
-        this.tasks = tasks;
+    public static ServerResponse<ResultStatus> create(ResultStatus status, String arg) {
+        ServerResponse<ResultStatus> response = new ServerResponse<>();
+        response.status = status;
+        response.arg = arg;
+
+        return response;
+    }
+
+    public T getStatus() {
+        return status;
+    }
+
+    public void setStatus(T status) {
+        this.status = status;
+    }
+
+    public String getArg() {
+        return arg;
+    }
+
+    public void setArg(String arg) {
+        this.arg = arg;
     }
 
     @Override
     public String toString() {
-        return "ServerResponse{" +
-                "result=" + result +
-                ", tasks=" + tasks +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (!StringUtil.isEmpty(status))
+            stringBuilder.append(getStatus());
+
+        if (!StringUtil.isEmpty(arg))
+            stringBuilder.append(" ").append(getArg());
+
+        return stringBuilder.toString();
     }
 }

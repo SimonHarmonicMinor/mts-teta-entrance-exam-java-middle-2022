@@ -23,11 +23,11 @@ public class ClientView extends JFrame {
 
         textArea.setEditable(false);
         textArea.setLineWrap(true);
+        textArea.setAutoscrolls(true);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(fieldNick, BorderLayout.CENTER);
         panel.add(new JLabel("Username: "), BorderLayout.WEST);
-
 
         add(panel, BorderLayout.NORTH);
         add(textArea, BorderLayout.CENTER);
