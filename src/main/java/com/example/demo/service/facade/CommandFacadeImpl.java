@@ -37,19 +37,19 @@ public class CommandFacadeImpl implements CommandFacade {
     }
 
     @Override
-    public String executeCommand(String command) throws DemoException {
+    public String sendCommand(String command) {
         try {
             //парсим команду
             List<String> commandArray = parser.parseToList(command);
             //проверяем формат
             validator.validateRequestFormat(commandArray, serviceMap);
-            //определяем команду
+            //определяем команду по названию
             CommandService service = serviceMap.get(commandArray.get(1));
-            //валидируем разрешения и прочие проверки
+            //смотрим разрешения и прочие проверки
             service.validatePermission(commandArray.get(0), commandArray.get(2));
             //выполняем
-            return service.sendCommand(commandArray.get(0), commandArray.get(2));
-        }catch (DemoException e) {
+            return service.executeCommand(commandArray.get(0), commandArray.get(2));
+        } catch (DemoException e) {
             LOG.debug(e.getMessage());
             return e.getErrorResponse();
         }

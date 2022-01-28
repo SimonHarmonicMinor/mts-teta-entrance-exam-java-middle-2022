@@ -13,12 +13,12 @@ public class ListTask extends AbstractCommandService{
     }
 
     @Override
-    public void validatePermission(String userName, String arg) throws DemoException {
+    public void validatePermission(String userName, String arg) {
 
     }
 
     @Override
-    public String sendCommand(String userName, String arg) {
+    public String executeCommand(String userName, String arg) {
         Set<String> tasks = userRepository.readTasksForUser(arg);
         StringBuilder response = new StringBuilder("TASKS [");
         if (tasks.isEmpty()) {

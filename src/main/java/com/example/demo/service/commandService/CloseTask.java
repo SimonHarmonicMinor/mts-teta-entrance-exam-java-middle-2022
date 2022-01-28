@@ -5,7 +5,7 @@ import com.example.demo.type.MyLittleBean;
 import com.example.demo.type.TaskStatus;
 
 @MyLittleBean
-public class CloseTask extends AbstractCommandService{
+public class CloseTask extends AbstractCommandService {
 
     public CloseTask() {
         this.serviceName = "CLOSE_TASK";
@@ -14,14 +14,14 @@ public class CloseTask extends AbstractCommandService{
     @Override
     public void validatePermission(String userName, String arg) throws DemoException {
         TaskStatus taskStatus = taskRepository.readStatus(arg);
-        validateUserRights(arg,taskStatus,userName);
+        validateUserRights(arg, taskStatus, userName);
         if (taskStatus != TaskStatus.CREATED) {
-            throw new DemoException("Вы не можете закрывать открытые задачи или уже удаленные","ERROR");
+            throw new DemoException("Вы не можете закрывать открытые задачи или уже удаленные", "ERROR");
         }
     }
 
     @Override
-    public String sendCommand(String userName, String arg) {
+    public String executeCommand(String userName, String arg) {
         taskRepository.updateTask(arg, TaskStatus.CLOSED);
         return "CLOSED";
     }

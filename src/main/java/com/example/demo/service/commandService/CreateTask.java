@@ -23,7 +23,7 @@ public class CreateTask extends AbstractCommandService{
     }
 
     @Override
-    public String sendCommand(String userName, String arg) {
+    public String executeCommand(String userName, String arg) {
         userRepository.updateUserTasks(userName, arg);
         taskRepository.createTask(arg);
         return "CREATED";

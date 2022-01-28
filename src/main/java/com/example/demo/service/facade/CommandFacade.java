@@ -4,6 +4,6 @@ import com.example.demo.exception.DemoException;
 
 public interface CommandFacade {
 
-    String executeCommand(String request) throws DemoException;
+    String sendCommand(String request) throws DemoException;
 
 }
