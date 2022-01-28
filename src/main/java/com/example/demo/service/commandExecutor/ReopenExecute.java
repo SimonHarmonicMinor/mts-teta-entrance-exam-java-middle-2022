@@ -13,10 +13,10 @@ public class ReopenExecute implements CommandExecutor {
     TaskRepository taskRepository;
 
     @Override
-    public Result execute(Request request) {
+    public String execute(Request request) {
             Task task = taskRepository.getTaskByName(request.getAdditionalParam());
             task.setStatus(Status.CREATED);
             taskRepository.updateTask(task);
-        return Result.REOPENED;
+        return Result.REOPENED.toString();
     }
 }

@@ -17,8 +17,9 @@ public class ListExecute implements CommandExecutor {
     TaskRepository taskRepository;
 
     @Override
-    public Result execute(Request request) {
+    public String execute(Request request) {
         User currentUser = userRepository.getUserByName(request.getUserName());
         List<String> taskName = currentUser.getTaskName();
+        return Result.TASKS.toString() + taskName;
     }
 }

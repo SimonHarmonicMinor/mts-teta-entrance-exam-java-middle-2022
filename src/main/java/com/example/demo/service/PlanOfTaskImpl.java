@@ -13,9 +13,9 @@ public class PlanOfTaskImpl implements PlanOfTask {
     private CommandExecutor commandExecutor;
     private RequestChecker requestChecker;
 
-    public Result execute(Request request) {
+    public String execute(Request request) {
         requestChecker.check(request);
-      Result result = commandExecutor.execute(request);
+      String result = commandExecutor.execute(request);
         return result;
     }
 

@@ -11,9 +11,9 @@ public class BaseCommandExecutor implements CommandExecutor{
     private Map<Command, CommandExecutor> specificCommandExecutors;
 
     @Override
-    public Result execute(Request request) {
+    public String execute(Request request) {
         CommandExecutor commandExecutor = specificCommandExecutors.get(request.getCommand());
-        Result result = commandExecutor.execute(request);
+        String result = commandExecutor.execute(request);
         return result;
     }
 }

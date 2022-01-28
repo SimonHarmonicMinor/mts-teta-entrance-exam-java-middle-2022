@@ -16,12 +16,12 @@ public class DeleteExecute implements CommandExecutor {
     TaskRepository taskRepository;
 
     @Override
-    public Result execute(Request request) {
+    public String execute(Request request) {
         Task currentTask = taskRepository.getTaskByName(request.getAdditionalParam());
         if (currentTask.getStatus().equals(Status.CLOSED)) {
             currentTask.setStatus(Status.DELETED);
             taskRepository.updateTask(currentTask);
-            return Result.DELETED;
-        } else return Result.ERROR;
+            return Result.DELETED.toString();
+        } else return Result.ERROR.toString();
     }
 }

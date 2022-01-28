@@ -6,5 +6,5 @@ import com.example.demo.entity.Result;
 public interface CommandExecutor {
 
 
-    Result execute(Request request);
+    String execute(Request request);
 }

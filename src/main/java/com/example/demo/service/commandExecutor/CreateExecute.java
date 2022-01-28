@@ -14,7 +14,7 @@ public class CreateExecute implements CommandExecutor {
     TaskRepository taskRepository;
 
     @Override
-    public Result execute(Request request) {
+    public String execute(Request request) {
         if (request.getCommand().equals(Command.CREATE_TASK)) {
             Task task = new Task();
             task.setName(request.getAdditionalParam());
@@ -22,6 +22,6 @@ public class CreateExecute implements CommandExecutor {
             task.setName(request.getUserName());
             taskRepository.addTask(task);
         }
-        return Result.CREATED;
+        return Result.CREATED.toString();
     }
 }

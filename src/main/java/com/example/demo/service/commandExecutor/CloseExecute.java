@@ -13,12 +13,12 @@ public class CloseExecute implements CommandExecutor {
     TaskRepository taskRepository;
 
     @Override
-    public Result execute(Request request) {
+    public String execute(Request request) {
         Task currentTask = taskRepository.getTaskByName(request.getAdditionalParam());
         if (!currentTask.getStatus().equals(Status.DELETED)) {
             currentTask.setStatus(Status.CLOSED);
             taskRepository.updateTask(currentTask);
-            return Result.CLOSED;
-        } else return Result.ERROR;
+            return Result.CLOSED.toString();
+        } else return Result.ERROR.toString();
     }
 }
