@@ -9,18 +9,16 @@ import java.util.List;
 public class VerificationController {
 
 
-    /**
+    /*
      * Данный метод проверяет валидность формата входной строки
      * Строка должна состоять из трех атрибутов
      * Первые два обязательно в Верхнев регистре
      * Третий атрибут при command = 'LIST_TASK', так же должен быть в верхнем регистре
-     * @param input
-     * @return true or false
      */
     public boolean validateFormat(String input) {
         List<String> inputArr = Arrays.asList(input.split(" "));
         List<String> appCommand = new ArrayList<>();
-        String commands = "CREATE_TASK,DELETE_TASK,CLOSE_TASK,REOPEN_TASK,LIST_TASK";
+
         appCommand.add("CREATE_TASK");
         appCommand.add("DELETE_TASK");
         appCommand.add("CLOSE_TASK");
@@ -34,9 +32,17 @@ public class VerificationController {
             String name = inputArr.get(0);
             String command = inputArr.get(1);
             String arg = inputArr.get(2);
+            boolean comIsTrue = false;
+
+            for(String com : appCommand) {
+                if (com.equals(command)) {
+                    comIsTrue  = true;
+                    break;
+                }
+            }
 
            //Далее проверяем что регистр соблюден
-            if(name.equals(name.toUpperCase()) &&  (commands).contains(command)) {
+            if(name.equals(name.toUpperCase()) && comIsTrue) {
                 //Необходимо еще проверить, что при команде LIST_TASK, аргумент записан в верхнем регисте
                 if("LIST_TASK".equals(command)) {
                     if (!arg.equals(arg.toUpperCase())) {

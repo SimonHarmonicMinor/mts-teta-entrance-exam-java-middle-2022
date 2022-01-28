@@ -10,12 +10,9 @@ public class AppController {
     VerificationController verificationController = new VerificationController();
 
 
-    /**
+    /*
      * Метод позволяет создать новую запись в коллекции taskCollection
      * На вход принимает название записи и автора
-     * @param creatorName
-     * @param taskName
-     * @return ERROR or CREATED
      */
     public String createTask(String creatorName, String taskName) {
 
@@ -33,12 +30,9 @@ public class AppController {
     }
 
 
-    /**
+    /*
      * Метод позволяет выставлять статус "DELETED" задачам
      * Данный метод может выполнить только создатель задачи
-     * @param userName
-     * @param taskName
-     * @return ACCESS_DENIED or DELETED
      */
     public  String deleteTask(String userName, String taskName) {
         if(!verificationController.validateAccess(taskName,userName, tasksCollection)) {
@@ -57,13 +51,10 @@ public class AppController {
         return "ERROR";
     }
 
-    /**
+    /*
      * Метод позволяет закрыть задачу, в слуае когда ее статус CREATED
      * В случае, когда статус задачи CLOSED, возвращает ERROR
      * В случае, когда статус задачи DELETED, возвращает ACCESS_DENIED, так как доступа к этой задачи нет
-     * @param userName
-     * @param taskName
-     * @return appStatus
      */
     public  String closeTask(String userName, String taskName) {
         if (!verificationController.validateAccess(taskName, userName, tasksCollection)) {
@@ -82,13 +73,10 @@ public class AppController {
         return "ERROR";
     }
 
-    /**
+    /*
      * Метод позволяет открыть заново задачу если ее статус CREATED
      * В случае если, когда статус задачи CLOSED, возвращает ERROR
      * В случае, когда статус задачи DELETED, возвращает ACCESS_DENIED, так как доступа к этой задачи нет
-     * @param userName
-     * @param taskName
-     * @return appStatus
      */
     public  String reopenTask(String userName, String taskName) {
         if (!verificationController.validateAccess(taskName, userName, tasksCollection)) {
@@ -107,11 +95,9 @@ public class AppController {
         return "ERROR";
     }
 
-    /**
+    /*
      * Метод позволяет вернуть список задач конкретного пользователя
      * Возвращет только активные задачи, которые находятся не в статусе DELETED
-     * @param creatorName
-     * @return userTasks
      */
     public List<String> showTasksList(String creatorName) {
         List<String> userTasks = tasksCollection.stream().filter(p -> p.getCreator().equals(creatorName))
