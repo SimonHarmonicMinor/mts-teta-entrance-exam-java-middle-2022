@@ -33,7 +33,7 @@ public class Server {
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
-//            String result = new ConfigApp().getPlanOfTask();
+            String result = ConfigApp.getPlanOfTaskAdapter().execute(line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
             serverWriter.write(result);
             serverWriter.flush();

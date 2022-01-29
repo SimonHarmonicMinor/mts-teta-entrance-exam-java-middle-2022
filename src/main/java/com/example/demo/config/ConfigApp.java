@@ -24,7 +24,7 @@ public class ConfigApp {
 
     private static final Map<String, Object> objectContainer = new HashMap<>();
 
-    public PlanOfTask getPlanOfTask() {
+    private static PlanOfTask getPlanOfTask() {
         CommandExecutor commandExecutor = getCommandExecutor();
         RequestChecker requestChecker = getRequestChecker();
         ExceptionHandler exceptionHandler = getExceptionHandler();
@@ -125,6 +125,6 @@ public class ConfigApp {
     }
 
     public static PlanOfTaskAdapter getPlanOfTaskAdapter() {
-        
+        return (PlanOfTaskAdapter) getOrCreate(PlanOfTaskAdapter.class.getCanonicalName(), () -> new PlanOfTaskAdapter(getPlanOfTask(), getExceptionHandler()));
     }
 }
