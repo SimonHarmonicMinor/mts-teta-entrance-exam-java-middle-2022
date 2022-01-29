@@ -16,6 +16,10 @@ public class Request {
         this.additionalParam = additionalParam;
     }
 
+    public Request() {
+
+    }
+
     public String getUserName() {
         return userName;
     }

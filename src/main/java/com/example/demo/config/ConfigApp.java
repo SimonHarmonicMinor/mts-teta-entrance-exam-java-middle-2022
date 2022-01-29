@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.adapter.PlanOfTaskAdapter;
 import com.example.demo.entity.Command;
 import com.example.demo.exception.ExceptionHandler;
 import com.example.demo.exception.ExceptionHandlerImpl;
@@ -123,5 +124,7 @@ public class ConfigApp {
                 });
     }
 
-
+    public static PlanOfTaskAdapter getPlanOfTaskAdapter() {
+        
+    }
 }

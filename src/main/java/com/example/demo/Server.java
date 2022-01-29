@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import com.example.demo.config.ConfigApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +33,9 @@ public class Server {
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
+//            String result = new ConfigApp().getPlanOfTask();
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            serverWriter.write(result);
             serverWriter.flush();
           }
         } catch (Exception e) {
