@@ -20,6 +20,7 @@ public class Server {
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
+      TaskAction task = new TaskAction();
       while (true) {
         try {
           Socket connection = serverSocket.accept();
@@ -30,6 +31,31 @@ public class Server {
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
             String line = serverReader.readLine();
+            String[] lineComand = line.split(" ");
+            if(lineComand.length==3){
+              switch (lineComand[1]){
+                case "CREATE_TASK":
+                  line = task.createTask(lineComand[0],lineComand[3]);
+                  break;
+                case "DELETE_TASK":
+                  line = task.deletedTask(lineComand[0],lineComand[3]);
+                  break;
+                case "CLOSE_TASK":
+                  line = task.closedTask(lineComand[0],lineComand[3]);
+                  break;
+                case "REOPEN_TASK":
+                  line = task.reOpenTask(lineComand[0],lineComand[3]);
+                  break;
+                case "LIST_TASK":
+                  line = "TASKS " + task.listTaskUser(lineComand[3]);
+                  break;
+                  default:
+                    line = "ERROR Invalid command";
+                    break;
+              }
+            }else{
+              line = "WRONG_FORMAT";
+            }
             LOG.debug("Request captured: " + line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
             serverWriter.write(line);
