@@ -25,16 +25,10 @@ public class AbstractServerTest {
 
   @BeforeEach
   void beforeEach() throws Exception {
-    clientSocket = new Socket("localhost", 9090);
-    out = new PrintWriter(clientSocket.getOutputStream(), true);
-    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
   }
 
   @AfterEach
   void afterEach() throws Exception {
-    in.close();
-    out.close();
-    clientSocket.close();
   }
 
   @AfterAll
@@ -42,12 +36,27 @@ public class AbstractServerTest {
     server.stop();
   }
 
+  /**
+   * Пришлось переделать тест, т.к. сервер по одной команде отрабатывает только
+   * будем тогда открывать новый сокет на каждый вызов
+   */
   protected String sendMessage(String msg) {
-    out.println(msg);
     try {
-      return in.readLine();
+	    clientSocket = new Socket("localhost", 9090);
+	    out = new PrintWriter(clientSocket.getOutputStream(), true);
+	    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+	    out.println(msg);
+	    return in.readLine();
     } catch (IOException e) {
-      throw new RuntimeException(e);
+    	throw new RuntimeException(e);
+    } finally {
+    	try {
+    		in.close();
+    		out.close();
+    		clientSocket.close();
+    	} catch (IOException e) {
+    		; // pass
+    	}
     }
   }
 }
