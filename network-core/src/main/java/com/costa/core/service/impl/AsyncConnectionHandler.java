@@ -32,8 +32,8 @@ public class AsyncConnectionHandler implements ConnectionHandler {
         } catch (IOException e) {
             LOG.error("An exception has occurred", e);
             connection.getListener().onException(connection, e);
-            connection.disconnect();
         } finally {
+            connection.disconnect();
             connection.getListener().onDisconnect(connection);
         }
     }
