@@ -18,17 +18,17 @@ class ServerTest extends AbstractServerTest {
 //    assertEquals("request2", response);
 //  }
 
-  @Test
-  void test() {
-    String response = sendMessage("VASYA CREATE_TASK CleanRoom");
-    assertEquals("CREATED", response);
-  }
+//  @Test
+//  void test() {
+//    String response = sendMessage("VASYA CREATE_TASK CleanRoom");
+//    assertEquals("CREATED", response);
+//  }
 
-  @Test
-  void test2() {
-    String response = sendMessage("PETYA DELETE_TASK CleanRoom");
-    assertEquals("ACCESS_DENIED", response);
-  }
+//  @Test
+//  void test2() {
+//    String response = sendMessage("PETYA DELETE_TASK CleanRoom");
+//    assertEquals("ACCESS_DENIED", response);
+//  }
 
   @Test
   void test3() {
@@ -52,5 +52,14 @@ class ServerTest extends AbstractServerTest {
   void test6() {
     String response = sendMessage("VASYA CREATE_TASK CleanRoom");
     assertEquals("ERROR", response);
+  }
+
+  @Test
+  void test7() {
+    String response1 = sendMessage("VASYA CREATE_TASK CleanRoom");
+    assertEquals("CREATED", response1);
+
+    String response2 = sendMessage("PETYA DELETE_TASK CleanRoom");
+    assertEquals("ACCESS_DENIED", response2);
   }
 }
