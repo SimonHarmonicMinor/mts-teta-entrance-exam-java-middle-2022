@@ -17,7 +17,7 @@ public class Task {
 		Task task = tasks.get(task_name);
 		if (task == null)
 			throw new ErrOther();
-		if (!(task.user.getName().equals(user_name)))
+		if (!task.user.getName().equals(user_name))
 			throw new ErrAccess();
 		return task;
 	}
