@@ -31,19 +31,19 @@ public class RequestHandler {
 
             taskOperation = new TaskOperation();
             switch (request.getCommand()){
-                case ("CREATE_TASK"):
+                case "CREATE_TASK":
                     taskOperation.CreateTask(request.getUser(),request.getArg(),result);
                     break;
-                case ("CLOSE_TASK"):
+                case "CLOSE_TASK":
                     taskOperation.CloseTask(request.getUser(),request.getArg(),result);
                     break;
-                case ("DELETE_TASK"):
+                case "DELETE_TASK":
                    taskOperation.DeleteTask(request.getUser(),request.getArg(),result);
                    break;
-                case ("REOPEN_TASK"):
+                case "REOPEN_TASK":
                     taskOperation.ReopenTask(request.getUser(),request.getArg(),result);
                     break;
-                case ("LIST_TASK"):
+                case "LIST_TASK":
                     taskOperation.ListTask(request.getUser(),request.getArg(),result);
                     break;
                 default:

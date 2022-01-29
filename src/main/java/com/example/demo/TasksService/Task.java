@@ -6,10 +6,10 @@ public class Task {
     private TasksStatuses Status;
     private final String User;
 
-    public Task(String name, TasksStatuses status, String user){
-        Name = name;
-        Status = status;
-        User = user;
+    public Task(String Taskname, TasksStatuses Taskstatus, String Taskuser){
+        Name = Taskname;
+        Status = Taskstatus;
+        User = Taskuser;
     }
 
     public String getName() {
@@ -20,8 +20,8 @@ public class Task {
         return Status;
     }
 
-    public void setStatus(TasksStatuses status){
-        this.Status = status;
+    public void setStatus(TasksStatuses Taskstatus){
+        this.Status = Taskstatus;
     }
 
     public String getUser() {
