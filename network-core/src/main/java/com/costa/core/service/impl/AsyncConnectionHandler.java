@@ -25,7 +25,9 @@ public class AsyncConnectionHandler implements ConnectionHandler {
         try {
             connection.getListener().onConnectionSuccess(connection);
             while (!Thread.interrupted()) {
-                connection.getListener().onReceiveMessage(connection, connection.getReader().readLine());
+                String line = connection.getReader().readLine();
+                if (line == null) return;
+                connection.getListener().onReceiveMessage(connection, line);
             }
         } catch (IOException e) {
             LOG.error("An exception has occurred", e);

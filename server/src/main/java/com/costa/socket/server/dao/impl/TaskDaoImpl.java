@@ -46,10 +46,8 @@ public class TaskDaoImpl implements TaskDao {
 
     @Override
     public boolean save(Task task) {
-        tasks.stream()
-                .filter(t -> !t.getState().equals(TaskState.DELETED))
-                .collect(Collectors.toList())
-                .remove(task);
+        tasks.removeIf(item -> !item.getState().equals(TaskState.DELETED)
+                && item.equals(task));
 
         return tasks.add(task);
     }

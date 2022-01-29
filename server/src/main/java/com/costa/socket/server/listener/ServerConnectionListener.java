@@ -19,7 +19,7 @@ public class ServerConnectionListener<T> implements ConnectionListener {
 
     @Override
     public void onDisconnect(SocketConnection connection) {
-        connection.sendMessage("disconnected from server");
+        LOG.info("{} Disconnected from server", connection);
     }
 
     @Override
@@ -34,6 +34,6 @@ public class ServerConnectionListener<T> implements ConnectionListener {
 
     @Override
     public void onConnectionSuccess(SocketConnection connection) {
-        connection.sendMessage("Connected to the server");
+        LOG.info("Client with connection {} connected", connection);
     }
 }

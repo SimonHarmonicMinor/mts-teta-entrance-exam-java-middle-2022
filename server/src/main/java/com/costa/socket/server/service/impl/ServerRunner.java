@@ -19,6 +19,7 @@ import java.net.ServerSocket;
 public class ServerRunner {
     private static final Logger LOG = LoggerFactory.getLogger(ServerRunner.class);
     private final ConnectionListener listener;
+    private SocketConnection socketConnection;
 
     public ServerRunner(CommandHandler<ResultStatus> commandHandler) {
         this.listener = new ServerConnectionListener<>(commandHandler);
@@ -26,24 +27,31 @@ public class ServerRunner {
 
     public void start() {
         ConfigLoader.load(BaseNetworkConfig.class, "server.properties");
+        Thread serverThread = new Thread(() -> {
+            try (ServerSocket serverSocket = new ServerSocket(BaseNetworkConfig.getPort())) {
+                LOG.debug("Server running...");
+                acceptSocket(serverSocket);
+            } catch (IOException e) {
+                LOG.error("Some problem with server", e);
+            }
+        });
 
-        try (ServerSocket serverSocket = new ServerSocket(BaseNetworkConfig.getPort())) {
-            LOG.debug("Server running...");
-            acceptSocket(serverSocket);
-        } catch (IOException e) {
-            LOG.error("Some problem with server", e);
-        }
+        serverThread.start();
     }
 
     private void acceptSocket(ServerSocket serverSocket) {
         while (true) {
             try {
-                SocketConnection socketConnection = new SocketConnection(listener, serverSocket.accept());
+                socketConnection = new SocketConnection(listener, serverSocket.accept());
                 socketConnection.start();
             } catch (IOException e) {
                 LOG.error("Error during request proceeding", e);
                 break;
             }
         }
+    }
+
+    public void closeConnection(){
+        socketConnection.disconnect();
     }
 }

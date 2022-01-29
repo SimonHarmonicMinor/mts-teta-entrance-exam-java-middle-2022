@@ -5,6 +5,7 @@ import com.costa.socket.server.model.Task;
 import com.costa.socket.server.model.TaskState;
 import com.costa.socket.server.model.UserRequest;
 import com.costa.socket.server.service.Validator;
+import com.costa.util.StringUtil;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -21,6 +22,9 @@ public class CommandValidator implements Validator {
 
     @Override
     public boolean validateComposition(String command) {
+        if (StringUtil.isEmpty(command))
+            return false;
+
         Pattern pattern = Pattern.compile("\\w+\\s\\w+\\s\\w+");
         return pattern.matcher(command).matches();
     }
