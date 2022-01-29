@@ -1,6 +1,16 @@
 package com.example.demo.config;
 
+import com.example.demo.entity.Command;
+import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.TaskRepositoryImpl;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.UserRepositoryImpl;
 import com.example.demo.service.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ConfigApp {
 
@@ -10,12 +20,28 @@ public class ConfigApp {
         return new PlanOfTaskImpl(commandExecutor, requestChecker);
     }
 
-    public CommandExecutor getCommandExecutor() {
-        return new BaseCommandExecutor();
+    private static CommandExecutor getCommandExecutor() {
+        return new BaseCommandExecutor(getSpecificCommandExecutors());
     }
 
-    public RequestChecker getRequestChecker() {
-        return new RequestCheckerImpl();
+    private static Map<Command, CommandExecutor> getSpecificCommandExecutors() {
+        return new HashMap<>();
+    }
+
+    private static RequestChecker getRequestChecker() {
+        return new RequestCheckerImpl(getRequestCheckerList());
+    }
+
+    private static List<RequestChecker> getRequestCheckerList() {
+        return new ArrayList<>();
+    }
+
+    private static UserRepository getUserRepository() {
+        return new UserRepositoryImpl();
+    }
+
+    private static TaskRepository getTaskRepository() {
+        return new TaskRepositoryImpl();
     }
 
 }
