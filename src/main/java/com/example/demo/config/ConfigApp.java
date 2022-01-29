@@ -15,22 +15,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
+
+import static java.util.Optional.ofNullable;
 
 public class ConfigApp {
+
+    private static final Map<String, Object> objectContainer = new HashMap<>();
 
     public PlanOfTask getPlanOfTask() {
         CommandExecutor commandExecutor = getCommandExecutor();
         RequestChecker requestChecker = getRequestChecker();
         ExceptionHandler exceptionHandler = getExceptionHandler();
-        return new PlanOfTaskImpl(commandExecutor, requestChecker, exceptionHandler);
+        return (PlanOfTaskImpl) getOrCreate(PlanOfTaskImpl.class.getCanonicalName(), () -> new PlanOfTaskImpl(commandExecutor, requestChecker, exceptionHandler));
     }
 
     private static CommandExecutor getCommandExecutor() {
-        return new BaseCommandExecutor(getSpecificCommandExecutors());
+        return (BaseCommandExecutor) getOrCreate(BaseCommandExecutor.class.getCanonicalName(), () -> new BaseCommandExecutor(getSpecificCommandExecutors()));
     }
 
     private static ExceptionHandler getExceptionHandler() {
-        return new ExceptionHandlerImpl();
+        return (ExceptionHandlerImpl) getOrCreate(ExceptionHandlerImpl.class.getCanonicalName(), ExceptionHandlerImpl::new);
     }
 
     private static Map<Command, CommandExecutor> getSpecificCommandExecutors() {
@@ -44,27 +49,27 @@ public class ConfigApp {
     }
 
     private static CommandExecutor getCreateExecute() {
-        return new CreateExecute(getTaskRepository());
+        return (CreateExecute) getOrCreate(CreateExecute.class.getCanonicalName(), () -> new CreateExecute(getTaskRepository()));
     }
 
     private static CommandExecutor getCloseExecute() {
-        return new CloseExecute(getTaskRepository());
+        return (CloseExecute) getOrCreate(CloseExecute.class.getCanonicalName(), () -> new CloseExecute(getTaskRepository()));
     }
 
     private static CommandExecutor getDeleteExecute() {
-        return new DeleteExecute(getTaskRepository());
+        return (DeleteExecute) getOrCreate(DeleteExecute.class.getCanonicalName(), () -> new DeleteExecute(getTaskRepository()));
     }
 
     private static CommandExecutor getListExecute() {
-        return new ListExecute(getUserRepository());
+        return (ListExecute) getOrCreate(ListExecute.class.getCanonicalName(), () -> new ListExecute(getUserRepository()));
     }
 
     private static CommandExecutor getReopenExecute() {
-        return new ReopenExecute(getTaskRepository());
+        return (ReopenExecute) getOrCreate(ReopenExecute.class.getCanonicalName(), () -> new ReopenExecute(getTaskRepository()));
     }
 
     private static RequestChecker getRequestChecker() {
-        return new RequestCheckerImpl(getRequestCheckerList());
+        return (RequestCheckerImpl) getOrCreate(RequestCheckerImpl.class.getCanonicalName(), () -> new RequestCheckerImpl(getRequestCheckerList()));
     }
 
     private static List<RequestChecker> getRequestCheckerList() {
@@ -79,35 +84,44 @@ public class ConfigApp {
     }
 
     private static RequestChecker getAdditionalParamChecker() {
-        return new AdditionalParamChecker();
+        return (AdditionalParamChecker) getOrCreate(AdditionalParamChecker.class.getCanonicalName(), AdditionalParamChecker::new);
     }
 
     private static RequestChecker getCommandNameChecker() {
-        return new CommandNameChecker();
+        return (CommandNameChecker) getOrCreate(CommandNameChecker.class.getCanonicalName(), CommandNameChecker::new);
     }
 
     private static RequestChecker getRequiredFieldsChecker() {
-        return new RequiredFieldsChecker();
+        return (RequiredFieldsChecker) getOrCreate(RequiredFieldsChecker.class.getCanonicalName(), RequiredFieldsChecker::new);
     }
 
     private static RequestChecker getRightChecker() {
-        return new RightChecker(getUserRepository());
+        return (RightChecker) getOrCreate(RightChecker.class.getCanonicalName(), () -> new RightChecker(getUserRepository()));
     }
 
     private static RequestChecker getTaskNameChecker() {
-        return new TaskNameChecker(getTaskRepository());
+        return (TaskNameChecker) getOrCreate(TaskNameChecker.class.getCanonicalName(), () -> new TaskNameChecker(getTaskRepository()));
     }
 
     private static RequestChecker getUserNameChecker() {
-        return new UserNameChecker();
+        return (UserNameChecker) getOrCreate(UserNameChecker.class.getCanonicalName(), UserNameChecker::new);
     }
 
     private static UserRepository getUserRepository() {
-        return new UserRepositoryImpl();
+        return (UserRepositoryImpl) getOrCreate(UserRepositoryImpl.class.getCanonicalName(), UserRepositoryImpl::new);
     }
 
     private static TaskRepository getTaskRepository() {
-        return new TaskRepositoryImpl();
+        return (TaskRepositoryImpl) getOrCreate(TaskRepositoryImpl.class.getCanonicalName(), TaskRepositoryImpl::new);
     }
+
+    private static Object getOrCreate(String objectName, Supplier<Object> initFunc) {
+        return ofNullable(objectContainer.get(objectName))
+                .orElseGet(() -> {
+                    objectContainer.put(objectName, initFunc.get());
+                    return objectContainer.get(objectName);
+                });
+    }
+
 
 }
