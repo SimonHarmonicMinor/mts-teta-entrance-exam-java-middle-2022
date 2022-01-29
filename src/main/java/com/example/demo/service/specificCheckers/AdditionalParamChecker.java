@@ -13,7 +13,7 @@ public class AdditionalParamChecker implements RequestChecker {
     @Override
     public void check(Request request) {
         if (request.getCommand().equals(Command.LIST_TASK)) {
-            if (!request.getAdditionalParam().matches("[A-Z]")) {
+            if (!request.getAdditionalParam().chars().allMatch(Character::isUpperCase)) {
                 throw new FormatException("Неправильный формат написания имени");
             }
         }

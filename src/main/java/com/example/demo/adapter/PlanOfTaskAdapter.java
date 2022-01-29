@@ -29,6 +29,7 @@ public class PlanOfTaskAdapter {
                 return planOfTask.execute(request);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return exceptionHandler.handle(e);
         }
     }

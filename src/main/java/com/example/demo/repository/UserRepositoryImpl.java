@@ -2,10 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Имплементация репозитория юзеров
@@ -30,8 +27,8 @@ public class UserRepositoryImpl implements UserRepository {
      * Получить юзера по его имени
      */
     @Override
-    public User getUserByName(String userName) {
-        return userMap.get(userName);
+    public Optional<User> getUserByName(String userName) {
+        return Optional.ofNullable(userMap.get(userName));
     }
 
     /**

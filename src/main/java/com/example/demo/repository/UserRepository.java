@@ -7,12 +7,13 @@ import com.example.demo.entity.User;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
     void addUser(User user);
 
-    User getUserByName(String userName);
+    Optional<User> getUserByName(String userName);
 
     List<User> getAllUsers();
 

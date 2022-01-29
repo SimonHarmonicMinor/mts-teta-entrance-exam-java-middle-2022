@@ -24,6 +24,7 @@ public class PlanOfTaskImpl implements PlanOfTask {
             requestChecker.check(request);
             return commandExecutor.execute(request);
         } catch (Exception e) {
+            e.printStackTrace();
             return exceptionHandler.handle(e);
         }
     }
