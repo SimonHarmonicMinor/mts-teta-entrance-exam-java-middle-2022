@@ -20,7 +20,7 @@ public class Server {
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
-      var processor = new AppCommandProcessor();
+      var processor = new AppOperationProcessor();
       while (true) {
         try {
           Socket connection = serverSocket.accept();
@@ -32,8 +32,7 @@ public class Server {
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(processor.processCommandLine(line));
+            serverWriter.write(processor.processOperationLine(line));
             serverWriter.flush();
           }
         } catch (Exception e) {
