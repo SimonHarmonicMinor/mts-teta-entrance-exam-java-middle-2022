@@ -10,7 +10,11 @@ import com.example.demo.service.CommandExecutor;
 
 public class CloseExecute implements CommandExecutor {
 
-    TaskRepository taskRepository;
+   private final TaskRepository taskRepository;
+
+    public CloseExecute(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     public String execute(Request request) {

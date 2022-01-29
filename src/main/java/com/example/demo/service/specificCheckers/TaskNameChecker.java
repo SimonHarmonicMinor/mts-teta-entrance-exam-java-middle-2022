@@ -14,7 +14,11 @@ import static java.util.Objects.nonNull;
 
 public class TaskNameChecker implements RequestChecker {
 
-    TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+
+    public TaskNameChecker(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     public void check(Request request) {

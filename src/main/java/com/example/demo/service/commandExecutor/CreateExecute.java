@@ -11,7 +11,11 @@ import com.example.demo.service.CommandExecutor;
 
 public class CreateExecute implements CommandExecutor {
 
-    TaskRepository taskRepository;
+   private final TaskRepository taskRepository;
+
+    public CreateExecute(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     public String execute(Request request) {

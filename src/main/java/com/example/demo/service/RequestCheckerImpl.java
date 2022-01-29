@@ -6,7 +6,11 @@ import java.util.List;
 
 public class RequestCheckerImpl implements RequestChecker {
 
-    private List<RequestChecker> requestCheckerList;
+    private final List<RequestChecker> requestCheckerList;
+
+    public RequestCheckerImpl(List<RequestChecker> requestCheckerList) {
+        this.requestCheckerList = requestCheckerList;
+    }
 
     @Override
     public void check(Request request) {

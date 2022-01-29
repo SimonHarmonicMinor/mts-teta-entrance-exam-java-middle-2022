@@ -8,8 +8,13 @@ import com.example.demo.entity.Request;
 
 public class PlanOfTaskImpl implements PlanOfTask {
 
-    private CommandExecutor commandExecutor;
-    private RequestChecker requestChecker;
+    private final CommandExecutor commandExecutor;
+    private final RequestChecker requestChecker;
+
+    public PlanOfTaskImpl(CommandExecutor commandExecutor, RequestChecker requestChecker) {
+        this.commandExecutor = commandExecutor;
+        this.requestChecker = requestChecker;
+    }
 
     public String execute(Request request) {
         requestChecker.check(request);

@@ -11,7 +11,11 @@ import java.util.Map;
 
 public class BaseCommandExecutor implements CommandExecutor{
 
-    private Map<Command, CommandExecutor> specificCommandExecutors;
+    private final Map<Command, CommandExecutor> specificCommandExecutors;
+
+    public BaseCommandExecutor(Map<Command, CommandExecutor> specificCommandExecutors) {
+        this.specificCommandExecutors = specificCommandExecutors;
+    }
 
     @Override
     public String execute(Request request) {

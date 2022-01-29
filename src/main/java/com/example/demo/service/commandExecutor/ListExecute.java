@@ -1,7 +1,6 @@
 package com.example.demo.service.commandExecutor;
 
 import com.example.demo.entity.*;
-import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CommandExecutor;
 
@@ -16,7 +15,11 @@ import static java.util.Objects.nonNull;
 
 public class ListExecute implements CommandExecutor {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public ListExecute(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String execute(Request request) {

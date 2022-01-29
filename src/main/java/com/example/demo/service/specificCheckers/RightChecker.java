@@ -13,7 +13,11 @@ import java.util.List;
  */
 public class RightChecker implements RequestChecker {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public RightChecker(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void check(Request request) {
