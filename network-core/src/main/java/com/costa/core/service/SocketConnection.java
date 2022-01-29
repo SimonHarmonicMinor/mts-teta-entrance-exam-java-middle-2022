@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Connection class for multi-user client-server applications via {@link java.net.Socket}
@@ -24,8 +25,8 @@ public class SocketConnection {
     }
 
     public SocketConnection(ConnectionListener listener, Socket socket) throws IOException {
-        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
         this.listener = listener;
         this.socket = socket;
         this.connectionHandler = new AsyncConnectionHandler(this);

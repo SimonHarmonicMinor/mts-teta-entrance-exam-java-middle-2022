@@ -21,7 +21,7 @@ public class ClientConnection implements ConnectionListener {
         try {
             new SocketConnection(this, BaseNetworkConfig.getHost(), BaseNetworkConfig.getPort()).start();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Failed or interrupted I/O operation", e);
         }
     }
 
