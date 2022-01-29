@@ -19,7 +19,6 @@ import java.net.ServerSocket;
 public class ServerRunner {
     private static final Logger LOG = LoggerFactory.getLogger(ServerRunner.class);
     private final ConnectionListener listener;
-    private SocketConnection socketConnection;
 
     public ServerRunner(CommandHandler<ResultStatus> commandHandler) {
         this.listener = new ServerConnectionListener<>(commandHandler);
@@ -42,16 +41,11 @@ public class ServerRunner {
     private void acceptSocket(ServerSocket serverSocket) {
         while (true) {
             try {
-                socketConnection = new SocketConnection(listener, serverSocket.accept());
-                socketConnection.start();
+                new SocketConnection(listener, serverSocket.accept()).start();
             } catch (IOException e) {
                 LOG.error("Error during request proceeding", e);
                 break;
             }
         }
-    }
-
-    public void closeConnection(){
-        socketConnection.disconnect();
     }
 }

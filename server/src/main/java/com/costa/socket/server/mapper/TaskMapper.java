@@ -1,7 +1,7 @@
 package com.costa.socket.server.mapper;
 
 import com.costa.socket.server.model.Task;
-import com.costa.socket.server.model.UserRequest;
+import com.costa.socket.server.dto.UserRequest;
 
 public class TaskMapper {
     private TaskMapper() {

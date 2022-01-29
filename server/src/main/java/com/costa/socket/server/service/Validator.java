@@ -1,6 +1,6 @@
 package com.costa.socket.server.service;
 
-import com.costa.socket.server.model.UserRequest;
+import com.costa.socket.server.dto.UserRequest;
 
 /**
  * Check the condition, used by default at the beginning of handling

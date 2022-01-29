@@ -1,4 +1,7 @@
-package com.costa.socket.server.model;
+package com.costa.socket.server.dto;
+
+import com.costa.socket.server.model.AvailableCommand;
+import com.costa.socket.server.model.User;
 
 /**
  * DTO for user request

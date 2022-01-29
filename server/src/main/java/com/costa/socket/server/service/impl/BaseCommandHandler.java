@@ -4,7 +4,7 @@ import com.costa.socket.server.dto.ServerResponse;
 import com.costa.socket.server.mapper.UserRequestMapper;
 import com.costa.socket.server.model.Command;
 import com.costa.socket.server.model.ResultStatus;
-import com.costa.socket.server.model.UserRequest;
+import com.costa.socket.server.dto.UserRequest;
 import com.costa.socket.server.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

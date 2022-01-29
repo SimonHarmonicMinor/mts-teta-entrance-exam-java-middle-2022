@@ -3,7 +3,7 @@ package com.costa.socket.server.service.impl;
 import com.costa.socket.server.daoservice.TaskService;
 import com.costa.socket.server.model.Task;
 import com.costa.socket.server.model.TaskState;
-import com.costa.socket.server.model.UserRequest;
+import com.costa.socket.server.dto.UserRequest;
 import com.costa.socket.server.service.Validator;
 import com.costa.util.StringUtil;
 

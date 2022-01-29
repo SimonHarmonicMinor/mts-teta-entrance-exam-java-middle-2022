@@ -1,6 +1,7 @@
 package com.costa.socket.server.service.impl;
 
 import com.costa.socket.server.dto.ServerResponse;
+import com.costa.socket.server.dto.UserRequest;
 import com.costa.socket.server.model.*;
 import com.costa.socket.server.service.TaskHandler;
 import com.costa.socket.server.daoservice.TaskService;

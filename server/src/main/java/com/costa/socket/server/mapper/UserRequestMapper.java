@@ -1,5 +1,6 @@
 package com.costa.socket.server.mapper;
 
+import com.costa.socket.server.dto.UserRequest;
 import com.costa.socket.server.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
