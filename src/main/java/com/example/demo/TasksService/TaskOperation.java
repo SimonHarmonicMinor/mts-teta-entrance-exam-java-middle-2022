@@ -3,7 +3,6 @@ package com.example.demo.TasksService;
 import com.example.demo.ResultHandler.Result;
 import com.example.demo.ResultHandler.ResultTypes;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +62,7 @@ public class TaskOperation {
                     return;
                 }
                 else if (User.equals(task.getUser()) && task.getStatus().equals(TasksStatuses.CLOSED)) {
-                    result.setResult(ResultTypes.CREATED);
+                    result.setResult(ResultTypes.REOPENED);
                     task.setStatus(TasksStatuses.CREATED);
                     return;
                 }
@@ -72,7 +71,14 @@ public class TaskOperation {
         }
     }
 
-    public void ListTask(String User, String Name){
-
+    public void ListTask(String User, String Name, Result result){
+        var listTasksArg = new ArrayList<String>();
+        for (Task task : TasksList) {
+                if (Name.equals(task.getUser()) && !task.getStatus().equals(TasksStatuses.DELETED)) {
+                    listTasksArg.add(task.getName());
+                }
+        }
+        result.setResultArg("["+String.join(",",listTasksArg)+"]");
+        result.setResult(ResultTypes.TASKS);
     }
 }

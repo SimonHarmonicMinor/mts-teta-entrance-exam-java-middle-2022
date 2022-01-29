@@ -2,60 +2,106 @@ package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.example.demo.ResultHandler.ResultTypes;
 import org.junit.jupiter.api.Test;
 
 class ServerTest extends AbstractServerTest {
-
+  
   @Test
-  void test() {
-    String response = sendMessage("VASYA CREATE_TASK CleanRoom");
-    assertEquals("CREATED", response);
-  }
-  @Test
-  void test1() {
-    String response = sendMessage("VASYA CREATE_TASK CleanRoom2");
-    assertEquals("CREATED", response);
+  void test001() {
+    String response = sendMessage("OMON CREATE_TASK CleanRoom");
+    assertEquals(ResultTypes.CREATED.toString(), response);
   }
 
   @Test
-  void test2() {
-    String response = sendMessage("VASYA CREATE_TASK");
-    assertEquals("WRONG_FORMAT", response);
+  void test002() {
+    String response = sendMessage("OMON CREATE_TASK CleanRoom2");
+    assertEquals(ResultTypes.CREATED.toString(), response);
   }
 
   @Test
-  void test3() {
-    String response = sendMessage("VASYA CREATESADA_TASK dasdas");
-    assertEquals("WRONG_FORMAT", response);
+  void test003() {
+    String response = sendMessage("OMON CREATE_TASK CleanRoom ARGS");
+    assertEquals(ResultTypes.WRONG_FORMAT.toString(), response);
+  }
+
+  @Test
+  void test004() {
+    String response = sendMessage("OMON LIST_TASK OMON");
+    assertEquals(ResultTypes.TASKS + " [CleanRoom,CleanRoom2]", response);
+  }
+
+  @Test
+  void test005() {
+    String response = sendMessage("VOVA CREATE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.CREATED.toString(), response);
+  }
+
+  @Test
+  void test006() {
+    String response = sendMessage("OMON LIST_TASK VOVA");
+    assertEquals(ResultTypes.TASKS + " [СhangeTheConstitution]", response);
+  }
+
+  @Test
+  void test007() {
+    String response = sendMessage("OMON CLOSE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.ACCESS_DENIED.toString(), response);
+  }
+
+  @Test
+  void test008() {
+    String response = sendMessage("OMON CREATE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.ERROR.toString(), response);
+  }
+
+  @Test
+  void test009() {
+    String response = sendMessage("VOVA CLOSE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.CLOSED.toString(), response);
+  }
+
+  @Test
+  void test010() {
+    String response = sendMessage("VOVA DELETE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.DELETED.toString(), response);
+  }
+
+  @Test
+  void test011() {
+    String response = sendMessage("VOVA CREATE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.CREATED.toString(), response);
+  }
+
+  @Test
+  void test012() {
+    String response = sendMessage("VOVA CLOSE_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.CLOSED.toString(), response);
+  }
+
+  @Test
+  void test013() {
+    String response = sendMessage("VOVA REOPEN_TASK СhangeTheConstitution");
+    assertEquals(ResultTypes.REOPENED.toString(), response);
   }
   @Test
-  void test4() {
-    String response = sendMessage("VASYA DELETE_TASK CleanRoom");
-    assertEquals("ERROR", response);
+  void test014() {
+    String response = sendMessage("VOVA REOPEN_TASK");
+    assertEquals(ResultTypes.WRONG_FORMAT.toString(), response);
   }
   @Test
-  void test5() {
-    String response = sendMessage("VASYA DELETE_TASK CleanRoom1");
-    assertEquals("ERROR", response);
+  void test015() {
+    String response = sendMessage("VOVA REOPEааывN_TASK ыаываыва");
+    assertEquals(ResultTypes.WRONG_FORMAT.toString(), response);
   }
   @Test
-  void test6() {
-    String response = sendMessage("GENA DELETE_TASK CleanRoom2");
-    assertEquals("ACCESS_DENIED", response);
+  void test016() {
+    String response = sendMessage("VOVA LIST_TASK DIMA");
+    assertEquals(ResultTypes.TASKS + " []", response);
   }
   @Test
-  void test7() {
-    String response = sendMessage("GENA DELETE_TASK CleanRoom2");
-    assertEquals("ACCESS_DENIED", response);
-  }
-  @Test
-  void test8() {
-    String response = sendMessage("VASYA CREATED_TASK");
-    assertEquals("WRONG_FORMAT", response);
-  }
-  @Test
-  void t1est10() {
-    String response = sendMessage("VASYA CREATE_TASK CleanRoom2");
-    assertEquals("ERROR", response);
+  void test017() {
+    String response = sendMessage("DIMA REOPEN_TASK GO_SWAP");
+    assertEquals(ResultTypes.ERROR.toString(), response);
   }
 }
