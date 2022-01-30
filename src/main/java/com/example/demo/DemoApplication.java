@@ -19,6 +19,19 @@ public class DemoApplication {
         }
         return true;
     }
+    
+    public static String fingUniqTaskIndexForDelete(String taskname) {
+        int delete_id = 0;
+        String[] arrTask = {};
+        for (int i=0; i<tasks.length; i++) {
+            if (tasks[i][1]!=null) {
+                arrTask = tasks[i][1].split("___");
+                if (arrTask.length > 1 && Integer.parseInt(arrTask[1])+1 > delete_id) delete_id = Integer.parseInt(arrTask[1])+1;    
+            }
+        }
+        return taskname+"___"+delete_id;
+    }
+    
     public static int getFreeRow() {
         int row_id = 0;
             for (int j=0; j<tasks.length; j++) {
@@ -34,6 +47,7 @@ public class DemoApplication {
             }
         return row_id;
     }
+    
     public static void showTaskList(String[] arrCommand) {
         for (int j=0; j<tasks.length; j++) {
             if (tasks[j][0]!=null && tasks[j][0].equals(arrCommand[2]) && tasks[j][2]!="DELETED") { //если элемент таблицы tasks не null И имя (аргумент) = имя автора задачи И статус != DELETED
@@ -55,6 +69,7 @@ public class DemoApplication {
                 if (isCommandOrderCorrect(arrCommand[0], taskname, arrCommand[1]) == true) {
                     access_result = setStatus;
                     tasks[i][2] = setStatus;
+                    if (setStatus.equals("DELETED")) tasks[i][1] = fingUniqTaskIndexForDelete(taskname);
                     break;
                 } else {
                     access_result = "WRONG REQUEST";
