@@ -69,6 +69,8 @@ class OperationProcessorTest {
 
         sendTaskOperation(Operation.DELETE_TASK, User.VASYA, Task.Task1);
         assertTaskOperation(Operation.CREATE_TASK, User.VASYA, Task.Task1, Response.CREATED);
+
+        assertTaskOperation(Operation.CREATE_TASK, User.VASYA, Task.TASK1, Response.CREATED);
     }
 
     /**
@@ -86,6 +88,8 @@ class OperationProcessorTest {
         sendTaskOperation(Operation.CLOSE_TASK, User.VASYA, Task.Task3);
 
         assertTaskList(User.PETYA, User.VASYA, new Task[] {Task.Task1, Task.Task3});
+        assertTaskList(User.PETYA, User.Vasya, new Task[] {});
+
     }
 
     /**
@@ -139,12 +143,14 @@ class OperationProcessorTest {
     enum Task {
         Task1,
         Task2,
-        Task3
+        Task3,
+        TASK1
     }
 
     enum User {
         PETYA,
-        VASYA
+        VASYA,
+        Vasya
     }
 
 }
