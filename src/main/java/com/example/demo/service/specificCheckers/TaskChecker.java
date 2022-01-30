@@ -1,5 +1,6 @@
 package com.example.demo.service.specificCheckers;
 
+import ch.qos.logback.classic.Logger;
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
 import com.example.demo.entity.User;
@@ -7,6 +8,7 @@ import com.example.demo.exception.FormatException;
 import com.example.demo.exception.RightException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.RequestChecker;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +25,12 @@ public class TaskChecker implements RequestChecker {
         this.userRepository = userRepository;
     }
 
+    private static final Logger logger
+            = (Logger) LoggerFactory.getLogger(UserNameChecker.class);
+
     @Override
     public void check(Request request) {
+        logger.info(">>TaskChecker check request={}", request);
         Command currentCommand = request.getCommand();
         List<String> taskList = userRepository.getUserByName(request.getUserName()).map(User::getTaskName).orElse(List.of());
         if (currentCommand.equals(Command.CLOSE_TASK) || currentCommand.equals(Command.DELETE_TASK) || currentCommand.equals(Command.REOPEN_TASK)) {

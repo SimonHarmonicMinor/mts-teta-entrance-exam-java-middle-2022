@@ -1,11 +1,13 @@
 package com.example.demo.service.specificCheckers;
 
+import ch.qos.logback.classic.Logger;
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
 import com.example.demo.entity.Task;
 import com.example.demo.exception.ErrorException;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.RequestChecker;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -23,10 +25,13 @@ public class TaskNameChecker implements RequestChecker {
         this.taskRepository = taskRepository;
     }
 
+    private static final Logger logger
+            = (Logger) LoggerFactory.getLogger(UserNameChecker.class);
+
     @Override
     public void check(Request request) {
+        logger.info(">>TaskNameChecker check request={}", request);
         if (request.getCommand().equals(Command.CREATE_TASK)) {
-//            if (nonNull(taskRepository.getTaskByName(request.getAdditionalParam()))) {
             if (taskRepository.getTaskByName(request.getAdditionalParam()).isPresent()) {
                 throw new ErrorException("Имя задачи не уникально");
             }
