@@ -6,29 +6,31 @@ import com.example.demo.lexer.SwpToken;
 import com.example.demo.model.CloseTask;
 import com.example.demo.model.CreateTask;
 import com.example.demo.model.DeleteTask;
-import com.example.demo.model.ListsTasks;
+import com.example.demo.model.ListTasks;
 import com.example.demo.model.ReOpenTask;
 import com.example.demo.model.SwpCommand;
-import java.util.Deque;
-import java.util.LinkedList;
 
 public class SwpParser {
-    private final Deque<Integer> positions = new LinkedList<>();
     private int position = 0;
+    private static final String CREATE_TASK = "CREATE_TASK";
+    private static final String CLOSE_TASK = "CLOSE_TASK";
+    private static final String DELETE_TASK = "DELETE_TASK";
+    private static final String LIST_TASK = "LIST_TASK";
+    private static final String REOPEN_TASK = "REOPEN_TASK";
 
     public SwpCommand parse(LexemStream lexems) throws SwpParseException {
         SwpCommand command = null;
 
         String userId = consume(lexems, SwpToken.WORD).getValue();
-        if (check(lexems, SwpToken.TASK_NAME, "CREATE_TASK")) {
+        if (check(lexems, SwpToken.TASK_NAME, CREATE_TASK)) {
             command = new CreateTask(userId);
-        } else if (check(lexems, SwpToken.TASK_NAME, "CLOSE_TASK")) {
+        } else if (check(lexems, SwpToken.TASK_NAME, CLOSE_TASK)) {
             command = new CloseTask(userId);
-        } else if (check(lexems, SwpToken.TASK_NAME, "DELETE_TASK")) {
+        } else if (check(lexems, SwpToken.TASK_NAME, DELETE_TASK)) {
             command = new DeleteTask(userId);
-        } else if (check(lexems, SwpToken.TASK_NAME, "LIST_TASK")) {
-            command = new ListsTasks(userId);
-        } else if (check(lexems, SwpToken.TASK_NAME, "REOPEN_TASK")) {
+        } else if (check(lexems, SwpToken.TASK_NAME, LIST_TASK)) {
+            command = new ListTasks(userId);
+        } else if (check(lexems, SwpToken.TASK_NAME, REOPEN_TASK)) {
             command = new ReOpenTask(userId);
         }
 

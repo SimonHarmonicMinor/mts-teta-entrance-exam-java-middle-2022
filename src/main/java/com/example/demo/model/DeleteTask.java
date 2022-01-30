@@ -15,7 +15,7 @@ public class DeleteTask extends SwpCommand {
         if (task != null) {
             if (Objects.equals(getUserId(), task.getCreator())
                     && task.getState().equals(Task.TaskState.CLOSED)) {
-                context.deleteTask(taskName);
+                task.delete();
                 return new Result(ResultType.DELETED, null);
             } else {
                 return new Result(ResultType.ACCESS_DENIED, null);

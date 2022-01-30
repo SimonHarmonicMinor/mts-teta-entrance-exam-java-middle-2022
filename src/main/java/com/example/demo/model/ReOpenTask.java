@@ -14,6 +14,9 @@ public class ReOpenTask extends SwpCommand {
             String taskName = getArgs();
             Task task = context.findByName(taskName);
             if (task != null) {
+                if (task.getState().equals(Task.TaskState.CREATED)) {
+                    return new Result(ResultType.ERROR, null);
+                }
                 if (Objects.equals(getUserId(), task.getCreator())) {
                     task.reOpen();
                     return new Result(ResultType.REOPENED, null);

@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.lexer.SwpLexer;
 import com.example.demo.lexer.TokenizeException;
 import com.example.demo.model.Result;
+import com.example.demo.model.ResultType;
 import com.example.demo.model.SwpCommand;
 import com.example.demo.parser.SwpParseException;
 import com.example.demo.parser.SwpParser;
@@ -38,10 +39,10 @@ public class Server {
                             BufferedReader serverReader = new BufferedReader(
                                     new InputStreamReader(connection.getInputStream()));
                             Writer serverWriter = new BufferedWriter(
-                                    new OutputStreamWriter(connection.getOutputStream()));
+                                    new OutputStreamWriter(connection.getOutputStream()))
                     ) {
                         String line = serverReader.readLine();
-                        LOG.debug("Request captured: " + line);
+                        LOG.info("Request captured: " + line);
                         // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
                         serverWriter.write(processLine(swpContext, line));
                         serverWriter.flush();
@@ -56,13 +57,17 @@ public class Server {
         serverThread.start();
     }
 
-    public void stop() throws Exception {
+    public void stop() throws IOException {
         serverSocket.close();
     }
 
-    private String processLine(SwpContext context, String line) throws TokenizeException, SwpParseException {
-        SwpCommand command = new SwpParser().parse(new SwpLexer(line).tokenize());
-        Result result = command.execute(context);
-        return result.toString();
+    private String processLine(SwpContext context, String line) throws TokenizeException {
+        try {
+            SwpCommand command = new SwpParser().parse(new SwpLexer(line).tokenize());
+            Result result = command.execute(context);
+            return result.toString();
+        } catch (SwpParseException ex) {
+            return ResultType.WRONG_FORMAT.name();
+        }
     }
 }

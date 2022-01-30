@@ -3,8 +3,8 @@ package com.example.demo.model;
 import com.example.demo.SwpContext;
 import java.util.List;
 
-public class ListsTasks extends SwpCommand {
-    public ListsTasks(String userId) {
+public class ListTasks extends SwpCommand {
+    public ListTasks(String userId) {
         super(userId);
     }
 
