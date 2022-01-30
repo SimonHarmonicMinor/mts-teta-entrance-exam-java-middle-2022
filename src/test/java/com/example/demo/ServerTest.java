@@ -8,13 +8,13 @@ class ServerTest extends AbstractServerTest {
 
   @Test
   void test() {
-    String response = sendMessage("request");
-    assertEquals("request", response);
+    String response = sendMessage("User CREATE_TASK Name");
+    assertEquals("CREATED", response);
   }
 
   @Test
   void test2() {
-    String response = sendMessage("request2");
-    assertEquals("request2", response);
+    String response = sendMessage("User CLOSE_TASK Name");
+    assertEquals("ERROR", response);
   }
 }
