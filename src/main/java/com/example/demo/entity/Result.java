@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 /**
- * Варианты результата
+ * Варианты результата запроса
  */
 
 public enum Result {

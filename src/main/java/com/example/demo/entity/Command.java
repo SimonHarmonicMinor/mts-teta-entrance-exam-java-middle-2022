@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 /**
- * Варианты команд
+ * Варианты команд в запросах
  */
 
 public enum Command {

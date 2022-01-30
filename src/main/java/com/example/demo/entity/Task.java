@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 /**
- * Сущность Task
+ * Сущность задача, содержащая имя задачи, статус и имя пользователя
  */
 
 public class Task {

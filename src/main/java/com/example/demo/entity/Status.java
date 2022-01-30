@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 /**
- * Варианты статусов
+ * Варианты статусов для задач
  */
 
 public enum Status {

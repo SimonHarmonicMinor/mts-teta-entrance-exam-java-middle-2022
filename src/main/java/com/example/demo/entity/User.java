@@ -1,10 +1,9 @@
 package com.example.demo.entity;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Сущность User
+ * Сущность пользователь, содержит имя и список названий задач
  */
 
 public class User {
