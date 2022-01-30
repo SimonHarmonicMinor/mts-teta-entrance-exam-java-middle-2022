@@ -24,10 +24,10 @@ public class ListExecute implements CommandExecutor {
     @Override
     public String execute(Request request) {
 //        User currentUser = userRepository.getUserByName(request.getUserName());
-        List<String> taskName = userRepository.getUserByName(request.getUserName()).map(User::getTaskName).orElse(List.of());
+        List<String> taskName = userRepository.getUserByName(request.getAdditionalParam()).map(User::getTaskName).orElse(List.of());
 //        List<String> taskName = currentUser.getTaskName();
 //        if (nonNull(taskName)) {
-            return Result.TASKS.name() + taskName;
+            return Result.TASKS.name() + " " + taskName;
 //        } else return Result.TASKS.name() + new ArrayList<>();
     }
 }

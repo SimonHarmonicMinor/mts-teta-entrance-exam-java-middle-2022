@@ -2,9 +2,12 @@ package com.example.demo.service.specificCheckers;
 
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
+import com.example.demo.entity.Task;
 import com.example.demo.exception.ErrorException;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.RequestChecker;
+
+import java.util.Optional;
 
 import static java.util.Objects.nonNull;
 

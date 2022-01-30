@@ -76,11 +76,11 @@ public class ConfigApp {
     }
 
     private static CommandExecutor getCreateExecute() {
-        return (CreateExecute) getOrCreate(CreateExecute.class.getCanonicalName(), () -> new CreateExecute(getTaskRepository()));
+        return (CreateExecute) getOrCreate(CreateExecute.class.getCanonicalName(), () -> new CreateExecute(getTaskRepository(), getUserRepository()));
     }
 
     private static CommandExecutor getCloseExecute() {
-        return (CloseExecute) getOrCreate(CloseExecute.class.getCanonicalName(), () -> new CloseExecute(getTaskRepository()));
+        return (CloseExecute) getOrCreate(CloseExecute.class.getCanonicalName(), () -> new CloseExecute(getTaskRepository(), getUserRepository()));
     }
 
     private static CommandExecutor getDeleteExecute() {

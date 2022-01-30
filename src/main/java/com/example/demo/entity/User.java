@@ -40,4 +40,8 @@ public class User {
                 ", taskName=" + taskName +
                 '}';
     }
+
+    public void addTaskName(String additionalParam) {
+        this.taskName.add(additionalParam);
+    }
 }
