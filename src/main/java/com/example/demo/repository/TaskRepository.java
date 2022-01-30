@@ -20,8 +20,6 @@ public interface TaskRepository {
 
     Optional<Task> getTaskByName(String taskName);
 
-    List<Task> getTasksByUser(User user);
-
     List<Task> getAllTasks();
 
 }
