@@ -2,20 +2,20 @@ package com.example.demo.repositories;
 
 import com.example.demo.models.Task;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.example.demo.models.TaskStatus.DELETED;
 
 public class TaskRepositoryImpl implements TaskRepository {
-    private static final Set<Task> tasks = new HashSet<>();
+    private static final List<Task> tasks = new ArrayList<>();
 
     @Override
     public Optional<Task> findByName(String name) {
         return tasks.stream()
+                .filter(task -> task.getStatus() != DELETED)
                 .filter(task -> name.equals(task.getName()))
                 .findFirst();
     }
