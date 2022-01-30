@@ -32,7 +32,6 @@ public class Server {
                                 new OutputStreamWriter(connection.getOutputStream()))
                 ) {
                     String line = serverReader.readLine();
-                    line = line.trim();
                     LOG.debug("Request captured: {}", line);
 
                     Response response = requestHandler.handle(line);

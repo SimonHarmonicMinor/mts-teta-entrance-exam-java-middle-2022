@@ -22,10 +22,11 @@ public class RequestHandlerImpl implements RequestHandler {
     }
 
     @Override
-    public Response handle(String request) {
-        if (requestValidator.isInvalid(request))
+    public Response handle(String s) {
+        if (requestValidator.isInvalid(s)) {
             return new Response(WRONG_FORMAT);
-
+        }
+        String request = s.trim();
         String[] requestMembers = request.split(" ");
 
         Command command = getCommandFromRequest(requestMembers);

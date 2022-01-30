@@ -10,7 +10,10 @@ public class RequestValidatorImpl implements RequestValidator {
 
     @Override
     public boolean isValid(String request) {
-        String[] members = request.split(" ");
+        if (request == null || request.isEmpty())
+            return false;
+
+        String[] members = request.trim().split(" ");
 
         if (memNum != members.length) {
             LOG.error("Invalid format request");
