@@ -8,6 +8,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import com.example.demo.middleware.Middleware;
+import com.example.demo.requests.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +20,7 @@ public class Server {
 
   private ServerSocket serverSocket;
 
-  public void start() throws IOException {
+  public void start(Middleware handler) throws IOException {
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
       while (true) {
@@ -32,7 +35,10 @@ public class Server {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            Request request = new Request(line);
+            String response = handler.handle(request).getContent();
+            System.out.println(response);
+            serverWriter.write(response);
             serverWriter.flush();
           }
         } catch (Exception e) {

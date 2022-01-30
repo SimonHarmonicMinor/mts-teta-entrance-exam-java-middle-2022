@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,7 @@ public class AbstractServerTest {
   @BeforeAll
   static void beforeAll() throws Exception {
     server = new Server();
-    server.start();
+    server.start(DemoApplication.init());
   }
 
   @BeforeEach
@@ -35,6 +36,7 @@ public class AbstractServerTest {
     in.close();
     out.close();
     clientSocket.close();
+    Container.flush();
   }
 
   @AfterAll
