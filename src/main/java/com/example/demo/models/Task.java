@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Task {
     private final String name;
-    private User user;
+    private final User user;
     private TaskStatus status;
 
     public Task(String name, User user) {
@@ -27,10 +27,6 @@ public class Task {
 
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override
