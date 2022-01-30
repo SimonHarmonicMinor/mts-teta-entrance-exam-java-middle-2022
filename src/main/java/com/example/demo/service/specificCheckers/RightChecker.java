@@ -36,10 +36,10 @@ public class RightChecker implements RequestChecker {
         if (request.getCommand().equals(Command.CLOSE_TASK) || request.getCommand().equals(Command.REOPEN_TASK)
                 || request.getCommand().equals(Command.DELETE_TASK)) {
             Optional<Task> optionalTask = taskRepository.getTaskByName(taskName);
-            if (!currentUserName.equals(optionalTask.get().getUserName())) {
-                throw new RightException("Пользователь не имеет права на совершение действия");
-            }
+            optionalTask.filter(task -> !currentUserName.equals(task.getUserName()))
+                    .ifPresent(task -> {
+                        throw new RightException("Пользователь не имеет права на совершение действия");
+                    });
         }
-
     }
 }
