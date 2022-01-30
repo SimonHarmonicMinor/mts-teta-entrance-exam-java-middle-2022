@@ -1,11 +1,15 @@
 package com.example.demo.service.commandExecutor;
 
-import com.example.demo.entity.*;
+import ch.qos.logback.classic.Logger;
+import com.example.demo.entity.Request;
+import com.example.demo.entity.Result;
+import com.example.demo.entity.Status;
+import com.example.demo.entity.Task;
 import com.example.demo.repository.TaskRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CommandExecutor;
+import com.example.demo.service.specificCheckers.UserNameChecker;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -15,15 +19,22 @@ import java.util.Optional;
 public class CloseExecute implements CommandExecutor {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
 
-    public CloseExecute(TaskRepository taskRepository, UserRepository userRepository) {
+    public CloseExecute(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
     }
+
+    private static final Logger logger
+            = (Logger) LoggerFactory.getLogger(UserNameChecker.class);
+
+    /**
+     * @param request - запрос
+     * @return result - результат выполнения запроса
+     */
 
     @Override
     public String execute(Request request) {
+        logger.info(">>CloseExecute execute request={}", request);
         Optional<Task> currentOptionalTask = taskRepository.getTaskByName(request.getAdditionalParam());
         String result = currentOptionalTask
                 .filter(task -> !Status.DELETED.equals(task.getStatus()))
@@ -32,11 +43,8 @@ public class CloseExecute implements CommandExecutor {
                     taskRepository.updateTask(task);
                     return Result.CLOSED.name();
                 })
-//               .orElseGet(() -> {
-//                   return Result.ERROR.name();
-//               });
                 .orElse(Result.ERROR.name());
-
-            return result;
+        logger.info("<<CloseExecute execute result={}", result);
+        return result;
     }
 }

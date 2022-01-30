@@ -1,13 +1,15 @@
 package com.example.demo.service.commandExecutor;
 
-import com.example.demo.entity.*;
+import ch.qos.logback.classic.Logger;
+import com.example.demo.entity.Request;
+import com.example.demo.entity.Result;
+import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CommandExecutor;
+import com.example.demo.service.specificCheckers.UserNameChecker;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Objects.nonNull;
 
 /**
  * Выполнение задачи LIST_TASK
@@ -21,13 +23,21 @@ public class ListExecute implements CommandExecutor {
         this.userRepository = userRepository;
     }
 
+    private static final Logger logger
+            = (Logger) LoggerFactory.getLogger(UserNameChecker.class);
+
+    /**
+     * @param request - запрос
+     * @return result - результат выполнения запроса
+     */
+
     @Override
     public String execute(Request request) {
-//        User currentUser = userRepository.getUserByName(request.getUserName());
-        List<String> taskName = userRepository.getUserByName(request.getAdditionalParam()).map(User::getTaskName).orElse(List.of());
-//        List<String> taskName = currentUser.getTaskName();
-//        if (nonNull(taskName)) {
-            return Result.TASKS.name() + " " + taskName;
-//        } else return Result.TASKS.name() + new ArrayList<>();
+        logger.info(">>ListExecute execute request={}", request);
+        List<String> taskName = userRepository.getUserByName(request.getAdditionalParam())
+                .map(User::getTaskName).orElse(List.of());
+        String result = Result.TASKS.name() + " " + taskName;
+        logger.info("<<ListExecute execute result={}", result);
+        return result;
     }
 }

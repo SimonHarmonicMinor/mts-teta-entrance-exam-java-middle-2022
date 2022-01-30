@@ -116,7 +116,7 @@ public class ConfigApp {
      */
 
     private static CommandExecutor getCloseExecute() {
-        return (CloseExecute) getOrCreate(CloseExecute.class.getCanonicalName(), () -> new CloseExecute(getTaskRepository(), getUserRepository()));
+        return (CloseExecute) getOrCreate(CloseExecute.class.getCanonicalName(), () -> new CloseExecute(getTaskRepository()));
     }
 
     /**
