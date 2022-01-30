@@ -22,7 +22,7 @@ public class CreateExecute implements CommandExecutor {
         Task task = new Task();
         task.setName(request.getAdditionalParam());
         task.setStatus(Status.CREATED);
-        task.setName(request.getUserName());
+        task.setUserName(request.getUserName());
         taskRepository.addTask(task);
         return Result.CREATED.name();
     }

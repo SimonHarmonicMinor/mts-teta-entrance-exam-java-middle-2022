@@ -39,6 +39,17 @@ public class ConfigApp {
         return (ExceptionHandlerImpl) getOrCreate(ExceptionHandlerImpl.class.getCanonicalName(), ExceptionHandlerImpl::new);
     }
 
+    private static List<RequestChecker> getRequestCheckerList() {
+        List<RequestChecker> requestCheckerList = new ArrayList<>();
+        requestCheckerList.add(getRequiredFieldsChecker());
+        requestCheckerList.add(getCommandNameChecker());
+        requestCheckerList.add(getUserNameChecker());
+        requestCheckerList.add(getRightChecker());
+        requestCheckerList.add(getAdditionalParamChecker());
+        requestCheckerList.add(getTaskNameChecker());
+        return requestCheckerList;
+    }
+
     private static Map<Command, CommandExecutor> getSpecificCommandExecutors() {
         Map<Command, CommandExecutor> specificCommandExecutors = new HashMap<>();
         specificCommandExecutors.put(Command.CREATE_TASK, getCreateExecute());
@@ -71,17 +82,6 @@ public class ConfigApp {
 
     private static RequestChecker getRequestChecker() {
         return (RequestCheckerImpl) getOrCreate(RequestCheckerImpl.class.getCanonicalName(), () -> new RequestCheckerImpl(getRequestCheckerList()));
-    }
-
-    private static List<RequestChecker> getRequestCheckerList() {
-        List<RequestChecker> requestCheckerList = new ArrayList<>();
-        requestCheckerList.add(getAdditionalParamChecker());
-        requestCheckerList.add(getCommandNameChecker());
-        requestCheckerList.add(getRequiredFieldsChecker());
-        requestCheckerList.add(getRightChecker());
-        requestCheckerList.add(getTaskNameChecker());
-        requestCheckerList.add(getUserNameChecker());
-        return requestCheckerList;
     }
 
     private static RequestChecker getAdditionalParamChecker() {
