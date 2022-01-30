@@ -17,7 +17,18 @@ public class DemoApplication {
   public static void main(String[] args) throws IOException {
     logger.debug("Start.");
 
+    Server server = new Server();
+    server.start();
+
+    //TODO:только для теста
+    try {
+      Thread.sleep(Integer.MAX_VALUE);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     logger.debug("End");
   }
+
 
 }

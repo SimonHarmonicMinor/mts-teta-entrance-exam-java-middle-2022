@@ -1,4 +1,6 @@
-package com.example.demo.entity;
+package com.example.demo.task.entity;
+
+import com.example.demo.task.status.StatusTask;
 
 /**
  * Create by fkshistero on 30.01.2022.
