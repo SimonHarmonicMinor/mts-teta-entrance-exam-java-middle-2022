@@ -31,22 +31,6 @@ public class ConfigApp {
     private static final Map<String, Object> objectContainer = new HashMap<>();
 
     /**
-     * Блок для тестирования
-     */
-
-    public static void initTaskDataBase(List<Task> tasks) {
-        for (Task task : tasks) {
-            getTaskRepository().addTask(task);
-        }
-    }
-
-    public static void initUserDataBase(List<User> users) {
-        for (User user : users) {
-            getUserRepository().addUser(user);
-        }
-    }
-
-    /**
      * @return PlanOfTaskImpl - реализация интерфейса PlanOfTask
      */
 
