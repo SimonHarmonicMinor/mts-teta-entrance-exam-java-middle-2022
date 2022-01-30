@@ -4,16 +4,21 @@ import java.util.Scanner;
 
 public class DemoApplication {
 
-    static String[][] tasks = new String[256][3];
-    static String command;
-
-    public static void lineInput(String in)
-    {
-        
-        System.out.println("Enter a command:\nUsers:\n0: Petya\n1: Vasya\n2: Igor\n3: Slava");
-               
-    }  
+    public static String[][] tasks = new String[256][3]; //Таблица тасков где 3 столбца: user name / task name / status of task
+    public static String command;
+    public static String access_result = "";
     
+    public static boolean isCommandOrderCorrect(String commandUser, String commandTaskName, String commandArg) {
+        for (int i=0; i<tasks.length; i++) {
+            if (tasks[i][1]!=null && tasks[i][1].equals(commandTaskName))
+            {
+                //Current row in table tasks
+                if (tasks[i][2].equals("DELETED")) return false; //если в таблице таск со статусом DELETED мы уже ничего не можем с ним сделать и всё отвергаем
+                if (tasks[i][2].equals("CREATED") && commandArg.equals("DELETE_TASK")) return false;
+            }
+        }
+        return true;
+    }
     public static int getFreeRow() {
         int row_id = 0;
             for (int j=0; j<tasks.length; j++) {
@@ -29,6 +34,13 @@ public class DemoApplication {
             }
         return row_id;
     }
+    public static void showTaskList(String[] arrCommand) {
+        for (int j=0; j<tasks.length; j++) {
+            if (tasks[j][0]!=null && tasks[j][0].equals(arrCommand[2]) && tasks[j][2]!="DELETED") { //если элемент таблицы tasks не null И имя (аргумент) = имя автора задачи И статус != DELETED
+                System.out.println(tasks[j][1]+" "+tasks[j][2]);
+            } 
+        }
+    }
     
     public static void addTask(String username, String taskname) {
         int row = getFreeRow();
@@ -36,13 +48,25 @@ public class DemoApplication {
         tasks[row][1] = taskname;
         tasks[row][2] = "CREATED";
     }
-    
-    public static void findAndCloseOpenTask(String taskname, String setStatus) {
-        for (int i=0; i<tasks[1].length; i++) {
-            if (taskname.equals(tasks[i][1])) {
-                tasks[i][2] = setStatus;
+      
+    public static void findAndCloseOpenTask(String taskname, String setStatus, String[] arrCommand) {
+        for (int i=0; i<tasks.length; i++) {
+            if (taskname.equals(tasks[i][1]) && tasks[i][0].equals(arrCommand[0]) && (setStatus.equals("CLOSED") || setStatus.equals("CREATED") || setStatus.equals("DELETED"))) { //имя таска = таск из таблицы И юзер из строки с таском = юзер из команды И присваеваеый статус CLOSED||CREATE||DELETED
+                if (isCommandOrderCorrect(arrCommand[0], taskname, arrCommand[1]) == true) {
+                    access_result = setStatus;
+                    tasks[i][2] = setStatus;
+                    break;
+                } else {
+                    access_result = "WRONG REQUEST";
+                    break;
+                }
+
+            } else {
+                access_result = "ACCESS DENIED OR TASK NOT FOUND";
             }
         }
+        if (access_result.equals("CREATED")) access_result = "REOPENED";
+        System.out.println(access_result);
     }
     
     public static void action(String sendedCommand, String[] arrCommand)
@@ -56,18 +80,18 @@ public class DemoApplication {
                 }
             }
             if (sendedCommand.equals("CLOSE_TASK")) {
-                System.out.println("CLOSED");
-                findAndCloseOpenTask(arrCommand[2], "CLOSED");
+                findAndCloseOpenTask(arrCommand[2], "CLOSED", arrCommand);
                 
             }
             if (sendedCommand.equals("REOPEN_TASK")) {
-                System.out.println("Operation will be reopened");
-                findAndCloseOpenTask(arrCommand[2], "CREATED");
+                findAndCloseOpenTask(arrCommand[2], "CREATED", arrCommand);
                 
             }
             if (sendedCommand.equals("DELETE_TASK")) {
-                System.out.println("Operation will be Deleted");
-                findAndCloseOpenTask(arrCommand[2], "DELETED");
+                findAndCloseOpenTask(arrCommand[2], "DELETED",  arrCommand);
+            }
+            if (sendedCommand.equals("LIST_TASK")) {
+                showTaskList(arrCommand);
             }
         }
     
@@ -75,7 +99,7 @@ public class DemoApplication {
     {
         boolean isEmpty = true;
         for (int j=0; j<tasks.length; j++) {
-            for (int y=0; y<tasks[j].length;y++) {
+            for (int y=0; y<tasks[0].length;y++) {
             if (tasks[j][y] != null) {
                 isEmpty = false;
                 }
@@ -96,9 +120,12 @@ public class DemoApplication {
         }
     }
 
-    public static boolean isCommandCorrect() {
-        //если успею сделать проверку входных параметров
-        return true;
+    public static boolean isCommandCorrect(String command) {
+        String[] commands = {"CREATE_TASK", "CLOSE_TASK", "REOPEN_TASK", "LIST_TASK", "DELETE_TASK"};
+        String[] arrCommand = command.split(" ");
+        if (arrCommand.length == 1 && (arrCommand[0].equals("exit") || arrCommand[0].equals("TASKS"))) return true;
+        if (arrCommand.length == 3 && (Arrays.asList(commands).contains(arrCommand[1]))) return true;
+        return false;
     }
     
     public static boolean isTaskExist(String taskname) {
@@ -113,7 +140,7 @@ public class DemoApplication {
 
     public static void commandExecute(String command) {
         String[] arrCommand = command.split(" ");        
-        for (int i=0; i<arrCommand.length; i++) //i=0 - username; i=1 - command; i=3 argument
+        for (int i=0; i<arrCommand.length; i++) //i=0 - username; i=1 - command; i=2 argument
         {
             if (arrCommand[0].equals("exit")) System.exit(0);
             if (arrCommand[0].equals("TASKS")) {
@@ -138,7 +165,11 @@ public class DemoApplication {
         while(in.hasNextLine())
                 {
                     command = in.nextLine();
-                    if (isCommandCorrect() == true) commandExecute(command);
+                    if (isCommandCorrect(command) == true) {
+                        commandExecute(command);
+                    } else {
+                        System.out.println("WRONG COMMAND");
+                    }
                 }
         in.close();
     }
