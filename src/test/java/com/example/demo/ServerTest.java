@@ -23,11 +23,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("USER");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
-        response = sendMessage("HELP");
-        assertEquals("Список команд: CREATE_TASK, DELETE_TASK, CLOSE_TASK, REOPEN_TASK, LIST_TASK, EXIT."
-                , response);
         logger.info("Проверить работу команды CREATE_TASK. Имя задачи: TestTask1");
         response = sendMessage("USER CREATE_TASK TestTask1");
         logger.info("Server response: " + response);
@@ -69,8 +64,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("ANDREY");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
         logger.info("Выполнить создание задачи с именем: TestTask2");
         response = sendMessage("ANDREY CREATE_TASK TestTask2");
         logger.info("Server response: " + response);
@@ -93,8 +86,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("KIRILL");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
         logger.info("Выполнить создание задачи с именем: TestTask3");
         response = sendMessage("KIRILL CREATE_TASK TestTask3");
         logger.info("Server response: " + response);
@@ -112,8 +103,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("IGOR");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
         logger.info("Произвести попытку перевода статуса задачи(TestTask2) другого пользователя(ANDREY)," +
                 " в статус: DELETED");
         response = sendMessage("IGOR DELETE_TASK TestTask2");
@@ -138,8 +127,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("IGOR");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
         logger.info("Произвести попытку просмотра задач другого пользователя(ANDREY)");
         response = sendMessage("IGOR LIST_TASK ANDREY");
         logger.info("Server response: " + response);
@@ -152,8 +139,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("ANTON");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
         logger.info("Выполнить создание задачи с именем: TestTask4");
         response = sendMessage("ANTON CREATE_TASK TestTask4");
         logger.info("Server response: " + response);
@@ -180,8 +165,6 @@ class ServerTest extends AbstractServerTest {
         message = getMessage();
         assertEquals("Введите имя (Формат: USERNAME):", message);
         response = sendMessage("VASYA");
-        assertEquals("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):",
-                response);
         logger.info("Произвести попытку перевода несуществующей задачи в статус: CLOSED");
         response = sendMessage("VASYA CLOSE_TASK TestTask5");
         logger.info("Server response: " + response);
@@ -194,5 +177,25 @@ class ServerTest extends AbstractServerTest {
         response = sendMessage("VASYA DELETE_TASK TestTask5");
         logger.info("Server response: " + response);
         assertEquals("ERROR_TASK_DONT_EXIST", response);
+    }
+
+    @Test
+    @DisplayName("Негативный кейс. Проверка правил формата запроса.")
+    void checkFormatRules() {
+        message = getMessage();
+        assertEquals("Введите имя (Формат: USERNAME):", message);
+        response = sendMessage("SERGEY");
+        response = sendMessage("SERGEY cREATE_tASK formatTest");
+        logger.info("Server response: " + response);
+        assertEquals("WRONG_FORMAT", response);
+        response = sendMessage("SERGEY dELETE_tASK formatTest");
+        logger.info("Server response: " + response);
+        assertEquals("WRONG_FORMAT", response);
+        response = sendMessage("SERGEY cLOSE_tASK formatTest");
+        logger.info("Server response: " + response);
+        assertEquals("WRONG_FORMAT", response);
+        response = sendMessage("SERGEY rEOPEN_tASK formatTest");
+        logger.info("Server response: " + response);
+        assertEquals("WRONG_FORMAT", response);
     }
 }

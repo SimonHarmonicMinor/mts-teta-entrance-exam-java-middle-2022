@@ -9,7 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,9 @@ public class Server {
     String clientName, result, clientRequest;
 
     ArrayList<String> userNames = new ArrayList<>();
+
+    List<String> commandList = Arrays.asList("HELP", "EXIT", "CREATE_TASK", "DELETE_TASK", "CLOSE_TASK",
+            "REOPEN_TASK", "LIST_TASK");
 
     HashMap<String, ClientParams> clientInfo = new HashMap<>();
 
@@ -54,45 +59,46 @@ public class Server {
                                 clientParams = new ClientParams();
                                 clientInfo.put(clientName, clientParams);
                             }
-                            serverWriter.write("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) " +
-                                    "(HELP - список команд):");
+                            serverWriter.write("Введите команду (Формат: USERNAME COMMAND_NAME TaskName)");
                             serverWriter.newLine();
                             serverWriter.flush();
                             while (!connection.isClosed()) {
                                 clientRequest = serverReader.readLine();
-                                if (clientRequest.equals("HELP")) {
-                                    result = "Список команд: CREATE_TASK, DELETE_TASK, CLOSE_TASK, REOPEN_TASK, " +
-                                            "LIST_TASK, EXIT.";
-                                } else if (clientRequest.equals("EXIT")) {
-                                    result = "Выполняется выход.";
-                                    serverWriter.write(result);
-                                    serverWriter.newLine();
-                                    serverWriter.flush();
-                                    break;
-                                } else {
-                                    try {
-                                        String[] request = clientRequest.split(" ");
-                                        String userName = request[0];
-                                        String command = request[1];
-                                        String taskName = request[2];
-
+                                try {
+                                    String[] request = clientRequest.split(" ");
+                                    String userName = request[0];
+                                    String command = request[1];
+                                    String taskName = request[2];
+                                    if (!commandList.contains(command)) {
+                                        while (!checkFormat(clientRequest)) {
+                                            result = "WRONG_FORMAT";
+                                            serverWriter.write(result);
+                                            serverWriter.newLine();
+                                            serverWriter.flush();
+                                            clientRequest = serverReader.readLine();
+                                        }
+                                    } else {
                                         switch (command) {
                                             case "CREATE_TASK" -> createTask(clientName, userName, taskName);
                                             case "DELETE_TASK" -> deleteTask(clientName, taskName);
                                             case "CLOSE_TASK" -> closeTask(clientName, taskName);
                                             case "REOPEN_TASK" -> reOpenTask(clientName, taskName);
                                             case "LIST_TASK" -> getListTask(userName, taskName);
+                                            case "CONNECTION" -> result = "Выполняется выход.";
                                             default -> result = "ERROR_UNKNOWN_COMMAND";
                                         }
-                                    } catch (ArrayIndexOutOfBoundsException e) {
-                                        result = "ERROR_UNKNOWN_COMMAND";
                                     }
+                                } catch (ArrayIndexOutOfBoundsException e) {
+                                    result = "ERROR_UNKNOWN_COMMAND";
                                 }
                                 serverWriter.write(result);
                                 serverWriter.newLine();
                                 serverWriter.flush();
+                                if (clientRequest.equals("CONNECTION")) {
+                                    break;
+                                }
                             }
-                            if (clientRequest.equals("EXIT") || connection.isClosed()) {
+                            if (clientRequest.equals("CONNECTION") || connection.isClosed()) {
                                 break;
                             }
                         }
@@ -193,5 +199,32 @@ public class Server {
         } else {
             result = "ERROR_WRONG_OPERATOR_NAME";
         }
+    }
+
+    public boolean checkFormat(String clientCommand) {
+
+        boolean format = false;
+
+        try {
+            String[] command = clientCommand.split(" ");
+            String firstWord = command[0];
+            String secondWord = command[1];
+            String thirdWord = command[2];
+
+            if (secondWord.equalsIgnoreCase("LIST_TASK")
+                    || secondWord.equalsIgnoreCase("CONNECTION")) {
+                if (firstWord.equals(firstWord.toUpperCase()) || secondWord.equals(secondWord.toUpperCase())
+                        || thirdWord.equals(thirdWord.toUpperCase())) {
+                    format = true;
+                }
+            } else {
+                if (firstWord.equals(firstWord.toUpperCase()) && secondWord.equals(secondWord.toUpperCase())
+                        && thirdWord.matches("^([A-Z][a-z0-9]+)+")) {
+                    format = true;
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
+        return format;
     }
 }
