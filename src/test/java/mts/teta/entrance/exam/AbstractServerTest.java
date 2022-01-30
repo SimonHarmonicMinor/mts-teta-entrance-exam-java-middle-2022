@@ -1,4 +1,4 @@
-package com.example.demo;
+package mts.teta.entrance.exam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
