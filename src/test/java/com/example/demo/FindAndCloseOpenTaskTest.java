@@ -34,6 +34,7 @@ public class FindAndCloseOpenTaskTest {
         String expResult = "DELETED";
         DemoApplication.findAndCloseOpenTask(taskname, setStatus, arrCommand);
         String result = DemoApplication.access_result;
+        System.out.println(result);
         assertEquals(expResult, result);
     }
     @Test
