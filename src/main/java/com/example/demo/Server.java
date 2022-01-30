@@ -18,7 +18,9 @@ public class Server {
 
     private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
-    private ServerSocket serverSocket;
+    ServerSocket serverSocket;
+
+    Socket connection;
 
     ClientParams clientParams;
 
@@ -31,19 +33,20 @@ public class Server {
     HashMap<String, String> taskList = new HashMap<>();
 
     public void start() throws IOException {
-        serverSocket = new ServerSocket(6060);
+        serverSocket = new ServerSocket(9002);
         Thread serverThread = new Thread(() -> {
             while (true) {
                 try {
-                    Socket connection = serverSocket.accept();
+                    connection = serverSocket.accept();
                     try (
                             BufferedReader serverReader = new BufferedReader(
                                     new InputStreamReader(connection.getInputStream()));
                             BufferedWriter serverWriter = new BufferedWriter(
                                     new OutputStreamWriter(connection.getOutputStream()))
                     ) {
-                        while (true) {
-                            serverWriter.write("Введите имя (Формат: USERNAME):\n");
+                        while (!connection.isClosed()) {
+                            serverWriter.write("Введите имя (Формат: USERNAME):");
+                            serverWriter.newLine();
                             serverWriter.flush();
                             clientName = serverReader.readLine();
                             if (!userNames.contains(clientName)) {
@@ -51,11 +54,21 @@ public class Server {
                                 clientParams = new ClientParams();
                                 clientInfo.put(clientName, clientParams);
                             }
-                            while (true) {
+                            serverWriter.write("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) " +
+                                    "(HELP - список команд):");
+                            serverWriter.newLine();
+                            serverWriter.flush();
+                            while (!connection.isClosed()) {
                                 clientRequest = serverReader.readLine();
                                 if (clientRequest.equals("HELP")) {
                                     result = "Список команд: CREATE_TASK, DELETE_TASK, CLOSE_TASK, REOPEN_TASK, " +
-                                            "LIST_TASK.";
+                                            "LIST_TASK, EXIT.";
+                                } else if (clientRequest.equals("EXIT")) {
+                                    result = "Выполняется выход.";
+                                    serverWriter.write(result);
+                                    serverWriter.newLine();
+                                    serverWriter.flush();
+                                    break;
                                 } else {
                                     try {
                                         String[] request = clientRequest.split(" ");
@@ -68,7 +81,7 @@ public class Server {
                                             case "DELETE_TASK" -> deleteTask(clientName, taskName);
                                             case "CLOSE_TASK" -> closeTask(clientName, taskName);
                                             case "REOPEN_TASK" -> reOpenTask(clientName, taskName);
-                                            case "LIST_TASK" -> getListTask(taskName);
+                                            case "LIST_TASK" -> getListTask(userName, taskName);
                                             default -> result = "ERROR_UNKNOWN_COMMAND";
                                         }
                                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -79,18 +92,19 @@ public class Server {
                                 serverWriter.newLine();
                                 serverWriter.flush();
                             }
+                            if (clientRequest.equals("EXIT") || connection.isClosed()) {
+                                break;
+                            }
                         }
                     }
-
                 } catch (SocketException ex) {
-                    LOG.error("Error during close clientSocket proceeding", ex);
+                    LOG.error("Error during closing socket proceeding", ex);
                 } catch (Exception e) {
                     LOG.error("Error during request proceeding", e);
-                    break;
                 }
             }
         });
-        serverThread.setDaemon(false);
+        serverThread.setDaemon(true);
         serverThread.start();
     }
 
@@ -107,7 +121,7 @@ public class Server {
                 taskList.put(taskName, userName);
                 result = "CREATED";
             } else {
-                result = "ERROR_NAME_ALREADY_EXIST";
+                result = "ERROR_TASK_NAME_ALREADY_EXIST";
             }
         } else {
             result = "ACCESS_DENIED";
@@ -172,8 +186,12 @@ public class Server {
         }
     }
 
-    public void getListTask(String userName) {
-        clientParams = clientInfo.get(userName);
-        result = clientParams.getTaskInfo().keySet().toString();
+    public void getListTask(String operatorName, String userName) {
+        if (operatorName.equals(clientName)) {
+            clientParams = clientInfo.get(userName);
+            result = clientParams.getTaskInfo().keySet().toString();
+        } else {
+            result = "ERROR_WRONG_OPERATOR_NAME";
+        }
     }
 }

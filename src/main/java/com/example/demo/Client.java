@@ -6,47 +6,71 @@ import java.util.Scanner;
 
 public class Client {
 
-    static Scanner scanner = new Scanner(System.in);
+    Socket clientConnection;
 
-    static String message, clientCommand, result;
+    BufferedReader clientReader;
 
-    public static void main(String[] args) throws IOException {
-        Socket client = new Socket("127.0.0.1", 6060);
-        BufferedReader clientReader = new BufferedReader(
-                new InputStreamReader(client.getInputStream()));
-        BufferedWriter clientWriter = new BufferedWriter(
-                new OutputStreamWriter(client.getOutputStream()));
+    BufferedWriter clientWriter;
+
+    Scanner scanner = new Scanner(System.in);
+
+    String message, clientCommand, result;
+
+    public void startClientConnection() throws IOException {
+        clientConnection = new Socket("localhost", 9002);
+        clientReader = new BufferedReader(
+                new InputStreamReader(clientConnection.getInputStream()));
+        clientWriter = new BufferedWriter(
+                new OutputStreamWriter(clientConnection.getOutputStream()));
+    }
+
+    public void clientAction() throws IOException {
         while (true) {
             message = clientReader.readLine();
             System.out.println(message);
             clientCommand = scanner.nextLine();
-            while (!clientCommand.equals(clientCommand.toUpperCase())) {
-                System.out.println("WRONG_FORMAT");
-                clientCommand = scanner.nextLine();
-            }
-            clientWriter.write(clientCommand);
-            clientWriter.newLine();
-            clientWriter.flush();
-
+            auth(clientCommand);
+            message = clientReader.readLine();
+            System.out.println(message);
             while (true) {
-                System.out.println("Введите команду (Формат: USERNAME COMMAND_NAME TaskName) (HELP - список команд):");
                 clientCommand = scanner.nextLine();
-                while (!checkFormat(clientCommand)) {
-                    System.out.println("WRONG_FORMAT");
-                    clientCommand = scanner.nextLine();
-                }
-                clientWriter.write(clientCommand);
-                clientWriter.newLine();
-                clientWriter.flush();
+                getCommand(clientCommand);
                 result = clientReader.readLine();
                 System.out.println(result);
+                if (clientCommand.equals("EXIT")) {
+                    break;
+                }
+            }
+            if (clientCommand.equals("EXIT")) {
+                break;
             }
         }
+        clientConnection.close();
     }
 
-    public static boolean checkFormat(String clientCommand) {
+    public void auth(String username) throws IOException {
+        while (!username.equals(username.toUpperCase())) {
+            System.out.println("WRONG_FORMAT");
+            username = scanner.nextLine();
+        }
+        clientWriter.write(username);
+        clientWriter.newLine();
+        clientWriter.flush();
+    }
+
+    public void getCommand(String command) throws IOException {
+        while (!checkFormat(command)) {
+            System.out.println("WRONG_FORMAT");
+            command = scanner.nextLine();
+        }
+        clientWriter.write(command);
+        clientWriter.newLine();
+        clientWriter.flush();
+    }
+
+    public boolean checkFormat(String clientCommand) {
         boolean format = false;
-        if (clientCommand.equals("HELP")) {
+        if (clientCommand.equals("HELP") || clientCommand.equals("EXIT")) {
             format = true;
         } else {
             try {
@@ -56,8 +80,8 @@ public class Client {
                 String thirdWord = command[2];
 
                 if (secondWord.equalsIgnoreCase("LIST_TASK")) {
-                    if (firstWord.equals(firstWord.toUpperCase()) && secondWord.equals(secondWord.toUpperCase())
-                            && thirdWord.equals(thirdWord.toUpperCase())) {
+                    if (firstWord.equals(firstWord.toUpperCase()) || secondWord.equals(secondWord.toUpperCase())
+                            || thirdWord.equals(thirdWord.toUpperCase())) {
                         format = true;
                     }
                 } else {
@@ -71,5 +95,9 @@ public class Client {
             }
         }
         return format;
+    }
+
+    public void stopClientConnection() throws IOException {
+        clientConnection.close();
     }
 }
