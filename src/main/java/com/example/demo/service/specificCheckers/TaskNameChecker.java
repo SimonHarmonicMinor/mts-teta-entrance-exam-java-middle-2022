@@ -23,7 +23,8 @@ public class TaskNameChecker implements RequestChecker {
     @Override
     public void check(Request request) {
         if (request.getCommand().equals(Command.CREATE_TASK)) {
-            if (nonNull(taskRepository.getTaskByName(request.getAdditionalParam()))) {
+//            if (nonNull(taskRepository.getTaskByName(request.getAdditionalParam()))) {
+            if (taskRepository.getTaskByName(request.getAdditionalParam()).isPresent()) {
                 throw new ErrorException("Имя задачи не уникально");
             }
         }

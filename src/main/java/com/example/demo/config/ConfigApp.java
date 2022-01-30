@@ -2,6 +2,8 @@ package com.example.demo.config;
 
 import com.example.demo.adapter.PlanOfTaskAdapter;
 import com.example.demo.entity.Command;
+import com.example.demo.entity.Task;
+import com.example.demo.entity.User;
 import com.example.demo.exception.ExceptionHandler;
 import com.example.demo.exception.ExceptionHandlerImpl;
 import com.example.demo.repository.TaskRepository;
@@ -24,6 +26,18 @@ public class ConfigApp {
 
     private static final Map<String, Object> objectContainer = new HashMap<>();
 
+    public static void initTaskDataBase(List<Task> tasks) {
+        for (Task task : tasks) {
+            getTaskRepository().addTask(task);
+        }
+    }
+
+    public static void initUserDataBase(List<User> users) {
+        for (User user : users) {
+            getUserRepository().addUser(user);
+        }
+    }
+
     private static PlanOfTask getPlanOfTask() {
         CommandExecutor commandExecutor = getCommandExecutor();
         RequestChecker requestChecker = getRequestChecker();
@@ -44,6 +58,7 @@ public class ConfigApp {
         requestCheckerList.add(getRequiredFieldsChecker());
         requestCheckerList.add(getCommandNameChecker());
         requestCheckerList.add(getUserNameChecker());
+        requestCheckerList.add(getTaskChecker());
         requestCheckerList.add(getRightChecker());
         requestCheckerList.add(getAdditionalParamChecker());
         requestCheckerList.add(getTaskNameChecker());
@@ -96,8 +111,12 @@ public class ConfigApp {
         return (RequiredFieldsChecker) getOrCreate(RequiredFieldsChecker.class.getCanonicalName(), RequiredFieldsChecker::new);
     }
 
+    private static RequestChecker getTaskChecker() {
+        return (TaskChecker) getOrCreate(TaskChecker.class.getCanonicalName(), () -> new TaskChecker(getUserRepository()));
+    }
+
     private static RequestChecker getRightChecker() {
-        return (RightChecker) getOrCreate(RightChecker.class.getCanonicalName(), () -> new RightChecker(getUserRepository()));
+        return (RightChecker) getOrCreate(RightChecker.class.getCanonicalName(), () -> new RightChecker(getTaskRepository()));
     }
 
     private static RequestChecker getTaskNameChecker() {

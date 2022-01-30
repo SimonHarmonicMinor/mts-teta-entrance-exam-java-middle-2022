@@ -10,12 +10,10 @@ import java.util.Optional;
 public class User {
 
     private String name;
-    private String right;
     private List<String> taskName;
 
-    public User(String name, String right, List<String> taskName) {
+    public User(String name, List<String> taskName) {
         this.name = name;
-        this.right = right;
         this.taskName = taskName;
     }
 
@@ -25,14 +23,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRight() {
-        return right;
-    }
-
-    public void setRight(String right) {
-        this.right = right;
     }
 
     public List<String> getTaskName() {
@@ -47,7 +37,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", right='" + right + '\'' +
                 ", taskName=" + taskName +
                 '}';
     }

@@ -4,6 +4,7 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Репозиторий для задач
@@ -17,7 +18,7 @@ public interface TaskRepository {
 
     void updateTask(Task task);
 
-    Task getTaskByName(String taskName);
+    Optional<Task> getTaskByName(String taskName);
 
     List<Task> getTasksByUser(User user);
 

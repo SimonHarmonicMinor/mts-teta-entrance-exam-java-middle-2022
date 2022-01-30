@@ -4,6 +4,8 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.CommandExecutor;
 
+import java.util.Optional;
+
 /**
  * Выполнение задачи CLOSE_TASK
  */
@@ -18,11 +20,18 @@ public class CloseExecute implements CommandExecutor {
 
     @Override
     public String execute(Request request) {
-        Task currentTask = taskRepository.getTaskByName(request.getAdditionalParam());
-        if (!currentTask.getStatus().equals(Status.DELETED)) {
-            currentTask.setStatus(Status.CLOSED);
-            taskRepository.updateTask(currentTask);
-            return Result.CLOSED.name();
-        } else return Result.ERROR.name();
+        Optional<Task> currentOptionalTask = taskRepository.getTaskByName(request.getAdditionalParam());
+       String result = currentOptionalTask
+                .filter(task -> !Status.DELETED.equals(task.getStatus()))
+                .map(task -> {
+                    task.setStatus(Status.CLOSED);
+                    taskRepository.updateTask(task);
+                    return Result.CLOSED.name();
+                })
+//               .orElseGet(() -> {
+//                   return Result.ERROR.name();
+//               });
+                .orElse(Result.ERROR.name());
+        return result;
     }
 }

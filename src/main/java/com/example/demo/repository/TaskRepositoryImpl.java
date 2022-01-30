@@ -4,10 +4,7 @@ import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,8 +46,8 @@ public class TaskRepositoryImpl implements TaskRepository {
      * Получение задачи по ее имени
      */
     @Override
-    public Task getTaskByName(String taskName) {
-        return taskMap.get(taskName);
+    public Optional<Task> getTaskByName(String taskName) {
+        return Optional.ofNullable(taskMap.get(taskName));
     }
 
     /**

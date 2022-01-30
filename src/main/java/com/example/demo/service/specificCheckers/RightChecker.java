@@ -2,36 +2,42 @@ package com.example.demo.service.specificCheckers;
 
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
-import com.example.demo.entity.User;
+import com.example.demo.entity.Task;
 import com.example.demo.exception.RightException;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.RequestChecker;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
- * Проверка на право исполнение запроса у пользователя
+ * Проверка пользователя на право совершать операции над задачей.
+ * Пользователь должен быть создателем данной задачи.
  */
+
 public class RightChecker implements RequestChecker {
 
-    private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
-    public RightChecker(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public RightChecker(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     @Override
     public void check(Request request) {
-        Command currentCommand = request.getCommand();
-        List<String> taskList = userRepository.getUserByName(request.getUserName()).map(User::getTaskName).orElse(List.of());
-        if (currentCommand.equals(Command.CLOSE_TASK) || currentCommand.equals(Command.DELETE_TASK) || currentCommand.equals(Command.REOPEN_TASK)) {
-            for (String taskName : taskList) {
-                if (!taskName.equals(request.getAdditionalParam())) {
-                    throw new RightException("Нет прав на совершение действия");
-                }
-            }
+        String currentUserName = request.getUserName();
+        String taskName = request.getAdditionalParam();
+
+        if (request.getCommand().equals(Command.CLOSE_TASK) || request.getCommand().equals(Command.REOPEN_TASK)
+                || request.getCommand().equals(Command.DELETE_TASK)) {
+            Optional<Task> optionalTask = taskRepository.getTaskByName(taskName);
+            optionalTask.filter(task -> !currentUserName.equals(task.getUserName()))
+                    .orElseThrow(() -> new RightException("Пользователь не имеет права на совершение действия"));
         }
+
+//        Task task = taskRepository.getTaskByName(taskName);
+//        if (!currentUserName.equals(task.getUserName())) {
+//            throw new RightException("Пользователь не имеет права на совершение действия");
+//        }
+
     }
 }

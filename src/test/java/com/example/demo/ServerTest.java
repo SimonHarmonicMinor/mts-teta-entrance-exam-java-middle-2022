@@ -2,7 +2,13 @@ package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.example.demo.config.ConfigApp;
+import com.example.demo.entity.Status;
+import com.example.demo.entity.Task;
+import com.example.demo.entity.User;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class ServerTest extends AbstractServerTest {
 
@@ -54,12 +60,13 @@ class ServerTest extends AbstractServerTest {
 //    assertEquals("ERROR", response);
 //  }
 
-  @Test
-  void test7() {
-    String response1 = sendMessage("VASYA CREATE_TASK CleanRoom");
-    assertEquals("CREATED", response1);
-
-    String response2 = sendMessage("PETYA DELETE_TASK CleanRoom");
-    assertEquals("ACCESS_DENIED", response2);
-  }
+    @Test
+    void test7() {
+        ConfigApp.initTaskDataBase(List.of(new Task("CleanRoom", Status.CREATED, "VASYA")));
+//    String response1 = sendMessage("VASYA CREATE_TASK CleanRoom");
+//    assertEquals("CREATED", response1);
+        ConfigApp.initUserDataBase(List.of(new User("VASYA", List.of("CleanRoom"))));
+        String response2 = sendMessage("PETYA DELETE_TASK CleanRoom");
+        assertEquals("ACCESS_DENIED", response2);
+    }
 }
