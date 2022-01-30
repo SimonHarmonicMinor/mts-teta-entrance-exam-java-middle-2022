@@ -2,9 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.models.*;
 import com.example.demo.repositories.TaskRepository;
-import com.example.demo.repositories.TaskRepositoryImpl;
 import com.example.demo.security.Security;
-import com.example.demo.security.SecurityImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +15,13 @@ import static com.example.demo.models.Result.*;
 public class CommandProcessorImpl implements CommandProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(CommandProcessorImpl.class);
 
-    private final TaskRepository taskRepository = new TaskRepositoryImpl();
-    private final Security security = new SecurityImpl();
+    private final TaskRepository taskRepository;
+    private final Security security;
+
+    public CommandProcessorImpl(TaskRepository taskRepository, Security security) {
+        this.taskRepository = taskRepository;
+        this.security = security;
+    }
 
     @Override
     public Response process(Command command, User user, String arg) {

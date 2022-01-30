@@ -1,10 +1,9 @@
 package com.example.demo;
 
+import com.example.demo.factory.Factory;
 import com.example.demo.models.Response;
 import com.example.demo.services.RequestHandler;
-import com.example.demo.services.RequestHandlerImpl;
 import com.example.demo.services.ResponseHandler;
-import com.example.demo.services.ResponseHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,35 +21,38 @@ public class Server {
     public void start() throws IOException {
         serverSocket = new ServerSocket(9090);
         Thread serverThread = new Thread(() -> {
-            requestHandler = new RequestHandlerImpl();
-            responseHandler = new ResponseHandlerImpl();
+            requestHandler = Factory.getBean(RequestHandler.class);
+            responseHandler = Factory.getBean(ResponseHandler.class);
             while (true) {
-                try {
-                    Socket connection = serverSocket.accept();
-                    try (
-                            BufferedReader serverReader = new BufferedReader(
-                                    new InputStreamReader(connection.getInputStream()));
-                            Writer serverWriter = new BufferedWriter(
-                                    new OutputStreamWriter(connection.getOutputStream()))
-                    ) {
-                        String line = serverReader.readLine();
-                        line = line.trim();
-                        LOG.debug("Request captured: {}", line);
+                try (
+                        Socket connection = serverSocket.accept();
+                        BufferedReader serverReader = new BufferedReader(
+                                new InputStreamReader(connection.getInputStream()));
+                        Writer serverWriter = new BufferedWriter(
+                                new OutputStreamWriter(connection.getOutputStream()))
+                ) {
+                    String line = serverReader.readLine();
+                    line = line.trim();
+                    LOG.debug("Request captured: {}", line);
 
-                        Response response = requestHandler.handle(line);
-                        String responseString = responseHandler.handle(response);
-                        LOG.debug("Response: {}", responseString);
+                    Response response = requestHandler.handle(line);
+                    String responseString = responseHandler.handle(response);
+                    LOG.debug("Response: {}", responseString);
 
-                        serverWriter.write(responseString);
-                        serverWriter.flush();
-                    }
+                    serverWriter.write(responseString);
+                    serverWriter.flush();
+
                 } catch (Exception e) {
                     LOG.error("Error during request proceeding", e);
+                    try {
+                        stop();
+                    } catch (Exception err) {
+                        LOG.error("Error closing server", err);
+                    }
                     break;
                 }
             }
         });
-        serverThread.setDaemon(true);
         serverThread.start();
     }
 

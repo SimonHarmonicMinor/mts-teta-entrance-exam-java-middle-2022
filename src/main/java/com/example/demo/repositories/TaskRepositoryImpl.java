@@ -36,7 +36,6 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task updateStatus(Task task) {
-        tasks.add(task);
         return task;
     }
 }

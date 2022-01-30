@@ -4,21 +4,22 @@ import com.example.demo.models.Command;
 import com.example.demo.models.Response;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
-import com.example.demo.repositories.UserRepositoryImpl;
 import com.example.demo.validators.RequestValidator;
-import com.example.demo.validators.RequestValidatorImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 import static com.example.demo.models.Result.WRONG_FORMAT;
 
 public class RequestHandlerImpl implements RequestHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(RequestHandlerImpl.class);
-    private final UserRepository userRepository = new UserRepositoryImpl();
-    private final RequestValidator requestValidator = new RequestValidatorImpl();
-    private final CommandProcessor commandProcessor = new CommandProcessorImpl();
+    private final UserRepository userRepository;
+    private final RequestValidator requestValidator;
+    private final CommandProcessor commandProcessor;
+
+    public RequestHandlerImpl(UserRepository userRepository, RequestValidator requestValidator, CommandProcessor commandProcessor) {
+        this.userRepository = userRepository;
+        this.requestValidator = requestValidator;
+        this.commandProcessor = commandProcessor;
+    }
 
     @Override
     public Response handle(String request) {
