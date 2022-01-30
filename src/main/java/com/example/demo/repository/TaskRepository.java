@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Task;
-import com.example.demo.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +8,6 @@ import java.util.Optional;
 /**
  * Репозиторий для задач
  */
-
 public interface TaskRepository {
 
     void addTask(Task task);

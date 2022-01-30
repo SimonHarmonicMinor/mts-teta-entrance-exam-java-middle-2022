@@ -3,20 +3,14 @@ package com.example.demo.service.specificCheckers;
 import ch.qos.logback.classic.Logger;
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
-import com.example.demo.entity.Task;
 import com.example.demo.exception.ErrorException;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.RequestChecker;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-
-import static java.util.Objects.nonNull;
-
 /**
  * Проверка имени создаваемой задачи на уникальность
  */
-
 public class TaskNameChecker implements RequestChecker {
 
     private final TaskRepository taskRepository;

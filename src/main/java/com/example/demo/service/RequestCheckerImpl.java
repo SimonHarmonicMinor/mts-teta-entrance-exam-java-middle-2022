@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import ch.qos.logback.classic.Logger;
 import com.example.demo.entity.Request;
-import com.example.demo.service.specificCheckers.UserNameChecker;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 

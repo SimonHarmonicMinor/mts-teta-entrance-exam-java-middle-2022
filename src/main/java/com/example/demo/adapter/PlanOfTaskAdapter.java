@@ -47,7 +47,6 @@ public class PlanOfTaskAdapter {
                 return result;
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             logger.error("<<PlanOfTaskAdapter exception in execute()", e.getCause());
             return exceptionHandler.handle(e);
         }
