@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService{
             if (task.getStatus().equals(TaskStatus.CREATED) && task.getName().equals(taskName) && task.getUserName().equals(userName)){
                 task.setStatus(TaskStatus.CLOSED);
                 return Answer.CLOSED;
-            } else if(task.getName().equals(taskName) && (!task.getUserName().equals(userName) || !task.getStatus().equals(TaskStatus.CREATED)))
+            } else if(task.getName().equals(taskName) && !task.getUserName().equals(userName) && !task.getStatus().equals(TaskStatus.DELETED))
                 return Answer.ACCESS_DENIED;
         }
         return Answer.ERROR;
@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskService{
             if (task.getStatus().equals(TaskStatus.CLOSED) && task.getName().equals(taskName) && task.getUserName().equals(userName)){
                 task.setStatus(TaskStatus.DELETED);
                 return Answer.DELETED;
-            } else if(task.getName().equals(taskName) && (!task.getUserName().equals(userName) || !task.getStatus().equals(TaskStatus.CLOSED)))
+            } else if(task.getName().equals(taskName) && !task.getUserName().equals(userName) && !task.getStatus().equals(TaskStatus.DELETED))
                 return Answer.ACCESS_DENIED;
         }
         return Answer.ERROR;
@@ -52,7 +52,7 @@ public class TaskServiceImpl implements TaskService{
             if (task.getStatus().equals(TaskStatus.CLOSED) && task.getName().equals(taskName) && task.getUserName().equals(userName)){
                 task.setStatus(TaskStatus.CREATED);
                 return Answer.REOPENED;
-            } else if(task.getName().equals(taskName) && (!task.getUserName().equals(userName) || !task.getStatus().equals(TaskStatus.CLOSED)))
+            } else if(task.getName().equals(taskName) && !task.getUserName().equals(userName) && !task.getStatus().equals(TaskStatus.DELETED))
                 return Answer.ACCESS_DENIED;
         }
         return Answer.ERROR;
@@ -63,5 +63,15 @@ public class TaskServiceImpl implements TaskService{
         return taskList.stream()
                 .filter(t -> !t.getStatus().equals(TaskStatus.DELETED) && t.getUserName().equals(userName))
                 .collect(Collectors.toList());
+    }
+
+    //for tests
+
+    public ArrayList<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(ArrayList<Task> taskList) {
+        this.taskList = taskList;
     }
 }

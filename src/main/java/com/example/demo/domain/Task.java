@@ -2,6 +2,8 @@ package com.example.demo.domain;
 
 import com.example.demo.helper.TaskStatus;
 
+import java.util.Objects;
+
 public class Task {
     private String name;
     private TaskStatus status;
@@ -50,5 +52,20 @@ public class Task {
                 ", status=" + status +
                 ", userName='" + userName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(name, task.name) &&
+                status == task.status &&
+                Objects.equals(userName, task.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, status, userName);
     }
 }

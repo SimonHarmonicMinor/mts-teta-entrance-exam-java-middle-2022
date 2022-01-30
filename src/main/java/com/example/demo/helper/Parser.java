@@ -11,10 +11,11 @@ public class Parser {
 
     public Command stringToCommand(String stringToCommand){
         String[] commandParts = stringToCommand.split(" ");
-        logger.debug("arg[0]=" + commandParts[0] + " arg[1]=" + commandParts[1] + " arg[2]=" + commandParts[2]);
 
         if (commandParts.length != 3)
             return new Command();
+
+        logger.debug("arg[0]=" + commandParts[0] + " arg[1]=" + commandParts[1] + " arg[2]=" + commandParts[2]);
 
         return checkAction(commandParts[1]) ? new Command(commandParts[0], RequestAction.valueOf(commandParts[1]), commandParts[2]) : new Command();
     }
