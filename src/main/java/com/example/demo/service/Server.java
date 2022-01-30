@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,10 +29,14 @@ public class Server {
               Writer serverWriter = new BufferedWriter(
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            String request = serverReader.readLine();
+            LOG.debug("Request captured: " + request);
+
+            CommandProcessor commandProcessor = new CommandProcessor(request);
+            String response = commandProcessor.getResponse();
+            LOG.debug("Response to send: " + response);
+
+            serverWriter.write(response);
             serverWriter.flush();
           }
         } catch (Exception e) {
