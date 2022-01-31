@@ -8,6 +8,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ProcessingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +22,11 @@ public class Server {
   private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
   private ServerSocket serverSocket;
+  private final ProcessingService processingService;
+
+  public Server(UserRepository userRepository) {
+    this.processingService = new ProcessingService(new TaskRepository(new ArrayList<>(Collections.emptyList())), userRepository);
+  }
 
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
@@ -27,11 +38,11 @@ public class Server {
               BufferedReader serverReader = new BufferedReader(
                   new InputStreamReader(connection.getInputStream()));
               Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
+                  new OutputStreamWriter(connection.getOutputStream()))
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
+            line = processingService.getResponse(line);
             serverWriter.write(line);
             serverWriter.flush();
           }
@@ -48,4 +59,5 @@ public class Server {
   public void stop() throws Exception {
     serverSocket.close();
   }
+
 }
