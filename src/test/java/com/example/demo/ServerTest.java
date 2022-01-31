@@ -19,6 +19,7 @@ class ServerTest extends BaseServerTest {
         assertEquals("WRONG_FORMAT", sendMessage("VASYA CREATE_TASK name arg"));
 
         assertEquals("CREATED", sendMessage("VASYA CREATE_TASK testCreate"));
+        assertEquals("CREATED", sendMessage("vASYA CREATE_TASK testCreate"));
         assertEquals("CREATED", sendMessage("VASYA CREATE_TASK testcreate"));
 
         assertEquals("CREATED", sendMessage("VASYA CREATE_TASK Testcreate"));
