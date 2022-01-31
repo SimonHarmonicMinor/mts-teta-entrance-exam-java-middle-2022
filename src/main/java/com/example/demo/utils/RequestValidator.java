@@ -24,7 +24,7 @@ public class RequestValidator {
     }
 
     public Request getRequest(String line) throws Exception {
-        String[] parsedLine = line.split(" ");
+        String[] parsedLine = line.split(" ", -1);
 
         if (parsedLine.length != 3) {
             throw new WrongFormatException(line);
