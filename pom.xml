@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.32</version>
+      <version>1.7.33</version>
     </dependency>
 
     <dependency>
@@ -45,6 +45,48 @@
       <artifactId>mockito-core</artifactId>
       <version>4.2.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.11.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.nbbrd.java-io-util</groupId>
+      <artifactId>java-io-parent</artifactId>
+      <version>0.0.15</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.java</groupId>
+      <artifactId>java</artifactId>
+      <version>7.6.0.28201</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.github.ajchemist</groupId>
+      <artifactId>user.java.io</artifactId>
+      <version>2021.351.9469</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.gitlab.cdc-java.io</groupId>
+      <artifactId>cdc-io</artifactId>
+      <version>0.13.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>1.3.2</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 
@@ -68,5 +110,12 @@
 
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>clojars</id>
+      <name>Clojars</name>
+      <url>https://repo.clojars.org/</url>
+    </repository>
+  </repositories>
 
 </project>
