@@ -32,9 +32,8 @@ public class RightChecker implements RequestChecker {
         logger.info(">>RightChecker check request={}", request);
         String currentUserName = request.getUserName();
         String taskName = request.getAdditionalParam();
-        // FixMe возможно NPE. Нужно срвнивать то что есть с тем чего нет
-        if (request.getCommand().equals(Command.CLOSE_TASK) || request.getCommand().equals(Command.REOPEN_TASK)
-                || request.getCommand().equals(Command.DELETE_TASK)) {
+        if (Command.CLOSE_TASK.equals(request.getCommand()) || Command.REOPEN_TASK.equals(request.getCommand())
+                || Command.DELETE_TASK.equals(request.getCommand())) {
             Optional<Task> optionalTask = taskRepository.getTaskByName(taskName);
             optionalTask.filter(task -> !currentUserName.equals(task.getUserName()))
                     .ifPresent(task -> {

@@ -29,9 +29,10 @@ public class TaskChecker implements RequestChecker {
     public void check(Request request) {
         logger.info(">>TaskChecker check request={}", request);
         Command currentCommand = request.getCommand();
-        List<String> taskList = userRepository.getUserByName(request.getUserName()).map(User::getTaskName).orElse(List.of());
-        // FixMe возможно NPE. Нужно срвнивать то что есть с тем чего нет
-        if (currentCommand.equals(Command.CLOSE_TASK) || currentCommand.equals(Command.DELETE_TASK) || currentCommand.equals(Command.REOPEN_TASK)) {
+        List<String> taskList = userRepository.getUserByName(request.getUserName())
+                .map(User::getTaskName).orElse(List.of());
+        if (Command.CLOSE_TASK.equals(currentCommand) || Command.DELETE_TASK.equals(currentCommand)
+                || Command.REOPEN_TASK.equals(currentCommand)) {
             for (String taskName : taskList) {
                 if (!taskName.equals(request.getAdditionalParam())) {
                     throw new FormatException("Нет такой задачи");
