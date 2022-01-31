@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
-import static com.example.demo.services.task.data.TaskStatus.CLOSED;
-import static com.example.demo.services.task.data.TaskStatus.CREATED;
+import static com.example.demo.services.task.data.TaskStatus.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class Command {
@@ -41,10 +40,10 @@ public class Command {
     }
 
     public enum Type {
-        LIST_TASK("LIST_TASK", false, List.of(CREATED, CLOSED)),
-        CREATE_TASK("CREATE_TASK", true, List.of(CREATED)),
+        LIST_TASK("LIST_TASK", false, List.of(CREATED, CLOSED, REOPENED)),
+        CREATE_TASK("CREATE_TASK", true, List.of()),
         DELETE_TASK("DELETE_TASK", true, List.of(CLOSED)),
-        CLOSE_TASK("CLOSE_TASK", true, List.of(CREATED)),
+        CLOSE_TASK("CLOSE_TASK", true, List.of(CREATED, REOPENED)),
         REOPEN_TASK("REOPEN_TASK", true, List.of(CLOSED));
 
         final String title;

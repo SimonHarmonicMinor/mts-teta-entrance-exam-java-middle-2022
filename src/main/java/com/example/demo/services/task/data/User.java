@@ -100,15 +100,15 @@ public class User {
                 .noneMatch(user -> user.getUserTitle().equals(this.getUserTitle()));
     }
 
-    public String addTask(Task task) throws TaskException {
-        Optional<Task> findTask = findTask(task.getTaskTitle(), LIST_TASK.getStatusList()).findFirst();
+    public String addTask(Task newTask) throws TaskException {
+        Optional<Task> findTask = findTask(newTask.getTaskTitle(), LIST_TASK.getStatusList()).findFirst();
 
-        if (findTask.isPresent() || !task.getTaskStatus().getTaskStatusTitle().equals(CREATED.getTaskStatusTitle()))
+        if (findTask.isPresent() || !newTask.getTaskStatus().getTaskStatusTitle().equals(CREATED.getTaskStatusTitle()))
             throw new TaskException();
         else
-            getTaskList().add(task);
+            getTaskList().add(newTask);
 
-        return task.getTaskStatus().getTaskStatusTitle();
+        return newTask.getTaskStatus().getTaskStatusTitle();
     }
 
 }
