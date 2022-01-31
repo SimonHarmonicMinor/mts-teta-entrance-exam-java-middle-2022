@@ -150,10 +150,11 @@ class ServerTest extends AbstractServerTest {
         logger.info("Перевод задачи в статус: DELETED");
         response = sendMessage("ANTON CLOSE_TASK TestTask4");
         response = sendMessage("ANTON DELETE_TASK TestTask4");
-        logger.info("Произвести попытку перевода задачи в статусе: DELETED, в любой другой статус.");
+        logger.info("Произвести попытку перевода задачи в статусе: DELETED, в статус: CLOSED");
         response = sendMessage("ANTON CLOSE_TASK TestTask4");
         logger.info("Server response: " + response);
         assertEquals("ERROR_TASK_DONT_EXIST", response);
+        logger.info("Произвести попытку перевода задачи в статусе: DELETED, в статус: REOPEN");
         response = sendMessage("ANTON REOPEN_TASK TestTask4");
         logger.info("Server response: " + response);
         assertEquals("ERROR_TASK_DONT_EXIST", response);

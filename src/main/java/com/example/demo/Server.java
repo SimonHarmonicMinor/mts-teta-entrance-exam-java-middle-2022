@@ -40,7 +40,7 @@ public class Server {
     public void start() throws IOException {
         serverSocket = new ServerSocket(9002);
         Thread serverThread = new Thread(() -> {
-            while (true) {
+            while (!serverSocket.isClosed()) {
                 try {
                     connection = serverSocket.accept();
                     try (
@@ -64,47 +64,55 @@ public class Server {
                             serverWriter.flush();
                             while (!connection.isClosed()) {
                                 clientRequest = serverReader.readLine();
-                                try {
-                                    String[] request = clientRequest.split(" ");
-                                    String userName = request[0];
-                                    String command = request[1];
-                                    String taskName = request[2];
-                                    if (!commandList.contains(command)) {
-                                        while (!checkFormat(clientRequest)) {
-                                            result = "WRONG_FORMAT";
-                                            serverWriter.write(result);
-                                            serverWriter.newLine();
-                                            serverWriter.flush();
-                                            clientRequest = serverReader.readLine();
+                                if (clientRequest.contains("CONNECTION CLOSE")) {
+                                    result = "Выполняется выход.";
+                                    serverWriter.write(result);
+                                    serverWriter.newLine();
+                                    serverWriter.flush();
+                                    break;
+                                } else {
+                                    try {
+                                        if (!clientRequest.isEmpty()) {
+                                            String[] request = clientRequest.split(" ");
+                                            String userName = request[0];
+                                            String command = request[1];
+                                            String taskName = request[2];
+                                            if (!commandList.contains(command)) {
+                                                while (!checkFormat(clientRequest)) {
+                                                    result = "WRONG_FORMAT";
+                                                    serverWriter.write(result);
+                                                    serverWriter.newLine();
+                                                    serverWriter.flush();
+                                                    clientRequest = serverReader.readLine();
+                                                }
+                                            } else {
+                                                switch (command) {
+                                                    case "CREATE_TASK" -> createTask(clientName, userName, taskName);
+                                                    case "DELETE_TASK" -> deleteTask(clientName, taskName);
+                                                    case "CLOSE_TASK" -> closeTask(clientName, taskName);
+                                                    case "REOPEN_TASK" -> reOpenTask(clientName, taskName);
+                                                    case "LIST_TASK" -> getListTask(userName, taskName);
+                                                    default -> result = "ERROR_UNKNOWN_COMMAND";
+                                                }
+
+                                            }
                                         }
-                                    } else {
-                                        switch (command) {
-                                            case "CREATE_TASK" -> createTask(clientName, userName, taskName);
-                                            case "DELETE_TASK" -> deleteTask(clientName, taskName);
-                                            case "CLOSE_TASK" -> closeTask(clientName, taskName);
-                                            case "REOPEN_TASK" -> reOpenTask(clientName, taskName);
-                                            case "LIST_TASK" -> getListTask(userName, taskName);
-                                            case "CONNECTION" -> result = "Выполняется выход.";
-                                            default -> result = "ERROR_UNKNOWN_COMMAND";
-                                        }
+                                    } catch (ArrayIndexOutOfBoundsException e) {
+                                        result = "ERROR_UNKNOWN_COMMAND";
                                     }
-                                } catch (ArrayIndexOutOfBoundsException e) {
-                                    result = "ERROR_UNKNOWN_COMMAND";
                                 }
                                 serverWriter.write(result);
                                 serverWriter.newLine();
                                 serverWriter.flush();
-                                if (clientRequest.equals("CONNECTION")) {
-                                    break;
-                                }
                             }
-                            if (clientRequest.equals("CONNECTION") || connection.isClosed()) {
+                            if (clientRequest.contains("CONNECTION CLOSE") || connection.isClosed()) {
                                 break;
                             }
                         }
                     }
                 } catch (SocketException ex) {
                     LOG.error("Error during closing socket proceeding", ex);
+                } catch (NullPointerException ignored) {
                 } catch (Exception e) {
                     LOG.error("Error during request proceeding", e);
                 }

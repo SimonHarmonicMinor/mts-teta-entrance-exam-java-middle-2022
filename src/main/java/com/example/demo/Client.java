@@ -32,18 +32,16 @@ public class Client {
             auth(clientCommand);
             message = clientReader.readLine();
             System.out.println(message);
-            while (true) {
+            while (clientConnection.isConnected()) {
                 clientCommand = scanner.nextLine();
                 getCommand(clientCommand);
                 result = clientReader.readLine();
                 System.out.println(result);
-                if (clientCommand.equals("EXIT")) {
+                if (clientCommand.contains("CONNECTION")) {
                     break;
                 }
             }
-            if (clientCommand.equals("EXIT")) {
                 break;
-            }
         }
         stopClientConnection();
     }
