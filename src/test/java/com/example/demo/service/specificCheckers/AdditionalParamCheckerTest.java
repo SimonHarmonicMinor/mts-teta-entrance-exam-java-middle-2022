@@ -14,14 +14,14 @@ class AdditionalParamCheckerTest {
 
     @Test
     @DisplayName("выполнять проверку написания имени пользователя в доп.параметре")
-    void checkEAdditionalParamTest() {
+    void checkAdditionalParamTest() {
         Request request = new Request("SVETA", Command.LIST_TASK, "DIMA");
         assertDoesNotThrow(() -> new AdditionalParamChecker().check(request));
     }
 
     @Test
     @DisplayName("выбрасывать исключение FormatException")
-    void checkEAdditionalParamReturnWrongFormatTest() throws FormatException {
+    void checkAdditionalParamThrowsFormatExceptionTest() throws FormatException {
         Request request = new Request("SVETA", Command.LIST_TASK, "dima");
         assertThrows(FormatException.class, () -> new AdditionalParamChecker().check(request));
     }
