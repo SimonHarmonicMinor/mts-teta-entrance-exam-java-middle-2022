@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.services.task.TaskException;
-import com.example.demo.services.task.data.User;
+import com.example.demo.services.task.components.User;
 
 import java.util.ArrayList;
 import java.util.List;

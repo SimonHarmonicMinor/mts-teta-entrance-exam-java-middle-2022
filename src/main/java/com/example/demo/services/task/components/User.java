@@ -1,4 +1,4 @@
-package com.example.demo.services.task.data;
+package com.example.demo.services.task.components;
 
 import com.example.demo.services.task.TaskException;
 import org.jetbrains.annotations.NotNull;
@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 import static com.example.demo.services.Storage.storage;
 import static com.example.demo.services.task.TaskException.Type.ACCESS_DENIED;
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
-import static com.example.demo.services.task.data.Command.Type.LIST_TASK;
-import static com.example.demo.services.task.data.TaskStatus.CREATED;
-import static com.example.demo.services.task.data.TaskStatus.DELETED;
+import static com.example.demo.services.task.components.Command.Type.LIST_TASK;
+import static com.example.demo.services.task.components.TaskStatus.CREATED;
+import static com.example.demo.services.task.components.TaskStatus.DELETED;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class User {

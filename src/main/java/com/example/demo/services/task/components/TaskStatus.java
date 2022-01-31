@@ -1,10 +1,10 @@
-package com.example.demo.services.task.data;
+package com.example.demo.services.task.components;
 
 import com.example.demo.services.task.TaskException;
 
 import java.util.List;
 
-import static com.example.demo.services.task.data.TaskStatus.LifeCycle.*;
+import static com.example.demo.services.task.components.TaskStatus.LifeCycle.*;
 
 public enum TaskStatus {
 

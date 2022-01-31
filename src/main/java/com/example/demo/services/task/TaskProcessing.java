@@ -1,16 +1,16 @@
 package com.example.demo.services.task;
 
-import com.example.demo.services.task.data.Command;
-import com.example.demo.services.task.data.Task;
-import com.example.demo.services.task.data.TaskStatus;
-import com.example.demo.services.task.data.User;
+import com.example.demo.services.task.components.Command;
+import com.example.demo.services.task.components.Task;
+import com.example.demo.services.task.components.TaskStatus;
+import com.example.demo.services.task.components.User;
 
 import java.util.StringTokenizer;
 
 import static com.example.demo.services.Storage.storage;
 import static com.example.demo.services.task.TaskException.Type.DEFAULT;
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
-import static com.example.demo.services.task.data.TaskStatus.*;
+import static com.example.demo.services.task.components.TaskStatus.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
