@@ -46,19 +46,10 @@ public class TaskServiceImp implements TaskService {
     public Result openTask(String taskName, User user) {
         log.info("start opening task");
 
-
-        // проверка существования
         Task task = taskRepository.findByTaskName(taskName);
-        if (task == null) {
-            log.info("Task not found by task name");
-            return Result.ERROR;
-        }
-
-        //проверка доступа
-        log.info("Check access");
-        if (!task.getUser().equals(user)) {
-            log.info("User is not owner task");
-            return Result.ACCESS_DENIED;
+        Result checkinResult = isExistAndUserIsOwner(task, user);
+        if (checkinResult != null) {
+            return checkinResult;
         }
 
         // проверка статуса
@@ -76,15 +67,9 @@ public class TaskServiceImp implements TaskService {
         log.info("start closing task");
 
         Task task = taskRepository.findByTaskName(taskName);
-        if (task == null) {
-            log.info("Task not found by task name");
-            return Result.ERROR;
-        }
-
-        log.info("Check access");
-        if (!task.getUser().equals(user)) {
-            log.info("User is not owner task");
-            return Result.ACCESS_DENIED;
+        Result checkinResult = isExistAndUserIsOwner(task, user);
+        if (checkinResult != null) {
+            return checkinResult;
         }
 
         // проверка статуса
@@ -102,6 +87,22 @@ public class TaskServiceImp implements TaskService {
         log.info("start deleting task");
 
         Task task = taskRepository.findByTaskName(taskName);
+        Result checkinResult = isExistAndUserIsOwner(task, user);
+        if (checkinResult != null) {
+            return checkinResult;
+        }
+
+        // проверка статуса
+        if (task.getStatus().equals(TaskStatus.CLOSED)) {
+            taskRepository.findByTaskName(taskName).delete();
+
+            return Result.DELETED;
+        }
+
+        return Result.ERROR;
+    }
+
+    private Result isExistAndUserIsOwner(Task task, User user) {
         if (task == null) {
             log.info("Task not found by task name");
             return Result.ERROR;
@@ -113,13 +114,7 @@ public class TaskServiceImp implements TaskService {
             return Result.ACCESS_DENIED;
         }
 
-        // проверка статуса
-        if (task.getStatus().equals(TaskStatus.CLOSED)) {
-            taskRepository.findByTaskName(taskName).delete();
-
-            return Result.DELETED;
-        }
-
-        return Result.ERROR;
+        log.info("User is owner task");
+        return null;
     }
 }

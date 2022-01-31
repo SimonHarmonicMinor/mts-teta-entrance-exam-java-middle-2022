@@ -20,6 +20,10 @@ public class DemoApplication {
         String s7 = "VASYA CREATE_TASK CleanRoom Cat";
         String s8 = "VASYA COMMAND CleanRoom";
         String s9 = "VASYA DELETE_TASK CleanRoom";
+        String s10 = "VASYA CLOSE_TASK CleanRoom";
+        String s11 = "VASYA REOPEN_TASK CleanRoom";
+        String s12 = "VASYA CLOSE_TASK CleanRoom";
+        String s13 = "VASYA DELETE_TASK CleanRoom";
 
 
         TaskController controller = TaskConfig.createController();
@@ -34,5 +38,9 @@ public class DemoApplication {
         responser.response(controller.handleRequest(s7));
         responser.response(controller.handleRequest(s8));
         responser.response(controller.handleRequest(s9));
+        responser.response(controller.handleRequest(s10));
+        responser.response(controller.handleRequest(s11));
+        responser.response(controller.handleRequest(s12));
+        responser.response(controller.handleRequest(s13));
     }
 }
