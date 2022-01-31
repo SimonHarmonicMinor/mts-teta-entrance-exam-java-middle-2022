@@ -26,6 +26,7 @@ public class RequestValidator {
     public Request getRequest(String line) throws Exception {
         String[] parsedLine = line.split(" ", -1);
 
+        //Request format validation
         if (parsedLine.length != 3) {
             throw new WrongFormatException(line);
         }
@@ -34,11 +35,11 @@ public class RequestValidator {
 
         String user = parsedLine[0];
         String command = parsedLine[1];
-        String arg = (parsedLine[2]);
+        String arg = parsedLine[2];
 
         User userEntity = userRepository.getUser(user);
 
-        //User not found exception
+        //General user validation
         if (userEntity == null) {
             throw new UserNotFoundException(user);
         }
@@ -47,7 +48,7 @@ public class RequestValidator {
 
         Command commandEnum;
 
-        //Wrong command
+        //Command validation
         try {
             commandEnum = Command.valueOf(command);
         } catch (Exception e) {
@@ -83,10 +84,12 @@ public class RequestValidator {
 
         //Command.CLOSE_TASK/REOPEN_TASK/DELETE_TASK validation
 
+        //Access validation
         if (!userEntity.hasTask(task)) {
             throw new AccessDeniedException();
         }
 
+        //State validation
         if (!isValidChangeStateRequest(task, commandEnum)) {
             throw new ChangeStateException(command);
         }
