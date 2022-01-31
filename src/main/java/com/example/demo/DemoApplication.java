@@ -15,5 +15,4 @@ public class DemoApplication {
         client.clientAction();
         server.stop();
     }
-
 }
