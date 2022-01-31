@@ -86,15 +86,19 @@ public class Server {
                                                     clientRequest = serverReader.readLine();
                                                 }
                                             } else {
-                                                switch (command) {
-                                                    case "CREATE_TASK" -> createTask(clientName, userName, taskName);
-                                                    case "DELETE_TASK" -> deleteTask(clientName, taskName);
-                                                    case "CLOSE_TASK" -> closeTask(clientName, taskName);
-                                                    case "REOPEN_TASK" -> reOpenTask(clientName, taskName);
-                                                    case "LIST_TASK" -> getListTask(userName, taskName);
-                                                    default -> result = "ERROR_UNKNOWN_COMMAND";
+                                                if (command.equals("CREATE_TASK")) {
+                                                    createTask(clientName, userName, taskName);
+                                                } else if (command.equals("DELETE_TASK")) {
+                                                    deleteTask(clientName, taskName);
+                                                } else if (command.equals("CLOSE_TASK")) {
+                                                    closeTask(clientName, taskName);
+                                                } else if (command.equals("REOPEN_TASK")) {
+                                                    reOpenTask(clientName, taskName);
+                                                } else if (command.equals("LIST_TASK")) {
+                                                    getListTask(userName, taskName);
+                                                } else {
+                                                    result = "ERROR_UNKNOWN_COMMAND";
                                                 }
-
                                             }
                                         }
                                     } catch (ArrayIndexOutOfBoundsException e) {
