@@ -22,13 +22,13 @@ public class TaskServiceImp implements TaskService {
     @Override
     public Task findByName(String taskName) {
         log.debug("start finding by taskName");
-        return taskRepository.findByTaskName(taskName);
+        return taskRepository.getByTaskName(taskName);
     }
 
     @Override
     public List<Task> findAllByUser(User user) {
         log.debug("start finding by all tasks by user");
-        return taskRepository.findByUser(user);
+        return taskRepository.getByUser(user);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TaskServiceImp implements TaskService {
             return Result.ERROR;
         }
 
-        taskRepository.create(new Task(taskName, user));
+        taskRepository.add(new Task(taskName, user));
         return Result.CREATED;
     }
 
@@ -46,7 +46,7 @@ public class TaskServiceImp implements TaskService {
     public Result openTask(String taskName, User user) {
         log.debug("start opening task");
 
-        Task task = taskRepository.findByTaskName(taskName);
+        Task task = taskRepository.getByTaskName(taskName);
         Result checkinResult = isExistAndUserIsOwner(task, user);
         if (checkinResult != null) {
             return checkinResult;
@@ -54,7 +54,7 @@ public class TaskServiceImp implements TaskService {
 
         // проверка статуса
         if (task.getStatus().equals(TaskStatus.CLOSED)) {
-            taskRepository.findByTaskName(taskName).open();
+            taskRepository.getByTaskName(taskName).open();
 
             return Result.REOPENED;
         }
@@ -66,7 +66,7 @@ public class TaskServiceImp implements TaskService {
     public Result closeTask(String taskName, User user) {
         log.debug("start closing task");
 
-        Task task = taskRepository.findByTaskName(taskName);
+        Task task = taskRepository.getByTaskName(taskName);
         Result checkinResult = isExistAndUserIsOwner(task, user);
         if (checkinResult != null) {
             return checkinResult;
@@ -74,7 +74,7 @@ public class TaskServiceImp implements TaskService {
 
         // проверка статуса
         if (task.getStatus().equals(TaskStatus.CREATED)) {
-            taskRepository.findByTaskName(taskName).close();
+            taskRepository.getByTaskName(taskName).close();
 
             return Result.CLOSED;
         }
@@ -86,7 +86,7 @@ public class TaskServiceImp implements TaskService {
     public Result deleteTask(String taskName, User user) {
         log.debug("start deleting task");
 
-        Task task = taskRepository.findByTaskName(taskName);
+        Task task = taskRepository.getByTaskName(taskName);
         Result checkinResult = isExistAndUserIsOwner(task, user);
         if (checkinResult != null) {
             return checkinResult;
@@ -94,7 +94,7 @@ public class TaskServiceImp implements TaskService {
 
         // проверка статуса
         if (task.getStatus().equals(TaskStatus.CLOSED)) {
-            taskRepository.findByTaskName(taskName).delete();
+            taskRepository.getByTaskName(taskName).delete();
             taskRepository.delete(task);
 
             return Result.DELETED;

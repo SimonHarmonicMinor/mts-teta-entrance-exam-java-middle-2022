@@ -6,17 +6,13 @@ import com.example.demo.model.User;
 import java.util.List;
 
 public interface TaskRepository {
-    List<Task> findAll();
+    Task getByTaskName(String name);
 
-    Task findByTaskName(String name);
+    List<Task> getByUser(User user);
 
-    List<Task> findByUser(User user);
+    void add(Task task);
 
-    boolean create(Task task);
-
-    boolean update(Task task);
-
-    boolean delete(Task task);
+    void delete(Task task);
 
     boolean isContainedByTaskName(String taskName);
 }

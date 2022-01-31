@@ -19,13 +19,7 @@ public class TaskRepositoryImp implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAll() {
-        log.debug("Collected all tasks in repo");
-        return repo;
-    }
-
-    @Override
-    public Task findByTaskName(String name) {
+    public Task getByTaskName(String name) {
         log.debug("Start findingByName");
 
         for (Task t : repo) {
@@ -40,7 +34,7 @@ public class TaskRepositoryImp implements TaskRepository {
     }
 
     @Override
-    public List<Task> findByUser(User user) {
+    public List<Task> getByUser(User user) {
         log.debug("Starting find tasks by user");
 
         List<Task> tasks = new ArrayList<>();
@@ -56,27 +50,21 @@ public class TaskRepositoryImp implements TaskRepository {
 
 
     @Override
-    public boolean create(Task task) {
+    public void add(Task task) {
         log.debug("Start saving task");
 
-        return repo.add(task);
+        repo.add(task);
     }
 
     @Override
-    public boolean update(Task task) {
-        delete(findByTaskName(task.getName()));
-        return create(task);
-    }
-
-    @Override
-    public boolean delete(Task task) {
+    public void delete(Task task) {
         log.debug("Start deleting task");
 
-        return repo.remove(task);
+        repo.remove(task);
     }
 
     @Override
     public boolean isContainedByTaskName(String taskName) {
-        return findByTaskName(taskName) != null;
+        return getByTaskName(taskName) != null;
     }
 }
