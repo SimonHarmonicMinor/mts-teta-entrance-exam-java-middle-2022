@@ -26,7 +26,7 @@ class DeleteExecuteTest {
     }
 
     @Test
-    @DisplayName("выполнять команду удаления задачи")
+    @DisplayName("возвращать ERROR")
     void deleteExecuteTestReturnError() {
         taskRepository.addTask(new Task("Task1", Status.CREATED, "LENA"));
         Request request = new Request("LENA", Command.DELETE_TASK, "Task1");

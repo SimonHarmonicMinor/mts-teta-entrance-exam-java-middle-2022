@@ -2,16 +2,13 @@ package com.example.demo.service.commandExecutor;
 
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
-import com.example.demo.entity.Status;
-import com.example.demo.entity.Task;
-import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.TaskRepositoryImpl;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.UserRepositoryImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Тест должен:")
 class ListExecuteTest {
