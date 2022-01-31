@@ -88,7 +88,7 @@ public class User {
                 .filter(user -> !user.getUserTitle().equals(this.getUserTitle()))
                 .forEach(user -> user.getTaskList()
                         .stream()
-                        .filter(task -> !task.getTaskStatus().equals(DELETED))
+                        .filter(task -> task.checkStatus(LIST_TASK.getStatusList()))
                         .forEach(task -> result.set(result.get() || task.getTaskTitle().equals(taskTitle))));
 
         return result.get();
