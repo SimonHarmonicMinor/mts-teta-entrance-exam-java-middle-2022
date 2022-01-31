@@ -19,6 +19,5 @@ public class RequestCheckerImpl implements RequestChecker {
     @Override
     public void check(Request request) {
         requestCheckerList.forEach(requestChecker -> requestChecker.check(request));
-
     }
 }
