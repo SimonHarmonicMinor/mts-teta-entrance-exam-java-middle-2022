@@ -11,8 +11,4 @@ public class TaskConfig {
 
         return new TaskControllerImp(service);
     }
-
-    public static TaskResponser createResponser() {
-        return new TaskResponserImp();
-    }
 }
