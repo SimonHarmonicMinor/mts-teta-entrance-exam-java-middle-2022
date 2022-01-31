@@ -10,7 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.example.demo.model.Response;
-import com.example.demo.service.RequestHandler;
+import com.example.demo.service.Dispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +19,10 @@ public class Server {
     private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
     private ServerSocket serverSocket;
-    private final RequestHandler requestHandler;
+    private final Dispatcher dispatcher;
 
-    public Server(RequestHandler requestHandler) {
-        this.requestHandler = requestHandler;
+    public Server(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
     public void start() throws IOException {
@@ -39,7 +39,7 @@ public class Server {
                     ) {
                         String line = serverReader.readLine();
                         LOG.debug("Request captured: " + line);
-                        Response response = requestHandler.handleRequest(line);
+                        Response response = dispatcher.dispatch(line);
                         serverWriter.write(response.toString());
                         serverWriter.flush();
                     }

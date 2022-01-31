@@ -5,31 +5,33 @@ public class Response {
         CREATED, DELETED, CLOSED, REOPENED, TASKS, WRONG_FORMAT, ACCESS_DENIED, ERROR
     }
 
+    private boolean successful;
     private Result result;
     private String arg;
 
-    public Result getResult() {
-        return result;
+    public boolean isSuccessful() {
+        return successful;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public Result getResult() {
+        return result;
     }
 
     public String getArg() {
         return arg;
     }
 
-    public void setArg(String arg) {
-        this.arg = arg;
+    public Response(boolean successful) {
+        this.successful = successful;
     }
 
-    public Response(Result result) {
+    public Response(Result result, boolean successful) {
         this.result = result;
+        this.successful = successful;
     }
 
-    public Response(Result result, String arg) {
-        this.result = result;
+    public Response(Result result, String arg, boolean successful) {
+        this(result, successful);
         this.arg = arg;
     }
 

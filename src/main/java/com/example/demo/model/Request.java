@@ -8,39 +8,37 @@ public class Request {
         CREATE_TASK, DELETE_TASK, CLOSE_TASK, REOPEN_TASK, LIST_TASK;
 
         public static Optional<Command> fromValue(String v) {
-            return Stream.of(Command.values()).filter(c -> c.name().equalsIgnoreCase(v)).findFirst();
+            return Stream.of(Command.values()).filter(c -> c.name().equals(v)).findFirst();
         }
     }
 
+    private boolean successful;
     private String user;
     private Command command;
     private String arg;
 
-    public String getUser() {
-        return user;
+    public boolean isSuccessful() {
+        return successful;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public String getUser() {
+        return user;
     }
 
     public Command getCommand() {
         return command;
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-
     public String getArg() {
         return arg;
     }
 
-    public void setArg(String arg) {
-        this.arg = arg;
+    public Request(boolean successful) {
+        this.successful = false;
     }
 
     public Request(String user, Command command, String arg) {
+        this.successful = true;
         this.user = user;
         this.command = command;
         this.arg = arg;

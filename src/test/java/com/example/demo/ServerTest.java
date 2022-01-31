@@ -7,9 +7,18 @@ import org.junit.jupiter.api.Test;
 class ServerTest extends AbstractServerTest {
 
     @Test
-    void test() {
-        String response = sendMessage("VASYA  CREATE_TASK CleanRoom");
+    void test() throws Exception {
+        String response = sendMessage("VASYA  create_task CleanRoom");
+        assertEquals("WRONG_FORMAT", response);
+
+        response = sendMessage("  VASYA   CREATE_TASK  CleanRoom  ");
         assertEquals("CREATED", response);
+
+        response = sendMessage("VASYA REOPEN_TASK CleanRoom");
+        assertEquals("ERROR", response);
+
+        response = sendMessage("VASYA DELETE_TASK CleanRoom");
+        assertEquals("ERROR", response);
 
         response = sendMessage("VASYA CLOSE_TASK CleanRoom");
         assertEquals("CLOSED", response);
@@ -18,7 +27,7 @@ class ServerTest extends AbstractServerTest {
         assertEquals("REOPENED", response);
 
         response = sendMessage("PETYA LIST_TASK VASYA");
-        assertEquals("[Task{name='CleanRoom', state=CREATED, user=VASYA}]", response);
+        assertEquals("TASKS [Task{name='CleanRoom', state=CREATED, user=VASYA}]", response);
 
         response = sendMessage("PETYA CLOSE_TASK CleanRoom");
         assertEquals("ACCESS_DENIED", response);
@@ -29,12 +38,21 @@ class ServerTest extends AbstractServerTest {
         response = sendMessage("VASYA CLOSE_TASK CleanRoom");
         assertEquals("CLOSED", response);
 
+        response = sendMessage("PETYA CREATE_TASK CleanRoom");
+        assertEquals("ERROR", response);
+
         response = sendMessage("VASYA DELETE_TASK CleanRoom");
         assertEquals("DELETED", response);
+
+        response = sendMessage("PETYA CREATE_TASK CleanRoom");
+        assertEquals("CREATED", response);
+
+        response = sendMessage("PETYA LIST_TASK VASYA");
+        assertEquals("TASKS []", response);
     }
 
     @Test
-    void test2() {
+    void test2() throws Exception {
         String response = sendMessage("request2");
         assertEquals("request2", response);
     }

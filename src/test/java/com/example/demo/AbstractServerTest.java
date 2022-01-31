@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 import com.example.demo.repository.TasksRepository;
+import com.example.demo.repository.TasksRepositoryImpl;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.CommandValidator;
-import com.example.demo.service.RequestHandler;
+import com.example.demo.repository.UserRepositoryImpl;
+import com.example.demo.service.*;
+import com.example.demo.service.handler.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,22 +27,28 @@ public class AbstractServerTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
-        UserRepository userRepository = new UserRepository();
-        TasksRepository tasksRepository = new TasksRepository();
-        CommandValidator commandValidator = new CommandValidator(userRepository, tasksRepository);
-        RequestHandler requestHandler = new RequestHandler(userRepository, tasksRepository, commandValidator);
-        server = new Server(requestHandler);
+        UserRepository userRepository = new UserRepositoryImpl();
+        TasksRepository tasksRepository = new TasksRepositoryImpl();
+        Validator validator = new ValidatorImpl(userRepository, tasksRepository);
+        List<Handler> handlers = List.of(
+                new CreateHandler(userRepository, tasksRepository, validator),
+                new CloseHandler(userRepository, tasksRepository, validator),
+                new ReopenHandler(userRepository, tasksRepository, validator),
+                new DeleteHandler(userRepository, tasksRepository, validator),
+                new ListHandler(userRepository, tasksRepository, validator));
+        Dispatcher dispatcher = new DispatcherImpl(handlers);
+        server = new Server(dispatcher);
         server.start();
     }
 
-    @BeforeEach
+//    @BeforeEach
     void beforeEach() throws Exception {
         clientSocket = new Socket("localhost", 9090);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    @AfterEach
+//    @AfterEach
     void afterEach() throws Exception {
         in.close();
         out.close();
@@ -51,12 +60,15 @@ public class AbstractServerTest {
         server.stop();
     }
 
-    protected String sendMessage(String msg) {
+    protected String sendMessage(String msg) throws Exception {
+        beforeEach();
         out.println(msg);
         try {
             return in.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            afterEach();
         }
     }
 }
