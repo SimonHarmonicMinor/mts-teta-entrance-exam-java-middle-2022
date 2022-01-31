@@ -38,7 +38,7 @@ public class DeleteExecute implements CommandExecutor {
         logger.info(">>DeleteExecute execute request={}", request);
         Optional<Task> currentOptionalTask = taskRepository.getTaskByName(request.getAdditionalParam());
         String result = currentOptionalTask
-                .filter(task -> !Status.CLOSED.equals(task.getStatus()))
+                .filter(task -> Status.CLOSED.equals(task.getStatus()))
                 .map(task -> {
                     task.setStatus(Status.DELETED);
                     taskRepository.updateTask(task);
