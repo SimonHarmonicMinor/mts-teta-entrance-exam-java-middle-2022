@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Адаптер для преобразовании запроса в виде строки в сущность Request
  */
-
 public class PlanOfTaskAdapter {
 
     private final PlanOfTask planOfTask;

@@ -3,7 +3,6 @@ package com.example.demo.entity;
 /**
  * Сущность задача, содержащая имя задачи, статус и имя пользователя
  */
-
 public class Task {
 
     private String name;

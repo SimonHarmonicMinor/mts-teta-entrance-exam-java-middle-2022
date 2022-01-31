@@ -15,7 +15,6 @@ import java.util.Optional;
 /**
  * Выполнение задачи CLOSE_TASK
  */
-
 public class CloseExecute implements CommandExecutor {
 
     private final TaskRepository taskRepository;

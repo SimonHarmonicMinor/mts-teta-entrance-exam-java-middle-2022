@@ -22,9 +22,9 @@ class RequestCheckerImplTest {
     TaskRepository taskRepository = new TaskRepositoryImpl();
     UserRepository userRepository = new UserRepositoryImpl();
 
-    List<RequestChecker> requestCheckerList = List.of(new RequiredFieldsChecker(), new CommandNameChecker(),
-            new UserNameChecker(), new TaskChecker(userRepository), new RightChecker(taskRepository), new AdditionalParamChecker(),
-            new TaskNameChecker(taskRepository));
+    List<RequestChecker> requestCheckerList = List.of(new RequiredFieldsChecker(),
+            new UserNameChecker(), new TaskChecker(userRepository), new RightChecker(taskRepository),
+            new AdditionalParamChecker(), new TaskNameChecker(taskRepository));
 
     @Test
     @DisplayName("пройтись по списку проверок, не выбрасывая исключений")

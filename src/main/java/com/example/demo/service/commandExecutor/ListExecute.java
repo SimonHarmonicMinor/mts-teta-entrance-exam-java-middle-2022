@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Выполнение задачи LIST_TASK
  */
-
 public class ListExecute implements CommandExecutor {
 
     private final UserRepository userRepository;

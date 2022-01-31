@@ -15,7 +15,6 @@ import java.util.Optional;
 /**
  * Выполнение задачи REOPEN_TASK
  */
-
 public class ReopenExecute implements CommandExecutor {
 
     private final TaskRepository taskRepository;

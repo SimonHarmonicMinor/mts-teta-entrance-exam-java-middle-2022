@@ -14,10 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Тест должен:")
 class TaskRepositoryImplTest {
 
+    TaskRepository taskRepository = new TaskRepositoryImpl();
+
     @Test
     @DisplayName("выполнять добавление задачи в репозиторий")
     void addTaskTest() {
-        assertDoesNotThrow(() -> new TaskRepositoryImpl().addTask(new Task
+        assertDoesNotThrow(() -> taskRepository.addTask(new Task
                 ("Task", Status.CREATED, "DASHA")));
     }
 
@@ -26,8 +28,8 @@ class TaskRepositoryImplTest {
     void removeTaskTest() {
         Task task = new Task
                 ("Task", Status.CREATED, "DASHA");
-        new TaskRepositoryImpl().addTask(task);
-        assertDoesNotThrow(() -> new TaskRepositoryImpl().removeTask(task));
+        taskRepository.addTask(task);
+        assertDoesNotThrow(() -> taskRepository.removeTask(task));
     }
 
     @Test
@@ -35,9 +37,9 @@ class TaskRepositoryImplTest {
     void  updateTaskTest() {
         Task task = new Task
                 ("Task", Status.CREATED, "DASHA");
-        new TaskRepositoryImpl().addTask(task);
+        taskRepository.addTask(task);
         task.setStatus(Status.CLOSED);
-        assertDoesNotThrow(() -> new TaskRepositoryImpl().updateTask(task));
+        assertDoesNotThrow(() -> taskRepository.updateTask(task));
     }
 
     @Test
@@ -45,8 +47,8 @@ class TaskRepositoryImplTest {
     void  getTaskByNameTest() {
         Task task = new Task
                 ("Task", Status.CREATED, "DASHA");
-        new TaskRepositoryImpl().addTask(task);
-        assertEquals(Optional.of(task), new TaskRepositoryImpl().getTaskByName("Task"));
+        taskRepository.addTask(task);
+        assertEquals(Optional.of(task), taskRepository.getTaskByName("Task"));
     }
 
     @Test
@@ -54,8 +56,8 @@ class TaskRepositoryImplTest {
     void  getAllTasksTest() {
         Task task = new Task
                 ("Task", Status.CREATED, "DASHA");
-        new TaskRepositoryImpl().addTask(task);
-        assertEquals(List.of(task), new TaskRepositoryImpl().getAllTasks());
+        taskRepository.addTask(task);
+        assertEquals(List.of(task), taskRepository.getAllTasks());
     }
 
 }

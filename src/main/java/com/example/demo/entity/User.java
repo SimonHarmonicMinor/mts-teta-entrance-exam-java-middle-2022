@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * Сущность пользователь, содержит имя и список названий задач
  */
-
 public class User {
 
     private String name;

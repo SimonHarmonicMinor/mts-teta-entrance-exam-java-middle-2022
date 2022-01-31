@@ -3,7 +3,6 @@ package com.example.demo.entity;
 /**
  * Варианты результата запроса
  */
-
 public enum Result {
 
     CREATED,
@@ -13,6 +12,6 @@ public enum Result {
     TASKS,
     WRONG_FORMAT,
     ACCESS_DENIED,
-    ERROR;
+    ERROR
 
 }

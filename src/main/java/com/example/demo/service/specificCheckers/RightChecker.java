@@ -15,7 +15,6 @@ import java.util.Optional;
  * Проверка пользователя на право совершать операции над задачей.
  * Пользователь должен быть создателем данной задачи.
  */
-
 public class RightChecker implements RequestChecker {
 
     private final TaskRepository taskRepository;

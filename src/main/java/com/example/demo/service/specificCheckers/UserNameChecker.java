@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Проверка имени юзера на написание в upper case
  */
-
 public class UserNameChecker implements RequestChecker {
 
     private static final Logger logger

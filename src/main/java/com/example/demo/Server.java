@@ -1,17 +1,12 @@
 package com.example.demo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import com.example.demo.config.ConfigApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server {
 
@@ -29,7 +24,7 @@ public class Server {
               BufferedReader serverReader = new BufferedReader(
                   new InputStreamReader(connection.getInputStream()));
               Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
+                  new OutputStreamWriter(connection.getOutputStream()))
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);

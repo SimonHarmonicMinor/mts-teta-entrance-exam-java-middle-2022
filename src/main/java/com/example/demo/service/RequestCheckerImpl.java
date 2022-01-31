@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Формирования листа проверок для запросов
  */
-
 public class RequestCheckerImpl implements RequestChecker {
 
     private final List<RequestChecker> requestCheckerList;

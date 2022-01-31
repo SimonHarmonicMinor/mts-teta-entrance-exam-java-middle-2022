@@ -13,26 +13,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Тест должен:")
 class UserRepositoryImplTest {
 
+    UserRepository userRepository = new UserRepositoryImpl();
+
     @Test
     @DisplayName("выполнять добавление юзера в репозиторий")
     void addUserTest() {
-        assertDoesNotThrow(() -> new UserRepositoryImpl().addUser(new User("DASHA", List.of())));
+        assertDoesNotThrow(() -> userRepository.addUser(new User("DASHA", List.of())));
     }
 
     @Test
     @DisplayName("выполнять получение юзера")
     void getUserByNameTest() {
         User user = new User("DASHA", List.of());
-        new UserRepositoryImpl().addUser(user);
-        assertEquals(Optional.of(user), new UserRepositoryImpl().getUserByName("DASHA"));
+        userRepository.addUser(user);
+        assertEquals(Optional.of(user), userRepository.getUserByName("DASHA"));
     }
 
     @Test
     @DisplayName("выполнять получение списка юзеров")
     void getAllUsersTest() {
         User user = new User("DASHA", List.of());
-        new UserRepositoryImpl().addUser(user);
-        assertEquals(List.of(user), new UserRepositoryImpl().getAllUsers());
+        userRepository.addUser(user);
+        assertEquals(List.of(user), userRepository.getAllUsers());
     }
 
 }

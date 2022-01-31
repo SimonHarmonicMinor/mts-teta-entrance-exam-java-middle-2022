@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Проверка запроса и вызов команды
  */
-
 public class PlanOfTaskImpl implements PlanOfTask {
 
     private final CommandExecutor commandExecutor;

@@ -11,7 +11,6 @@ import java.util.Map;
 /**
  * Выбор команды для выполнения
  */
-
 public class BaseCommandExecutor implements CommandExecutor{
 
     private final Map<Command, CommandExecutor> specificCommandExecutors;

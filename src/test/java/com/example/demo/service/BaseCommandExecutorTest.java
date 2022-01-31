@@ -24,8 +24,7 @@ class BaseCommandExecutorTest {
     Map<Command, CommandExecutor> commandExecutorMap = new HashMap<>();
 
     {
-        commandExecutorMap.put(Command.CREATE_TASK, new
-                CreateExecute(taskRepository, userRepository));
+        commandExecutorMap.put(Command.CREATE_TASK, new CreateExecute(taskRepository, userRepository));
         commandExecutorMap.put(Command.LIST_TASK, new ListExecute(userRepository));
         commandExecutorMap.put(Command.REOPEN_TASK, new ReopenExecute(taskRepository));
         commandExecutorMap.put(Command.CLOSE_TASK, new CloseExecute(taskRepository));

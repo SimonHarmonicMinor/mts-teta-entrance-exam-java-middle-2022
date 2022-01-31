@@ -11,7 +11,6 @@ import java.util.Map;
 /**
  * Реализация ExceptionHandler
  */
-
 public class ExceptionHandlerImpl implements ExceptionHandler {
 
     private static final Logger logger

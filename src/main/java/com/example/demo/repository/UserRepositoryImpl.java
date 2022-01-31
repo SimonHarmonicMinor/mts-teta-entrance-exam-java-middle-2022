@@ -7,7 +7,6 @@ import java.util.*;
 /**
  * Имплементация репозитория юзеров
  */
-
 public class UserRepositoryImpl implements UserRepository {
 
     /**

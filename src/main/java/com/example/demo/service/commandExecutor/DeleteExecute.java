@@ -15,7 +15,6 @@ import java.util.Optional;
 /**
  * Выполнение задачи DELETE_TASK
  */
-
 public class DeleteExecute implements CommandExecutor {
 
     private final TaskRepository taskRepository;

@@ -3,7 +3,6 @@ package com.example.demo.entity;
 /**
  * Сущность запроса, содеждащая имя пользователя, комманду и доп. параметр (имя задачи или имя пользователя)
  */
-
 public class Request {
 
     private String userName;

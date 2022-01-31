@@ -26,15 +26,14 @@ class PlanOfTaskAdapterTest {
     UserRepository userRepository = new UserRepositoryImpl();
 
 
-    List<RequestChecker> requestCheckerList = List.of(new RequiredFieldsChecker(), new CommandNameChecker(),
-            new UserNameChecker(), new TaskChecker(userRepository), new RightChecker(taskRepository), new AdditionalParamChecker(),
-            new TaskNameChecker(taskRepository));
+    List<RequestChecker> requestCheckerList = List.of(new RequiredFieldsChecker(),
+            new UserNameChecker(), new TaskChecker(userRepository), new RightChecker(taskRepository),
+            new AdditionalParamChecker(), new TaskNameChecker(taskRepository));
 
     Map<Command, CommandExecutor> commandExecutorMap = new HashMap<>();
 
     {
-        commandExecutorMap.put(Command.CREATE_TASK, new
-                CreateExecute(taskRepository, userRepository));
+        commandExecutorMap.put(Command.CREATE_TASK, new CreateExecute(taskRepository, userRepository));
         commandExecutorMap.put(Command.LIST_TASK, new ListExecute(userRepository));
         commandExecutorMap.put(Command.REOPEN_TASK, new ReopenExecute(taskRepository));
         commandExecutorMap.put(Command.CLOSE_TASK, new CloseExecute(taskRepository));

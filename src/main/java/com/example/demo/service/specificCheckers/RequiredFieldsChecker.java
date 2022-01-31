@@ -11,7 +11,6 @@ import static java.util.Objects.isNull;
 /**
  * Проверка запроса на заполнение обязательных полей запроса
  */
-
 public class RequiredFieldsChecker implements RequestChecker {
 
     private static final Logger logger
