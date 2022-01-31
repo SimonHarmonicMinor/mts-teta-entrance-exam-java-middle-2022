@@ -15,7 +15,6 @@ public class TaskRepositoryImp implements TaskRepository {
 
     public TaskRepositoryImp() {
         this.repo = new ArrayList<>();
-
         log.info("Repo initiated");
     }
 
@@ -26,7 +25,7 @@ public class TaskRepositoryImp implements TaskRepository {
     }
 
     @Override
-    public Task findByName(String name) {
+    public Task findByTaskName(String name) {
         log.info("Start findingByName");
 
         for (Task t : repo) {
@@ -55,11 +54,18 @@ public class TaskRepositoryImp implements TaskRepository {
         return tasks;
     }
 
+
     @Override
-    public boolean save(Task task) {
+    public boolean create(Task task) {
         log.info("Start saving task");
 
         return repo.add(task);
+    }
+
+    @Override
+    public boolean update(Task task) {
+        delete(findByTaskName(task.getName()));
+        return create(task);
     }
 
     @Override
@@ -67,5 +73,10 @@ public class TaskRepositoryImp implements TaskRepository {
         log.info("Start deleting task");
 
         return repo.remove(task);
+    }
+
+    @Override
+    public boolean isContainedByTaskName(String taskName) {
+        return findByTaskName(taskName) != null;
     }
 }

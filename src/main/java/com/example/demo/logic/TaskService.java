@@ -1,5 +1,6 @@
 package com.example.demo.logic;
 
+import com.example.demo.model.Result;
 import com.example.demo.model.Task;
 import com.example.demo.model.User;
 
@@ -10,11 +11,11 @@ public interface TaskService {
 
     List<Task> findAllByUser(User user);
 
-    void createTask(String taskName, User user);
+    Result createTask(String taskName, User user);
 
-    void openTask(String taskName);
+    Result openTask(String taskName, User user);
 
-    void closeTask(String taskName);
+    Result closeTask(String taskName, User user);
 
-    void deleteTask(String taskName);
+    Result deleteTask(String taskName, User user);
 }

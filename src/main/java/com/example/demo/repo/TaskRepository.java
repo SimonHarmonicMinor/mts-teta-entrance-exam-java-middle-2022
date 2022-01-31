@@ -8,11 +8,15 @@ import java.util.List;
 public interface TaskRepository {
     List<Task> findAll();
 
-    Task findByName(String name);
+    Task findByTaskName(String name);
 
     List<Task> findByUser(User user);
 
-    boolean save(Task task);
+    boolean create(Task task);
+
+    boolean update(Task task);
 
     boolean delete(Task task);
+
+    boolean isContainedByTaskName(String taskName);
 }

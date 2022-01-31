@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-// (?) Логика в контроллере или валидация в сервисе+ потребность в DTO между слоями
+// (?) Потребность в DTO между слоями
 public class TaskControllerImp implements TaskController {
     private final Logger log = LoggerFactory.getLogger(TaskControllerImp.class);
     private final TaskService taskService;
@@ -51,106 +51,28 @@ public class TaskControllerImp implements TaskController {
     private Result handleModifyTask(String[] inputCommand) {
         log.info("Start handleModifyTask");
         // если создание задачи - проверяем свободное ли название, если да - создаем
-        if (inputCommand[1].equals(Command.CREATE_TASK.name())) {
+        User user = new User(inputCommand[0]);
+        String command = inputCommand[1];
+        String taskName = inputCommand[2];
+
+
+        if (command.equals(Command.CREATE_TASK.name())) {
             log.info("Chosen command: create task");
-
-            if (isCreatedTask(inputCommand[2])) {
-                log.info("Task name is busy");
-                return Result.ERROR;
-            }
-
-            taskService.createTask(inputCommand[2], new User(inputCommand[0]));
-            return Result.CREATED;
+            return taskService.createTask(taskName, user);
         }
 
-        // для закрытие/открытие/удаление - проверяем наличие записи
-        log.info("Check existing task");
-        if (!isCreatedTask(inputCommand[2])) {
-            log.info("Task not found by task name");
-            return Result.ERROR;
+        if (command.equals(Command.REOPEN_TASK.name())) {
+            return taskService.openTask(taskName, user);
         }
 
-        // наличие прав доступа
-        log.info("Check access");
-        if (!validateAccess(inputCommand[1], new User(inputCommand[0]))) {
-            log.info("User is not owner task");
-            return Result.ACCESS_DENIED;
+        if (command.equals(Command.DELETE_TASK.name())) {
+            return taskService.deleteTask(taskName, user);
         }
 
-        // соответствие статуса задачи для измениня
-        log.info("Check task status");
-        if (inputCommand[1].equals(Command.REOPEN_TASK.name())) {
-            if (validateReopenTask(inputCommand[1])) {
-                log.info("Task status doesnot allow reopen task");
-                return Result.ERROR;
-            }
-
-            log.info("Reopening task");
-            taskService.openTask(inputCommand[2]);
-            return Result.REOPENED;
+        if (command.equals(Command.CLOSE_TASK.name())) {
+            return taskService.closeTask(taskName, user);
         }
 
-        if (inputCommand[1].equals(Command.CLOSE_TASK.name())) {
-            if (validateCloseTask(inputCommand[1])) {
-                log.info("Task status doesnot allow close task");
-                return Result.ERROR;
-            }
-
-            log.info("Closing task");
-            taskService.closeTask(inputCommand[2]);
-            return Result.CLOSED;
-        }
-
-        if (inputCommand[1].equals(Command.DELETE_TASK.name())) {
-            if (validateDeleteTask(inputCommand[1])) {
-                log.info("Task status doesnot allow delete task");
-                return Result.ERROR;
-            }
-
-            log.info("Deleting task");
-            taskService.deleteTask(inputCommand[2]);
-            return Result.DELETED;
-        }
-
-        log.info("Something was wrong");
         return Result.ERROR;
-    }
-
-    private boolean isCreatedTask(String taskName) {
-        log.info("Checking task is created");
-        return taskService.findByName(taskName) != null;
-    }
-
-    private boolean validateAccess(String taskName, User user) {
-        log.info("Checking user is task owner");
-        if (taskService.findByName(taskName) == null) {
-            log.info("Task was not found");
-            return false;
-        }
-
-        Task task = taskService.findByName(taskName);
-
-        return task.getUser().equals(user);
-    }
-
-    private boolean validateReopenTask(String taskName) {
-        log.info("Checking status for reopening");
-        TaskStatus currentStatus = taskService.findByName(taskName).getStatus();
-
-        return currentStatus.equals(TaskStatus.CLOSED);
-    }
-
-    private boolean validateCloseTask(String taskName) {
-        log.info("Checking status for closing");
-        TaskStatus currentStatus = taskService.findByName(taskName).getStatus();
-
-        return currentStatus.equals(TaskStatus.CREATED);
-    }
-
-    private boolean validateDeleteTask(String taskName) {
-        log.info("Checking status for deleting");
-        TaskStatus currentStatus = taskService.findByName(taskName).getStatus();
-
-        return currentStatus.equals(TaskStatus.CLOSED);
     }
 }

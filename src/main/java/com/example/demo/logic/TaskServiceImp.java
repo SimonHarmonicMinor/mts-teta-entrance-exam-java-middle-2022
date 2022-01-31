@@ -1,6 +1,8 @@
 package com.example.demo.logic;
 
+import com.example.demo.model.Result;
 import com.example.demo.model.Task;
+import com.example.demo.model.TaskStatus;
 import com.example.demo.model.User;
 import com.example.demo.repo.TaskRepository;
 import org.slf4j.Logger;
@@ -20,7 +22,7 @@ public class TaskServiceImp implements TaskService {
     @Override
     public Task findByName(String taskName) {
         log.info("start finding by taskName");
-        return taskRepository.findByName(taskName);
+        return taskRepository.findByTaskName(taskName);
     }
 
     @Override
@@ -30,26 +32,94 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public void createTask(String taskName, User user) {
-        log.info("start creating task");
-        taskRepository.save(new Task(taskName, user));
+    public Result createTask(String taskName, User user) {
+        if (taskRepository.isContainedByTaskName(taskName)) {
+            log.info("Task name is busy");
+            return Result.ERROR;
+        }
+
+        taskRepository.create(new Task(taskName, user));
+        return Result.CREATED;
     }
 
     @Override
-    public void openTask(String taskName) {
+    public Result openTask(String taskName, User user) {
         log.info("start opening task");
-        taskRepository.findByName(taskName).open();
+
+
+        // проверка существования
+        Task task = taskRepository.findByTaskName(taskName);
+        if (task == null) {
+            log.info("Task not found by task name");
+            return Result.ERROR;
+        }
+
+        //проверка доступа
+        log.info("Check access");
+        if (!task.getUser().equals(user)) {
+            log.info("User is not owner task");
+            return Result.ACCESS_DENIED;
+        }
+
+        // проверка статуса
+        if (task.getStatus().equals(TaskStatus.CLOSED)) {
+            taskRepository.findByTaskName(taskName).open();
+
+            return Result.REOPENED;
+        }
+
+        return Result.ERROR;
     }
 
     @Override
-    public void closeTask(String taskName) {
+    public Result closeTask(String taskName, User user) {
         log.info("start closing task");
-        taskRepository.findByName(taskName).close();
+
+        Task task = taskRepository.findByTaskName(taskName);
+        if (task == null) {
+            log.info("Task not found by task name");
+            return Result.ERROR;
+        }
+
+        log.info("Check access");
+        if (!task.getUser().equals(user)) {
+            log.info("User is not owner task");
+            return Result.ACCESS_DENIED;
+        }
+
+        // проверка статуса
+        if (task.getStatus().equals(TaskStatus.CREATED)) {
+            taskRepository.findByTaskName(taskName).close();
+
+            return Result.CLOSED;
+        }
+
+        return Result.ERROR;
     }
 
     @Override
-    public void deleteTask(String taskName) {
+    public Result deleteTask(String taskName, User user) {
         log.info("start deleting task");
-        taskRepository.findByName(taskName).delete();
+
+        Task task = taskRepository.findByTaskName(taskName);
+        if (task == null) {
+            log.info("Task not found by task name");
+            return Result.ERROR;
+        }
+
+        log.info("Check access");
+        if (!task.getUser().equals(user)) {
+            log.info("User is not owner task");
+            return Result.ACCESS_DENIED;
+        }
+
+        // проверка статуса
+        if (task.getStatus().equals(TaskStatus.CLOSED)) {
+            taskRepository.findByTaskName(taskName).delete();
+
+            return Result.DELETED;
+        }
+
+        return Result.ERROR;
     }
 }
