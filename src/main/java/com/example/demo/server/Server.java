@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +44,9 @@ public class Server {
       Socket connection = serverSocket.accept();
       try (
               BufferedReader serverReader = new BufferedReader(
-                      new InputStreamReader(connection.getInputStream()));
+                      new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
               Writer serverWriter = new BufferedWriter(
-                      new OutputStreamWriter(connection.getOutputStream()))
+                      new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8))
       ) {
         String request = serverReader.readLine();
         LOG.debug("Request captured: {}", request);
