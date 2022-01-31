@@ -10,19 +10,11 @@ import com.modules.Server;
  */
 public class DemoApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Server server = new Server();
         Client client = new Client("localhost", 9090);
-        try {
-            server.start();
-            client.run();
-        } catch (Exception e) {
-            try {
-                server.stop();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        server.start();
+        client.run();
         System.out.println("Приложение запущено, введите команду:");
     }
 }

@@ -1,7 +1,11 @@
 package com.modules;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Демо для показа работы функционала наглядно.
@@ -9,6 +13,7 @@ import java.net.Socket;
  * Команда stop - останавливает процесс
  */
 public class Client implements Runnable {
+    private static final Logger LOG = LoggerFactory.getLogger(Server.class);
     private final String host;
     private final int port;
     private BufferedReader in;
@@ -26,14 +31,14 @@ public class Client implements Runnable {
     public void run() {
         try {
             socket = new Socket(this.host, this.port);
-            inputUser = new BufferedReader(new InputStreamReader(System.in));
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            inputUser = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
             new ReadMsg().start();
             new WriteMsg().start();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Socket failed");
+            LOG.error("Socket failed",e);
         }
     }
 
@@ -44,7 +49,8 @@ public class Client implements Runnable {
                 in.close();
                 out.close();
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            LOG.debug("Error, while try to down Service", e);
         }
     }
 
@@ -66,6 +72,7 @@ public class Client implements Runnable {
                     System.out.println(str);
                 }
             } catch (IOException e) {
+                LOG.debug("Error, while try to down Service in ReadMsg Thread", e);
                 Client.this.downService();
             }
         }

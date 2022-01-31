@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +26,9 @@ public class Server {
                 Socket connection = serverSocket.accept();
                 try (
                         BufferedReader serverReader = new BufferedReader(
-                                new InputStreamReader(connection.getInputStream()));
+                                new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
                         Writer serverWriter = new BufferedWriter(
-                                new OutputStreamWriter(connection.getOutputStream()))
+                                new OutputStreamWriter(connection.getOutputStream(), StandardCharsets.UTF_8))
                 ) {
                     while (true) {
                         LOG.debug("server start");
@@ -36,7 +37,8 @@ public class Server {
                         if (line == null) {
                             continue;
                         }
-                        String[] lineArgs = line.split(" ");
+
+                        String[] lineArgs = line.split(" ",-1);
                         if (lineArgs.length < 3 || lineArgs.length > 4) {
                             serverWriter.write("WRONG_FORMAT" + "\n");
                             serverWriter.flush();

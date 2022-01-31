@@ -8,7 +8,9 @@ class ServerTest extends AbstractServerTest {
 
     @Test()
     void testArgs() {
-        String response = sendMessage("VASYA");
+        String response = sendMessage("");
+        assertEquals("WRONG_FORMAT", response);
+        response = sendMessage("VASYA");
         assertEquals("WRONG_FORMAT", response);
         response = sendMessage("VASYA CREATE_TASK");
         assertEquals("WRONG_FORMAT", response);
