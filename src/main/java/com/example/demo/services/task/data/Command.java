@@ -4,7 +4,6 @@ import com.example.demo.services.task.TaskException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
 import static com.example.demo.services.task.data.TaskStatus.CLOSED;
@@ -18,9 +17,8 @@ public class Command {
     private Command() {
     }
 
-    public Command(String title, String arg) {
+    public Command(String title, String arg) throws TaskException {
         this.type = checkType(title, arg);
-
         this.arg = arg != null ? arg : "";
     }
 
@@ -32,23 +30,12 @@ public class Command {
         return this.type;
     }
 
-    private List<String> getTitleTypes() {
-        return Arrays
-                .stream(Type.values())
-                .map(Type::getTitle)
-                .collect(Collectors.toList());
-    }
-
-    private List<Type> getTypes() {
-        return Arrays
-                .stream(Type.values())
-                .collect(Collectors.toList());
-    }
-
-    private Type checkType(String title, String arg) {
-        return getTypes()
-                .stream()
-                .filter(t -> t.getTitle().equals(title) && t.isNeedArg() == isNotBlank(arg))
+    private Type checkType(String title, String arg) throws TaskException {
+        return Arrays.stream(Type.values())
+                .filter(t ->
+                        t.getTitle().equals(title)
+                                && (t.isNeedArg() == isNotBlank(arg) || title.equals(Type.LIST_TASK.getTitle()))
+                )
                 .findFirst()
                 .orElseThrow(() -> new TaskException(WRONG_FORMAT));
     }
@@ -60,11 +47,14 @@ public class Command {
         CLOSE_TASK("CLOSE_TASK", true, List.of(CREATED)),
         REOPEN_TASK("REOPEN_TASK", true, List.of(CLOSED));
 
-        String title;
-        boolean needArg;
-        List<TaskStatus> statusList;
+        final String title;
+        final boolean needArg;
+        final List<TaskStatus> statusList;
 
         Type(String title, boolean needArg, List<TaskStatus> statusList) {
+            this.title = title;
+            this.needArg = needArg;
+            this.statusList = statusList;
         }
 
         public String getTitle() {
@@ -78,5 +68,7 @@ public class Command {
         public List<TaskStatus> getStatusList() {
             return statusList;
         }
+
     }
+
 }

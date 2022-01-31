@@ -1,26 +1,27 @@
 package com.example.demo;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
 import static com.example.demo.Configure.buildPort;
+import static org.slf4j.LoggerFactory.getLogger;
 
-public class AbstractServerTest {
+public class BaseServerTest {
 
     private static Socket clientSocket;
     private static PrintWriter out;
     private static BufferedReader in;
     private static Server server;
     private static int port;
+
+    private static final Logger LOG = getLogger(BaseServerTest.class);
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -29,31 +30,39 @@ public class AbstractServerTest {
         port = buildPort();
     }
 
-    @BeforeEach
-    void beforeEach() throws Exception {
-        clientSocket = new Socket(InetAddress.getLocalHost().getHostAddress(), port);
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    }
-
-    @AfterEach
-    void afterEach() throws Exception {
-        in.close();
-        out.close();
-        clientSocket.close();
-    }
-
     @AfterAll
     static void afterAll() {
         server.stop();
     }
 
+    void beforeSendMessage() throws Exception {
+        clientSocket = new Socket(InetAddress.getLocalHost().getHostAddress(), port);
+        out = new PrintWriter(clientSocket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    }
+
+    void afterSendMessage() throws Exception {
+        in.close();
+        out.close();
+        clientSocket.close();
+    }
+
     protected String sendMessage(String msg) {
-        out.println(msg);
         try {
+            beforeSendMessage();
+
+            LOG.debug("sendMessage \"" + msg + "\" ...");
+            out.println(msg);
+
             return in.readLine();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                afterSendMessage();
+            } catch (Exception e) {
+                LOG.error(e.getMessage(), e);
+            }
         }
     }
 }

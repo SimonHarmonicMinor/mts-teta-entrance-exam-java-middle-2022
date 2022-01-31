@@ -1,20 +1,24 @@
 package com.example.demo.services.task.data;
 
+import com.example.demo.services.task.TaskException;
+
 import java.util.List;
 
 import static com.example.demo.services.task.data.TaskStatus.LifeCycle.*;
 
 public enum TaskStatus {
 
-    CREATED("CREATED", CREATED_LIFECYCLE),
-    REOPENED("REOPENED", CREATED_LIFECYCLE),
-    CLOSED("CLOSED", CLOSED_LIFECYCLE),
-    DELETED("DELETED", DELETED_LIFECYCLE);
+    CREATED("CREATED", null),
+    REOPENED("REOPENED", null),
+    CLOSED("CLOSED", null),
+    DELETED("DELETED", null);
 
-    private String title;
-    LifeCycle lifeCycle;
+    private final String title;
+    final LifeCycle lifeCycle;
 
     TaskStatus(String title, LifeCycle lifeCycle) {
+        this.title = title;
+        this.lifeCycle = lifeCycle;
     }
 
     public String getTaskStatusTitle() {
@@ -22,7 +26,17 @@ public enum TaskStatus {
     }
 
     public LifeCycle getLifeCycle() {
-        return lifeCycle;
+        switch (this.title) {
+            case "DELETED":
+                return DELETED_LIFECYCLE;
+            case "CLOSED":
+                return CLOSED_LIFECYCLE;
+            case "CREATED":
+            case "REOPENED":
+                return CREATED_LIFECYCLE;
+            default:
+                throw new TaskException();
+        }
     }
 
     public enum LifeCycle {
@@ -30,9 +44,10 @@ public enum TaskStatus {
         CLOSED_LIFECYCLE(List.of(CREATED, DELETED)),
         DELETED_LIFECYCLE(List.of());
 
-        List<TaskStatus> availableStatusList;
+        final List<TaskStatus> availableStatusList;
 
         LifeCycle(List<TaskStatus> availableStatusList) {
+            this.availableStatusList = availableStatusList;
         }
 
         public List<TaskStatus> getAvailableStatusList() {

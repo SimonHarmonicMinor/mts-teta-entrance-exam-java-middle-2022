@@ -15,7 +15,7 @@ public class Task {
     private Task() {
     }
 
-    public Task(String title) {
+    public Task(String title) throws TaskException {
         this.setTitle(title);
         this.taskStatus = CREATED;
     }
@@ -24,7 +24,7 @@ public class Task {
         return title;
     }
 
-    private void setTitle(String title) {
+    private void setTitle(String title) throws TaskException {
         checkTitle(title);
 
         this.title = title;

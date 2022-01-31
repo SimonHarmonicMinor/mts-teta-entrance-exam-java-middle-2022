@@ -55,6 +55,7 @@ public class TaskService extends Thread {
             } catch (Exception e) {
                 if (!(e instanceof SocketException && isInterrupted()))
                     LOG.error("Error during request proceeding", e);
+
                 break;
             }
         }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.example.demo.services.Storage.storage;
@@ -25,7 +26,7 @@ public class User {
     private User() {
     }
 
-    public User(String title) {
+    public User(String title) throws TaskException {
         this.setTitle(title);
     }
 
@@ -33,7 +34,7 @@ public class User {
         return title;
     }
 
-    private void setTitle(@NotNull String title) {
+    private void setTitle(@NotNull String title) throws TaskException {
         checkTitle(title);
 
         this.title = title;
@@ -44,7 +45,11 @@ public class User {
     }
 
     public String getTaskListByString() {
-        return taskList.toString();
+        return taskList
+                .stream()
+                .map(Task::getTaskTitle)
+                .collect(Collectors.toList())
+                .toString();
     }
 
     private void checkTitle(String title) throws TaskException {

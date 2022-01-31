@@ -44,7 +44,7 @@ public class TaskProcessing {
         return body;
     }
 
-    private void buildBody(StringTokenizer body) {
+    private void buildBody(StringTokenizer body) throws TaskException {
         this.user = new User(body.nextToken());
         this.command = new Command(body.nextToken(), body.hasMoreTokens() ? body.nextToken() : null);
     }
@@ -56,14 +56,19 @@ public class TaskProcessing {
             switch (this.command.getType()) {
                 case CREATE_TASK:
                     this.response = createTask();
+                    break;
                 case CLOSE_TASK:
                     this.response = updateTask(CLOSED);
+                    break;
                 case REOPEN_TASK:
                     this.response = updateTask(REOPENED);
+                    break;
                 case DELETE_TASK:
                     this.response = updateTask(DELETED);
+                    break;
                 case LIST_TASK:
                     this.response = listTasks();
+                    break;
                 default:
                     throw new TaskException();
             }
