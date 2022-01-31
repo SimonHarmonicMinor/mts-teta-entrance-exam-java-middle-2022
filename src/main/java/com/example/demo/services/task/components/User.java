@@ -15,7 +15,6 @@ import static com.example.demo.services.task.TaskException.Type.ACCESS_DENIED;
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
 import static com.example.demo.services.task.components.Command.Type.LIST_TASK;
 import static com.example.demo.services.task.components.TaskStatus.CREATED;
-import static com.example.demo.services.task.components.TaskStatus.DELETED;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class User {
