@@ -1,15 +1,17 @@
 package com.example.demo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.ServerSocket;
-import java.net.Socket;
+import com.example.demo.exceptions.AccessDeniedException;
+import com.example.demo.exceptions.AnyOtherErrorException;
+import com.example.demo.exceptions.WrongFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import static com.example.demo.enums.ServerResponse.*;
+import static com.example.demo.service.CommandProcessingService.getResponse;
 
 public class Server {
 
@@ -27,12 +29,26 @@ public class Server {
               BufferedReader serverReader = new BufferedReader(
                   new InputStreamReader(connection.getInputStream()));
               Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
+                  new OutputStreamWriter(connection.getOutputStream()))
           ) {
             String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            LOG.debug("Request captured: {}", line);
+
+            String response;
+            try {
+              response = getResponse(line);
+            } catch (AccessDeniedException e) {
+              response = ACCESS_DENIED.name();
+              LOG.error(e.getMessage());
+            } catch (AnyOtherErrorException e) {
+              response = ERROR.name();
+              LOG.error(e.getMessage());
+            } catch (WrongFormatException e) {
+              response = WRONG_FORMAT.name();
+              LOG.error(e.getMessage());
+            }
+
+            serverWriter.write(response);
             serverWriter.flush();
           }
         } catch (Exception e) {
