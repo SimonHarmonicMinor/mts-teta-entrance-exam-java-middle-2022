@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaskTest {
 
     @Test
-    @DisplayName("")
+    @DisplayName("Проверка функционала таска")
     void checkTask() {
         Task task = new Task("TASK");
 
