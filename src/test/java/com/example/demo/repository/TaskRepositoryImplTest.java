@@ -1,11 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Command;
-import com.example.demo.entity.Request;
 import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
-import com.example.demo.service.commandExecutor.CreateExecute;
-import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +22,7 @@ class TaskRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("выполнять удаление задвчи из репозитория")
+    @DisplayName("выполнять удаление задачи из репозитория")
     void removeTaskTest() {
         Task task = new Task
                 ("Task", Status.CREATED, "DASHA");

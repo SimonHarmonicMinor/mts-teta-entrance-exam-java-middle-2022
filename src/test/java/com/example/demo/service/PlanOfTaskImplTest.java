@@ -42,7 +42,7 @@ class PlanOfTaskImplTest {
 
     @Test
     @DisplayName("проверить запрос, вызвать нужную команду, вернуть результат CREATED")
-    void PlanOfTaskImplReturn_CREATED_Test() {
+    void planOfTaskImplReturn_CREATED_Test() {
         String result = new PlanOfTaskImpl(new BaseCommandExecutor(commandExecutorMap), new RequestCheckerImpl(requestCheckerList),
                 new ExceptionHandlerImpl()).execute(new Request("DASHA", Command.CREATE_TASK, "Task"));
         assertEquals("CREATED", result);
@@ -50,7 +50,7 @@ class PlanOfTaskImplTest {
 
     @Test
     @DisplayName("проверить запрос, вызвать нужную команду, вернуть результат WRONG_FORMAT")
-    void PlanOfTaskImplReturn_WRONG_FORMAT_Test() {
+    void planOfTaskImplReturn_WRONG_FORMAT_Test() {
         String result = new PlanOfTaskImpl(new BaseCommandExecutor(commandExecutorMap), new RequestCheckerImpl(requestCheckerList),
                 new ExceptionHandlerImpl()).execute(new Request("DASHA", Command.CREATE_TASK, null));
         assertEquals("WRONG_FORMAT", result);

@@ -32,7 +32,7 @@ class TaskCheckerTest {
 
     @Test
     @DisplayName("выбрасывать исключение FormatException")
-    void checkTaskCheckerExceptionTest() throws FormatException {
+    void checkTaskCheckerThrowsFormatExceptionTest() throws FormatException {
         new CreateExecute(taskRepository, userRepository).execute(new Request("DASHA", Command.CREATE_TASK, "Task"));
         Request request = new Request("DASHA", Command.CLOSE_TASK, "Task5");
         assertThrows(FormatException.class, () -> new TaskChecker(userRepository).check(request));
