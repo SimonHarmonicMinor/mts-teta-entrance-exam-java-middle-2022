@@ -8,17 +8,15 @@ import static com.example.demo.services.task.data.TaskStatus.LifeCycle.*;
 
 public enum TaskStatus {
 
-    CREATED("CREATED", null),
-    REOPENED("REOPENED", null),
-    CLOSED("CLOSED", null),
-    DELETED("DELETED", null);
+    CREATED("CREATED"),
+    REOPENED("REOPENED"),
+    CLOSED("CLOSED"),
+    DELETED("DELETED");
 
     private final String title;
-    final LifeCycle lifeCycle;
 
-    TaskStatus(String title, LifeCycle lifeCycle) {
+    TaskStatus(String title) {
         this.title = title;
-        this.lifeCycle = lifeCycle;
     }
 
     public String getTaskStatusTitle() {
