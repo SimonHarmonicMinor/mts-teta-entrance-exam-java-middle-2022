@@ -16,25 +16,25 @@ public class TaskServiceImp implements TaskService {
 
     public TaskServiceImp(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        log.info("Service initiated");
+        log.debug("Service initiated");
     }
 
     @Override
     public Task findByName(String taskName) {
-        log.info("start finding by taskName");
+        log.debug("start finding by taskName");
         return taskRepository.findByTaskName(taskName);
     }
 
     @Override
     public List<Task> findAllByUser(User user) {
-        log.info("start finding by all tasks by user");
+        log.debug("start finding by all tasks by user");
         return taskRepository.findByUser(user);
     }
 
     @Override
     public Result createTask(String taskName, User user) {
         if (taskRepository.isContainedByTaskName(taskName)) {
-            log.info("Task name is busy");
+            log.debug("Task name is busy");
             return Result.ERROR;
         }
 
@@ -44,7 +44,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public Result openTask(String taskName, User user) {
-        log.info("start opening task");
+        log.debug("start opening task");
 
         Task task = taskRepository.findByTaskName(taskName);
         Result checkinResult = isExistAndUserIsOwner(task, user);
@@ -64,7 +64,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public Result closeTask(String taskName, User user) {
-        log.info("start closing task");
+        log.debug("start closing task");
 
         Task task = taskRepository.findByTaskName(taskName);
         Result checkinResult = isExistAndUserIsOwner(task, user);
@@ -84,7 +84,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public Result deleteTask(String taskName, User user) {
-        log.info("start deleting task");
+        log.debug("start deleting task");
 
         Task task = taskRepository.findByTaskName(taskName);
         Result checkinResult = isExistAndUserIsOwner(task, user);
@@ -105,17 +105,17 @@ public class TaskServiceImp implements TaskService {
 
     private Result isExistAndUserIsOwner(Task task, User user) {
         if (task == null) {
-            log.info("Task not found by task name");
+            log.debug("Task not found by task name");
             return Result.ERROR;
         }
 
-        log.info("Check access");
+        log.debug("Check access");
         if (!task.getUser().equals(user)) {
-            log.info("User is not owner task");
+            log.debug("User is not owner task");
             return Result.ACCESS_DENIED;
         }
 
-        log.info("User is owner task");
+        log.debug("User is owner task");
         return null;
     }
 }

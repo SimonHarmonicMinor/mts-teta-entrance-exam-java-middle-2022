@@ -15,33 +15,33 @@ public class TaskRepositoryImp implements TaskRepository {
 
     public TaskRepositoryImp() {
         this.repo = new ArrayList<>();
-        log.info("Repo initiated");
+        log.debug("Repo initiated");
     }
 
     @Override
     public List<Task> findAll() {
-        log.info("Collected all tasks in repo");
+        log.debug("Collected all tasks in repo");
         return repo;
     }
 
     @Override
     public Task findByTaskName(String name) {
-        log.info("Start findingByName");
+        log.debug("Start findingByName");
 
         for (Task t : repo) {
             if (t.getName().equals(name)) {
-                log.info("Task was found by taskName");
+                log.debug("Task was found by taskName");
                 return t;
             }
         }
 
-        log.info("Task was not found by taskName");
+        log.debug("Task was not found by taskName");
         return null;
     }
 
     @Override
     public List<Task> findByUser(User user) {
-        log.info("Starting find tasks by user");
+        log.debug("Starting find tasks by user");
 
         List<Task> tasks = new ArrayList<>();
         for (Task t : repo) {
@@ -50,14 +50,14 @@ public class TaskRepositoryImp implements TaskRepository {
             }
         }
 
-        log.info("Tasks by user were collected");
+        log.debug("Tasks by user were collected");
         return tasks;
     }
 
 
     @Override
     public boolean create(Task task) {
-        log.info("Start saving task");
+        log.debug("Start saving task");
 
         return repo.add(task);
     }
@@ -70,7 +70,7 @@ public class TaskRepositoryImp implements TaskRepository {
 
     @Override
     public boolean delete(Task task) {
-        log.info("Start deleting task");
+        log.debug("Start deleting task");
 
         return repo.remove(task);
     }

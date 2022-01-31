@@ -16,30 +16,30 @@ public class TaskControllerImp implements TaskController {
 
     public TaskControllerImp(TaskService taskService) {
         this.taskService = taskService;
-        log.info("Controller initiated");
+        log.debug("Controller initiated");
     }
 
     public String handleRequest(String request) {
         System.out.println("\n");
-        log.info("Start handleRequest" + " " + request);
+        log.debug("Start handleRequest" + " " + request);
 
         // Базовые проверки (количество аргументов, команда из списка команд)
-        log.info("Start parseRequest");
+        log.debug("Start parseRequest");
         String[] inputCommand = RequestParser.parse(request);
-        log.info("End parseRequest");
+        log.debug("End parseRequest");
 
-        log.info("Start format request validate");
+        log.debug("Start format request validate");
         if (RequestValidator.validateRequest(inputCommand)) {
-            log.info("Invalidate format request");
+            log.debug("Invalidate format request");
             return ResponseFormatter.createResponse(Result.WRONG_FORMAT);
         }
-        log.info("Success format request validate");
+        log.debug("Success format request validate");
 
         // если запрос списка - сразу запрашиваем + форматируем отображение
         if (inputCommand[1].equals(Command.LIST_TASK.name())) {
-            log.info("LIST_TASK command. Start handle");
+            log.debug("LIST_TASK command. Start handle");
             List<Task> tasks = taskService.findAllByUser(new User(inputCommand[2]));
-            log.info("Tasks by user were collected");
+            log.debug("Tasks by user were collected");
 
             return ResponseFormatter.createResponse(tasks);
         }
@@ -49,15 +49,14 @@ public class TaskControllerImp implements TaskController {
     }
 
     private Result handleModifyTask(String[] inputCommand) {
-        log.info("Start handleModifyTask");
+        log.debug("Start handleModifyTask");
         // если создание задачи - проверяем свободное ли название, если да - создаем
         User user = new User(inputCommand[0]);
         String command = inputCommand[1];
         String taskName = inputCommand[2];
 
-
         if (command.equals(Command.CREATE_TASK.name())) {
-            log.info("Chosen command: create task");
+            log.debug("Chosen command: create task");
             return taskService.createTask(taskName, user);
         }
 
