@@ -35,6 +35,6 @@ public class TackClose implements CommandInterface {
             return ex.getMessage();
         }
 
-        return Status.CREATED.name();
+        return Status.CLOSED.name();
     }
 }
