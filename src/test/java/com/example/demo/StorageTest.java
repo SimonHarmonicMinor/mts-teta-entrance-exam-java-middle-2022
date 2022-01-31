@@ -17,7 +17,6 @@ public class StorageTest {
     void checkStorage() {
         assertNotNull(storage());
         assertNotNull(storage().getAllUser());
-        assertEquals(0, storage().getAllUser().size());
 
         checkAddUser(new User("checkStorage"));
     }

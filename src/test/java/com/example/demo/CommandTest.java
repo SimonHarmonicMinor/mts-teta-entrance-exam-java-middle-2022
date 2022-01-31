@@ -30,7 +30,7 @@ public class CommandTest {
         assertEquals("REOPEN_TASK", REOPEN_TASK.getTitle());
 
         assertTrue(LIST_TASK.getStatusList().containsAll(List.of(CREATED, CLOSED, REOPENED)));
-        assertEquals(0, LIST_TASK.getStatusList().size());
+        assertEquals(3, LIST_TASK.getStatusList().size());
         assertTrue(DELETE_TASK.getStatusList().contains(CLOSED));
         assertTrue(CLOSE_TASK.getStatusList().containsAll(List.of(CREATED, REOPENED)));
         assertTrue(REOPEN_TASK.getStatusList().contains(CLOSED));
@@ -105,13 +105,13 @@ public class CommandTest {
         assertEquals("TASK", new Command(REOPEN_TASK.getTitle(), "TASK").getArg());
 
 
-        assertEquals(REOPEN_TASK.getTitle(), new Command(REOPEN_TASK.getTitle(), "").getType().getTitle());
-        assertEquals("", new Command(REOPEN_TASK.getTitle(), "").getArg());
+        assertEquals(LIST_TASK.getTitle(), new Command(LIST_TASK.getTitle(), "").getType().getTitle());
+        assertEquals("", new Command(LIST_TASK.getTitle(), "").getArg());
 
-        assertEquals(REOPEN_TASK.getTitle(), new Command(REOPEN_TASK.getTitle(), null).getType().getTitle());
-        assertNull(new Command(REOPEN_TASK.getTitle(), null).getArg());
+        assertEquals(LIST_TASK.getTitle(), new Command(LIST_TASK.getTitle(), null).getType().getTitle());
+        assertEquals("", new Command(LIST_TASK.getTitle(), null).getArg());
 
-        assertEquals(REOPEN_TASK.getTitle(), new Command(REOPEN_TASK.getTitle(), "TASK").getType().getTitle());
-        assertEquals("TASK", new Command(REOPEN_TASK.getTitle(), "TASK").getArg());
+        assertEquals(LIST_TASK.getTitle(), new Command(LIST_TASK.getTitle(), "TASK").getType().getTitle());
+        assertEquals("TASK", new Command(LIST_TASK.getTitle(), "TASK").getArg());
     }
 }
