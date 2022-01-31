@@ -1,14 +1,8 @@
 package com.example.demo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.example.demo.config.ConfigApp;
-import com.example.demo.entity.Status;
-import com.example.demo.entity.Task;
-import com.example.demo.entity.User;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ServerTest extends AbstractServerTest {
 
