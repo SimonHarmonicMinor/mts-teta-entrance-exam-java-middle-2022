@@ -23,12 +23,13 @@ public class AbstractServerTest {
     server.start();
   }
 
-  @BeforeEach
-  void beforeEach() throws Exception {
-    clientSocket = new Socket("localhost", 9090);
-    out = new PrintWriter(clientSocket.getOutputStream(), true);
-    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-  }
+//  Текущая реализация не дает возможность в одном тест-методе отправлять несколько сообщений серверу!
+//  @BeforeEach
+//  void beforeEach() throws Exception {
+//    clientSocket = new Socket("localhost", 9090);
+//    out = new PrintWriter(clientSocket.getOutputStream(), true);
+//    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//  }
 
   @AfterEach
   void afterEach() throws Exception {
@@ -43,8 +44,11 @@ public class AbstractServerTest {
   }
 
   protected String sendMessage(String msg) {
-    out.println(msg);
     try {
+      clientSocket = new Socket("localhost", 9090);
+      out = new PrintWriter(clientSocket.getOutputStream(), true);
+      in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+      out.println(msg);
       return in.readLine();
     } catch (IOException e) {
       throw new RuntimeException(e);
