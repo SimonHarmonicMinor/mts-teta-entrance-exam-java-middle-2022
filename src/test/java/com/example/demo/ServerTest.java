@@ -82,7 +82,7 @@ class ServerTest extends AbstractServerTest {
   @Test
   void test013() {
     String response = sendMessage("user1 LIST_TASK user6");
-    assertEquals("[]", response);
+    assertEquals("TASKS []", response);
   }
 
   @Test
@@ -94,7 +94,7 @@ class ServerTest extends AbstractServerTest {
   @Test
   void test015() {
     String response = sendMessage("user1 LIST_TASK user");
-    assertEquals("[]", response);
+    assertEquals("TASKS []", response);
   }
 
   @Test

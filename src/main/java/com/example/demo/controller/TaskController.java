@@ -85,9 +85,8 @@ public class TaskController {
      */
     private String listTask(Command command){
         logger.debug("start listTask");
-        String result = taskService.selectAll(command.getArg()).stream()
-                .map(Task::getName)
-                .collect(Collectors.toList()).toString();
-        return result.length() == 2 ?  result : Answer.TASKS + " " + result;
+        return Answer.TASKS + " " + taskService.selectAll(command.getArg()).stream()
+                                                                        .map(Task::getName)
+                                                                        .collect(Collectors.toList()).toString();
     }
 }
