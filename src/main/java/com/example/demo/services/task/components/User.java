@@ -47,6 +47,7 @@ public class User {
     public String getTaskListByString() {
         return taskList
                 .stream()
+                .filter(task -> task.checkStatus(LIST_TASK.getStatusList()))
                 .map(Task::getTaskTitle)
                 .collect(Collectors.toList())
                 .toString();
