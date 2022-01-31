@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.server.Server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-public class AbstractServerTest {
+public abstract class AbstractServerTest {
 
   private static Socket clientSocket;
   private static PrintWriter out;
