@@ -65,7 +65,7 @@ public class Server {
                         switch (command) {
                             case "CREATE_TASK":
                                 if (chosenTask.getName() == null) {
-                                    tasks.add(new Task(userName, "OPEN", name));
+                                    tasks.add(new Task(userName, "CREATED", name));
                                     serverWriter.write("CREATED" + "\n");
                                     serverWriter.flush();
                                 } else if (!chosenTask.getAuthor().equals(userName)) {
@@ -79,9 +79,14 @@ public class Server {
                             case "DELETE_TASK":
                                 if (chosenTask.getName() != null) {
                                     if (chosenTask.getAuthor().equals(userName)) {
-                                        tasks.remove(chosenTask);
-                                        serverWriter.write("DELETED" + "\n");
-                                        serverWriter.flush();
+                                        if (chosenTask.getStatus().equals("CLOSED")) {
+                                            tasks.remove(chosenTask);
+                                            serverWriter.write("DELETED" + "\n");
+                                            serverWriter.flush();
+                                        } else {
+                                            serverWriter.write("ERROR" + "\n");
+                                            serverWriter.flush();
+                                        }
                                     } else {
                                         serverWriter.write("ACCESS_DENIED" + "\n");
                                         serverWriter.flush();
@@ -94,8 +99,8 @@ public class Server {
                             case "CLOSE_TASK":
                                 if (chosenTask.getName() != null) {
                                     if (chosenTask.getAuthor().equals(userName)) {
-                                        if (chosenTask.getStatus().equals("OPEN")) {
-                                            chosenTask.setStatus("CLOSE");
+                                        if (chosenTask.getStatus().equals("CREATED")) {
+                                            chosenTask.setStatus("CLOSED");
                                             serverWriter.write("CLOSED" + "\n");
                                             serverWriter.flush();
                                         } else {
@@ -114,8 +119,8 @@ public class Server {
                             case "REOPEN_TASK":
                                 if (chosenTask.getName() != null) {
                                     if (chosenTask.getAuthor().equals(userName)) {
-                                        if (chosenTask.getStatus().equals("CLOSE")) {
-                                            chosenTask.setStatus("OPEN");
+                                        if (chosenTask.getStatus().equals("CLOSED")) {
+                                            chosenTask.setStatus("CREATED");
                                             serverWriter.write("REOPENED" + "\n");
                                             serverWriter.flush();
                                         } else {

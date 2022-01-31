@@ -44,6 +44,10 @@ class ServerTest extends AbstractServerTest {
         response = sendMessage("PETYA DELETE_TASK CleanRoomDelete");
         assertEquals("ACCESS_DENIED", response);
         response = sendMessage("VASYA DELETE_TASK CleanRoomDelete");
+        assertEquals("ERROR", response);
+        response = sendMessage("VASYA CLOSE_TASK CleanRoomDelete");
+        assertEquals("CLOSED", response);
+        response = sendMessage("VASYA DELETE_TASK CleanRoomDelete");
         assertEquals("DELETED", response);
         response = sendMessage("VASYA DELETE_TASK CleanRoomDelete");
         assertEquals("ERROR", response);
