@@ -5,9 +5,11 @@ import com.example.demo.validators.ChangeTaskStatusValidator;
 
 import java.util.Objects;
 
-import static com.example.demo.enums.TaskStatus.CREATED;
 import static com.example.demo.enums.TaskStatus.DELETED;
 
+/**
+ * Представление Задачи
+ */
 public class Task {
 
     private final ChangeTaskStatusValidator validator = ChangeTaskStatusValidator.getInstance();
@@ -15,11 +17,6 @@ public class Task {
     private TaskStatus taskStatus;
 
     private final String taskName;
-
-    public Task(String taskName) {
-        this.taskName = taskName;
-        this.taskStatus = CREATED;
-    }
 
     public Task(String taskName, TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
@@ -37,10 +34,6 @@ public class Task {
     public void changeTaskStatus(TaskStatus newTaskStatus) {
         validator.validate(taskStatus, newTaskStatus);
         taskStatus = newTaskStatus;
-    }
-
-    public void setTaskStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
     }
 
     @Override

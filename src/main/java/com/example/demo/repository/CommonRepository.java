@@ -24,6 +24,9 @@ public class CommonRepository {
         return instance;
     }
 
+    /**
+     * Основное хранилище - Пользователи с их Задачами
+     */
     private final Set<User> users = new HashSet<>();
 
     public Optional<User> getUserByName(String userName) {
