@@ -14,5 +14,7 @@ public class DemoApplication {
 
         TaskController controller = TaskConfig.createController();
         TaskResponser responser = TaskConfig.createResponser();
+
+        System.out.println("Hello world");
     }
 }

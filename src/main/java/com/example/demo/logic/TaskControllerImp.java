@@ -12,6 +12,7 @@ import java.util.List;
 // (?) Потребность в DTO между слоями
 public class TaskControllerImp implements TaskController {
     private final Logger log = LoggerFactory.getLogger(TaskControllerImp.class);
+
     private final TaskService taskService;
 
     public TaskControllerImp(TaskService taskService) {

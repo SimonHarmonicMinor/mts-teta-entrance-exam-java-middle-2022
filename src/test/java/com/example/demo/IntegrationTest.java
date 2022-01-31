@@ -17,7 +17,7 @@ class IntegrationTest {
     }
 
     @Test
-    void createTask() {
+    void createTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String expected = "CREATED";
 
@@ -27,7 +27,7 @@ class IntegrationTest {
     }
 
     @Test
-    void createAndCloseTask() {
+    void createAndCloseTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c2 = "VASYA CLOSE_TASK CleanRoom";
 
@@ -39,7 +39,7 @@ class IntegrationTest {
     }
 
     @Test
-    void closeAndReopenTask() {
+    void closeAndReopenTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c2 = "VASYA CLOSE_TASK CleanRoom";
         String c3 = "VASYA REOPEN_TASK CleanRoom";
@@ -53,7 +53,7 @@ class IntegrationTest {
     }
 
     @Test
-    void closeAndDeleteTask() {
+    void closeAndDeleteTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c2 = "VASYA CLOSE_TASK CleanRoom";
         String c3 = "VASYA DELETE_TASK CleanRoom";
@@ -67,7 +67,7 @@ class IntegrationTest {
     }
 
     @Test
-    void createAndDeleteTask() {
+    void createAndDeleteTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c3 = "VASYA DELETE_TASK CleanRoom";
 
@@ -79,7 +79,7 @@ class IntegrationTest {
     }
 
     @Test
-    void reopenAndDeleteTask() {
+    void reopenAndDeleteTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c2 = "VASYA CLOSE_TASK CleanRoom";
         String c3 = "VASYA REOPEN_TASK CleanRoom";
@@ -95,7 +95,7 @@ class IntegrationTest {
     }
 
     @Test
-    void reopenTask() {
+    void reopenTaskTest() {
         String c4 = "VASYA REOPEN_TASK CleanRoom";
 
         String response = controller.handleRequest(c4);
@@ -105,7 +105,7 @@ class IntegrationTest {
     }
 
     @Test
-    void closeTask() {
+    void closeTaskTest() {
         String c4 = "VASYA CLOSE_TASK CleanRoom";
 
         String response = controller.handleRequest(c4);
@@ -115,7 +115,7 @@ class IntegrationTest {
     }
 
     @Test
-    void deleteTask() {
+    void deleteTaskTest() {
         String c4 = "VASYA DELETE_TASK CleanRoom";
 
         String response = controller.handleRequest(c4);
@@ -138,7 +138,7 @@ class IntegrationTest {
     }
 
     @Test
-    void listTask() {
+    void listTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c2 = "VASYA CREATE_TASK Jogging";
         String c3 = "VASYA CREATE_TASK WashDishes";
@@ -154,7 +154,7 @@ class IntegrationTest {
     }
 
     @Test
-    void notAccessClosingTask() {
+    void notAccessClosingTaskTest() {
         String c1 = "VASYA CREATE_TASK CleanRoom";
         String c2 = "PETYA CLOSE_TASK CleanRoom";
 
