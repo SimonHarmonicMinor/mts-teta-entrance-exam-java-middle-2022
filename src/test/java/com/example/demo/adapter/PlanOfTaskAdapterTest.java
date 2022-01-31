@@ -44,7 +44,7 @@ class PlanOfTaskAdapterTest {
 
     @Test
     @DisplayName("возвращать результат выполнения запроса CREATED")
-    void checkPlanOfTaskAdapterReturn_CREATED_Test() {
+    void planOfTaskAdapterReturn_CREATED_Test() {
         String line = "SVETA CREATE_TASK Task6";
         String result = new PlanOfTaskAdapter(new PlanOfTaskImpl(new BaseCommandExecutor(commandExecutorMap),
                 new RequestCheckerImpl(requestCheckerList), new ExceptionHandlerImpl()), new ExceptionHandlerImpl()).execute(line);
@@ -53,7 +53,7 @@ class PlanOfTaskAdapterTest {
 
     @Test
     @DisplayName("возвращать результат, вызванный исключением WRONG_FORMAT")
-    void checkPlanOfTaskAdapterReturn_WRONG_FORMAT_Test() {
+    void planOfTaskAdapterReturn_WRONG_FORMAT_Test() {
         String line = "SVETA CREATE_TASK ";
         String result = new PlanOfTaskAdapter(new PlanOfTaskImpl(new BaseCommandExecutor(commandExecutorMap),
                 new RequestCheckerImpl(requestCheckerList), new ExceptionHandlerImpl()), new ExceptionHandlerImpl()).execute(line);
@@ -62,7 +62,7 @@ class PlanOfTaskAdapterTest {
 
     @Test
     @DisplayName("возвращать результат, вызванный исключением ACCESS_DENIED")
-    void checkPlanOfTaskAdapterReturn_ACCESS_DENIED_Test() {
+    void planOfTaskAdapterReturn_ACCESS_DENIED_Test() {
         new CreateExecute(taskRepository, userRepository).execute(new Request("VASYA", Command.CREATE_TASK, "Task"));
         String line = "SVETA CLOSE_TASK Task";
         String result = new PlanOfTaskAdapter(new PlanOfTaskImpl(new BaseCommandExecutor(commandExecutorMap),
@@ -72,7 +72,7 @@ class PlanOfTaskAdapterTest {
 
     @Test
     @DisplayName("возвращать результат, вызванный исключением ERROR")
-    void checkPlanOfTaskAdapterReturn_ERROR_Test() {
+    void planOfTaskAdapterReturn_ERROR_Test() {
         new CreateExecute(taskRepository, userRepository).execute(new Request("VASYA", Command.CREATE_TASK, "Task"));
         String line = "SVETA CREATE_TASK Task";
         String result = new PlanOfTaskAdapter(new PlanOfTaskImpl(new BaseCommandExecutor(commandExecutorMap),

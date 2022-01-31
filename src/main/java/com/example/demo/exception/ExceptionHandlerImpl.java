@@ -17,7 +17,7 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
     private static final Logger logger
             = (Logger) LoggerFactory.getLogger(UserNameChecker.class);
 
-    private Map<String, Result> resultMap = new HashMap<>();
+    private final Map<String, Result> resultMap = new HashMap<>();
 
     {
         resultMap.put(FormatException.class.getCanonicalName(), Result.WRONG_FORMAT);
