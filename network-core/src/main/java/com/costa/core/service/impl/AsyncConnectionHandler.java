@@ -1,11 +1,9 @@
 package com.costa.core.service.impl;
 
-import com.costa.core.service.SocketConnection;
 import com.costa.core.service.ConnectionHandler;
+import com.costa.core.service.SocketConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 /**
  * Implements connection processing via a listener
@@ -22,19 +20,10 @@ public class AsyncConnectionHandler implements ConnectionHandler {
     }
 
     private void handle() {
-        try {
-            connection.getListener().onConnectionSuccess(connection);
-            while (!Thread.interrupted()) {
-                String line = connection.getReader().readLine();
-                if (line == null) return;
-                connection.getListener().onReceiveMessage(connection, line);
-            }
-        } catch (IOException e) {
-            LOG.error("An exception has occurred", e);
-            connection.getListener().onException(connection, e);
-            connection.disconnect();
-        } finally {
-            connection.getListener().onDisconnect(connection);
+        connection.getListener().onConnectionSuccess(connection);
+        while (!Thread.interrupted()) {
+            String message = connection.readMessage();
+            connection.getListener().onReceiveMessage(connection, message);
         }
     }
 

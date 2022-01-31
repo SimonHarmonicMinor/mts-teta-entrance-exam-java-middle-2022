@@ -43,19 +43,24 @@ public class SocketConnection {
         }
     }
 
-    public void start() {
-        connectionHandler.startHandle();
-    }
-
-    public void disconnect() {
-        connectionHandler.stopHandle();
+    public String readMessage() {
         try {
-            socket.close();
-            reader.close();
-            writer.close();
+            String line = reader.readLine();
+            if (line == null)
+                throw new IOException("Received incorrect message");
+
+            LOG.trace("Connection: {} \n Reading message: {}", this, line);
+            return line;
         } catch (IOException e) {
             listener.onException(this, e);
+            disconnect();
         }
+
+        return null;
+    }
+
+    public void start() {
+        connectionHandler.startHandle();
     }
 
     public BufferedReader getReader() {
@@ -77,5 +82,17 @@ public class SocketConnection {
     @Override
     public String toString() {
         return String.format("Connection %s:%s", socket.getInetAddress(), socket.getPort());
+    }
+
+    public void disconnect() {
+        connectionHandler.stopHandle();
+        try {
+            socket.close();
+            reader.close();
+            writer.close();
+        } catch (IOException e) {
+            listener.onException(this, e);
+        }
+        listener.onDisconnect(this);
     }
 }
