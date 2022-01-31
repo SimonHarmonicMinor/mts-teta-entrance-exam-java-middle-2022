@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class ServerTest extends AbstractServerTest {
 
+    // проверки для удобства собраны в один
     @Test
     void test() throws Exception {
         String response = sendMessage("VASYA  create_task CleanRoom");
@@ -49,11 +50,5 @@ class ServerTest extends AbstractServerTest {
 
         response = sendMessage("PETYA LIST_TASK VASYA");
         assertEquals("TASKS []", response);
-    }
-
-    @Test
-    void test2() throws Exception {
-        String response = sendMessage("request2");
-        assertEquals("request2", response);
     }
 }
