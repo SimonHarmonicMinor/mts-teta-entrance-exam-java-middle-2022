@@ -15,7 +15,7 @@ public class RequestParser {
 		}
 		final var user = parts[0];
 		final var command = TaskCommandType.parseCommand(parts[1]);
-		final var arg = Optional.ofNullable(parts[2]);
+		final var arg = Optional.ofNullable(parts.length > 2 ? parts[2] : null);
 		if (command.shouldHaveArgument() && arg.isEmpty()) {
 			throw new RequestFormatException(String.format(
 					"Command '%s' shoud be supplied an argument", command.name()

@@ -16,7 +16,7 @@ public class DemoApplication {
   private static final Logger LOG = LoggerFactory.getLogger(DemoApplication.class);
 
   public static void main(String[] args) {
-    final var server = new Server(initController());
+    final var server = new Server(initController(new TaskRepository()));
     try {
       server.start();
     } catch (IOException e) {
@@ -25,9 +25,9 @@ public class DemoApplication {
   }
 
   // package-private for tests only
-  static Controller initController() {
+  static Controller initController(TaskRepository repo) {
     final var parser = new RequestParser();
-    final var taskService = new TaskService(new TaskRepository());
+    final var taskService = new TaskService(repo);
     return new Controller(parser, taskService);
   }
 }

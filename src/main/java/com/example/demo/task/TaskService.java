@@ -4,10 +4,14 @@ import com.example.demo.exception.DuplicateTaskException;
 import com.example.demo.parser.RequestData;
 import com.example.demo.server.ResultType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.file.AccessDeniedException;
 import java.util.NoSuchElementException;
 
 public class TaskService {
+	private static final Logger LOG = LoggerFactory.getLogger(TaskService.class);
 	private final TaskRepository repo;
 
 	public TaskService(TaskRepository repo) {
@@ -27,15 +31,18 @@ public class TaskService {
 				case REOPEN_TASK:
 					return reopenTask(params);
 				case LIST_TASK:
-					return listTask(request);
+					return listTasks(request);
 				default:
 					return ResultType.ERROR.name();
 			}
 		} catch (DuplicateTaskException | NoSuchElementException | IllegalArgumentException e) {
+			LOG.error(e.getMessage());
 			return ResultType.ERROR.name();
 		} catch (AccessDeniedException e) {
+			LOG.error(e.getMessage());
 			return ResultType.ACCESS_DENIED.name();
 		} catch (Exception e) {
+			LOG.error("Uncaught error on request {}", request, e);
 			return ResultType.ERROR.name();
 		}
 	}
@@ -61,7 +68,7 @@ public class TaskService {
 		return ResultType.REOPENED.name();
 	}
 
-	private String listTask(RequestData request) throws IllegalArgumentException {
+	private String listTasks(RequestData request) throws IllegalArgumentException {
 		final String tasksOwner = request.getArg().orElseThrow(IllegalArgumentException::new);
 		final String tasks = String.join(", ", repo.getUserTasks(tasksOwner));
 		return String.format("%s [%s]", ResultType.TASKS.name(), tasks);

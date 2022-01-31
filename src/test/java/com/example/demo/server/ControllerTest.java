@@ -7,6 +7,7 @@ import com.example.demo.task.TaskRepository;
 import com.example.demo.task.TaskService;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -30,5 +31,12 @@ class ControllerTest {
 	void processRequest() {
 		when(serviceMock.handleRequest(any(RequestData.class))).thenReturn("ACCESS_DENIED");
 		assertEquals("ACCESS_DENIED", controller.processRequest("PETYA DELETE_TASK CleanRoom"));
+	}
+
+	@Test
+	@DisplayName("Should return WRONG_FORMAT on missing argument")
+	void processRequest2() {
+		assertEquals("WRONG_FORMAT",
+				controller.processRequest("VASYA CREATE_TASK   \n\t"));
 	}
 }
