@@ -221,7 +221,7 @@ public class ConfigApp {
     }
 
     /**
-     * @return инициализация PlanOfTaskAdapter
+     * Returns PlanOfTaskAdapter
      */
 
     public static PlanOfTaskAdapter getPlanOfTaskAdapter() {

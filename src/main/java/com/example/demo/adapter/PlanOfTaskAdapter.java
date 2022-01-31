@@ -26,8 +26,7 @@ public class PlanOfTaskAdapter {
             = (Logger) LoggerFactory.getLogger(UserNameChecker.class);
 
     /**
-     * @param line - запрос, пример: "VASYA CREATE_TASK CleanRoom"
-     * @return result - результат выполнения запроса, пример: "CREATED"
+     * Returns result - результат выполнения запроса, пример: "CREATED"
      */
 
     public String execute(String line) {
