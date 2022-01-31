@@ -95,6 +95,7 @@ public class TaskServiceImp implements TaskService {
         // проверка статуса
         if (task.getStatus().equals(TaskStatus.CLOSED)) {
             taskRepository.findByTaskName(taskName).delete();
+            taskRepository.delete(task);
 
             return Result.DELETED;
         }
