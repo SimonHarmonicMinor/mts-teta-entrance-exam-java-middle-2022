@@ -83,7 +83,7 @@ public class TaskProcessing {
         if (this.user.isNotAddedToStorage())
             storage().getAllUser().add(this.user);
 
-        return this.user.addTask(new Task(this.command.getArg()));
+        return storage().checkUser(this.user.getUserTitle()).addTask(new Task(this.command.getArg()));
     }
 
     private String updateTask(TaskStatus taskStatus) throws TaskException {

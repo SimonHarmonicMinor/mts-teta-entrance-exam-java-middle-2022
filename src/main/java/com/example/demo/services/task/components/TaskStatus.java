@@ -39,7 +39,7 @@ public enum TaskStatus {
 
     public enum LifeCycle {
         CREATED_LIFECYCLE(List.of(CLOSED)),
-        CLOSED_LIFECYCLE(List.of(CREATED, DELETED)),
+        CLOSED_LIFECYCLE(List.of(REOPENED, DELETED)),
         DELETED_LIFECYCLE(List.of());
 
         final List<TaskStatus> availableStatusList;
