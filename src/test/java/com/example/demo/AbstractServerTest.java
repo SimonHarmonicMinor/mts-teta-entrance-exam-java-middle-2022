@@ -1,14 +1,14 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
 public class AbstractServerTest {
 
@@ -23,18 +23,12 @@ public class AbstractServerTest {
     server.start();
   }
 
-  @BeforeEach
-  void beforeEach() throws Exception {
-    clientSocket = new Socket("localhost", 9090);
-    out = new PrintWriter(clientSocket.getOutputStream(), true);
-    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-  }
-
   @AfterEach
   void afterEach() throws Exception {
     in.close();
     out.close();
     clientSocket.close();
+    server.getTaskRepository().removeAll();
   }
 
   @AfterAll
@@ -43,11 +37,22 @@ public class AbstractServerTest {
   }
 
   protected String sendMessage(String msg) {
-    out.println(msg);
-    try {
-      return in.readLine();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+     try {
+            clientSocket = new Socket("localhost", 9090);
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out.println(msg);
+            return in.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                in.close();
+                out.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+      }
     }
   }
 }

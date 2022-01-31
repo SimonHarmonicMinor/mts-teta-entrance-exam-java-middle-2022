@@ -1,21 +1,40 @@
 package com.example.demo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.ServerSocket;
-import java.net.Socket;
+import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.TaskRepositoryImpl;
+import com.example.demo.service.command.CommandService;
+import com.example.demo.service.command.CommandServiceImpl;
+import com.example.demo.service.mapper.CommandMapper;
+import com.example.demo.service.mapper.CommandMapperImpl;
+import com.example.demo.service.task.TaskService;
+import com.example.demo.service.task.TaskServiceImpl;
+import com.example.demo.service.validation.ValidationService;
+import com.example.demo.service.validation.ValidationServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 public class Server {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
-  private ServerSocket serverSocket;
+    private CommandMapper commandMapper;
+    private CommandService commandService;
+    private ServerSocket serverSocket;
+    private TaskRepository taskRepository;
+    private TaskService taskService;
+    private ValidationService validationService;
+
+    {
+      validationService = new ValidationServiceImpl();
+      commandMapper = new CommandMapperImpl();
+      taskRepository = new TaskRepositoryImpl();
+      taskService = new TaskServiceImpl(taskRepository);
+      commandService = new CommandServiceImpl(commandMapper, taskService, validationService);
+    }
 
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
@@ -29,10 +48,11 @@ public class Server {
               Writer serverWriter = new BufferedWriter(
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
+            String command = serverReader.readLine();
+            LOG.debug("Request captured: " + command);
+            String response = commandService.execute(command);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            serverWriter.write(response);
             serverWriter.flush();
           }
         } catch (Exception e) {
@@ -47,5 +67,9 @@ public class Server {
 
   public void stop() throws Exception {
     serverSocket.close();
+  }
+
+  public TaskRepository getTaskRepository() {
+    return taskRepository;
   }
 }
