@@ -12,6 +12,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
+import static com.example.demo.DemoApplication.initController;
+
 public abstract class AbstractServerTest {
 
   private static Socket clientSocket;
@@ -21,7 +23,7 @@ public abstract class AbstractServerTest {
 
   @BeforeAll
   static void beforeAll() throws Exception {
-    server = new Server();
+    server = new Server(initController());
     server.start();
   }
 
@@ -37,6 +39,11 @@ public abstract class AbstractServerTest {
     in.close();
     out.close();
     clientSocket.close();
+  }
+
+  protected void resetSocket() throws Exception {
+    afterEach();
+    beforeEach();
   }
 
   @AfterAll

@@ -17,8 +17,14 @@ public class Server {
 
   private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
+  private final Controller controller;
+
   private ServerSocket serverSocket;
   private volatile boolean running = false;
+
+  public Server(Controller controller) {
+    this.controller = controller;
+  }
 
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
@@ -28,8 +34,8 @@ public class Server {
         this.waitAndHandle();
       }
     });
-    serverThread.setDaemon(true);
     serverThread.start();
+    LOG.info("Server listens at {}", serverSocket.getLocalSocketAddress());
   }
 
   private void waitAndHandle() {
@@ -41,10 +47,10 @@ public class Server {
               Writer serverWriter = new BufferedWriter(
                       new OutputStreamWriter(connection.getOutputStream()))
       ) {
-        String line = serverReader.readLine();
-        LOG.debug("Request captured: {}", line);
-        // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-        serverWriter.write(line);
+        String request = serverReader.readLine();
+        LOG.debug("Request captured: {}", request);
+        final String response = controller.processRequest(request);
+        serverWriter.write(response);
         serverWriter.flush();
       }
     } catch (SocketException e) {
