@@ -13,7 +13,7 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * HashMap для хранения юзеров, где ключ - имя юзера, значение - юзер
      */
-    Map<String, User> userMap = new HashMap<>();
+   private final Map<String, User> userMap = new HashMap<>();
 
     /**
      * Создание юзера

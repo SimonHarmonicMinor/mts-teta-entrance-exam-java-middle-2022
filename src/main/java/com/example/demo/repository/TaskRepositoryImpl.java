@@ -13,7 +13,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     /**
      * HashMap для хранения задач, где ключ - название задачи, значение - задача
      */
-    Map<String, Task> taskMap = new HashMap<>();
+   private final Map<String, Task> taskMap = new HashMap<>();
 
     /**
      * Создание задачи
