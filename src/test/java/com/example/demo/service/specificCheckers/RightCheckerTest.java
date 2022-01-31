@@ -2,7 +2,6 @@ package com.example.demo.service.specificCheckers;
 
 import com.example.demo.entity.Command;
 import com.example.demo.entity.Request;
-import com.example.demo.exception.FormatException;
 import com.example.demo.exception.RightException;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.TaskRepositoryImpl;
@@ -12,7 +11,8 @@ import com.example.demo.service.commandExecutor.CreateExecute;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Тест должен:")
 class RightCheckerTest {
@@ -30,7 +30,7 @@ class RightCheckerTest {
 
     @Test
     @DisplayName("выбрасывать исключение RightException")
-    void checkARightThrowsRightExceptionTest() throws RightException {
+    void checkRightThrowsRightExceptionTest() throws RightException {
         new CreateExecute(taskRepository,userRepository).execute(new Request("DASHA",Command.CREATE_TASK, "Task4"));
         Request request = new Request("SVETA", Command.CLOSE_TASK, "Task4");
         assertThrows(RightException.class, () -> new RightChecker(taskRepository).check(request));
