@@ -1,9 +1,6 @@
 package com.costa.socket.server;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 
@@ -14,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ServerTest extends AbstractServerTest {
     @Test
+    @DisplayName("Task modify")
     @Order(1)
     void modifyProcessTest() {
         assertAll(
@@ -27,6 +25,7 @@ class ServerTest extends AbstractServerTest {
     }
 
     @Test
+    @DisplayName("Access denied")
     @Order(2)
     void accessDeniedTest() {
         assertAll(
@@ -37,6 +36,7 @@ class ServerTest extends AbstractServerTest {
     }
 
     @Test
+    @DisplayName("Wrong format")
     @Order(3)
     void commandFormatTest() {
         assertAll(
@@ -46,10 +46,15 @@ class ServerTest extends AbstractServerTest {
     }
 
     @Test
+    @DisplayName("List task")
     @Order(4)
     void readTaskTest() {
         String[] tasks = new String[]{"M2", "M3"};
-        assertEquals(TASKS.name() + " " + Arrays.toString(tasks),
-                sendMessage("Name LIST_TASK Name"));
+        assertAll(
+                () -> assertEquals(TASKS.name() + " " + Arrays.toString(new Object[]{}),
+                        sendMessage("Name LIST_TASK Name1")),
+                () -> assertEquals(TASKS.name() + " " + Arrays.toString(tasks),
+                        sendMessage("Name LIST_TASK Name"))
+        );
     }
 }
