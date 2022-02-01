@@ -1,6 +1,5 @@
 package com.example.demo.services.task;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +17,7 @@ public class TaskService extends Thread {
     private TaskService() {
     }
 
-    public TaskService(@NotNull ServerSocket serverSocket) {
+    public TaskService( ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
 

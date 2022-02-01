@@ -2,7 +2,6 @@ package com.example.demo;
 
 import com.example.demo.services.task.TaskException;
 import com.example.demo.services.task.components.User;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,7 @@ public class StorageTest {
         checkAddUser(new User("checkStorage"));
     }
 
-    public void checkAddUser(@NotNull User user) {
+    public void checkAddUser(User user) {
         String title = null;
         try {
             storage().checkUser(user.getUserTitle());

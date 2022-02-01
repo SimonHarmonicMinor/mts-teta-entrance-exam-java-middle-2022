@@ -3,11 +3,12 @@ package com.example.demo.services.task.components;
 import com.example.demo.services.task.TaskException;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
 import static com.example.demo.services.task.components.TaskStatus.*;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static com.example.demo.utils.StringUtils.isNotBlank;
 
 public class Command {
     private String arg;

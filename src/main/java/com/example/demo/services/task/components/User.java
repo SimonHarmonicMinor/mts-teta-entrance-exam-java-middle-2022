@@ -1,7 +1,6 @@
 package com.example.demo.services.task.components;
 
 import com.example.demo.services.task.TaskException;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import static com.example.demo.services.task.TaskException.Type.ACCESS_DENIED;
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
 import static com.example.demo.services.task.components.Command.Type.LIST_TASK;
 import static com.example.demo.services.task.components.TaskStatus.CREATED;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static com.example.demo.utils.StringUtils.isBlank;
 
 public class User {
 
@@ -33,7 +32,7 @@ public class User {
         return title;
     }
 
-    private void setTitle(@NotNull String title) throws TaskException {
+    private void setTitle(String title) throws TaskException {
         checkTitle(title);
 
         this.title = title;

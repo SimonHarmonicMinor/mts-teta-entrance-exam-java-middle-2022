@@ -11,8 +11,8 @@ import static com.example.demo.services.Storage.storage;
 import static com.example.demo.services.task.TaskException.Type.DEFAULT;
 import static com.example.demo.services.task.TaskException.Type.WRONG_FORMAT;
 import static com.example.demo.services.task.components.TaskStatus.*;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static com.example.demo.utils.StringUtils.isBlank;
+import static com.example.demo.utils.StringUtils.isNotBlank;
 
 public class TaskProcessing {
     private String request, response;
