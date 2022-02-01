@@ -39,7 +39,7 @@ public class TaskList implements CommandInterface {
 
         List<Task> taskList = taskRepository.readAll();
         if (taskList.size() == 0){
-            return "[]";
+            return Status.TASKS.toString() + taskList.toString();
         }
 
         List<Task> collect = taskList.stream()
