@@ -38,6 +38,10 @@ public class TaskList implements CommandInterface {
         }
 
         List<Task> taskList = taskRepository.readAll();
+        if (taskList.size() == 0){
+            return "[]";
+        }
+
         List<Task> collect = taskList.stream()
                 .filter(task -> task.getUserName().equals(request.getName()))
                 .collect(Collectors.toList());
