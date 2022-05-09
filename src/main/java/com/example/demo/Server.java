@@ -41,7 +41,6 @@ public class Server {
         }
       }
     });
-    serverThread.setDaemon(true);
     serverThread.start();
   }
 
