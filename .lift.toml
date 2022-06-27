@@ -1,0 +1,5 @@
+ignoreFiles = """
+.github/**
+.mvn/**
+src/**
+"""
