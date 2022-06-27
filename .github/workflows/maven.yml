@@ -14,8 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check pom.xml MD5 hash
+        env:
+          MD5_POM_XML: ${{ secrets.MD5_POM_XML }}
         run: |
-          if [[ $(md5sum ./pom.xml) = ${{env.MD5_POM_XML}} ]] 
+          if [[ $(md5sum ./pom.xml) = $MD5_POM_XML ]] 
           then
             echo "pom.xml hash is validated" 
           else
