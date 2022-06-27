@@ -13,6 +13,7 @@ jobs:
   check-hash:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Check pom.xml MD5 hash
         env:
           MD5_POM_XML: ${{ secrets.MD5_POM_XML }}
