@@ -15,7 +15,8 @@ jobs:
     steps:
       - name: Check pom.xml MD5 hash
         run: |
-          if [[ $(md5sum "./pom.xml") = ${{ env.MD5_POM_XML }} ]]; then
+          if [[ $(md5sum ./pom.xml) = ${{env.MD5_POM_XML}} ]] 
+          then
             echo "pom.xml hash is validated" 
           else
             echo "pom.xml hash value is wrong"
