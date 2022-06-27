@@ -19,6 +19,7 @@ jobs:
           MD5_POM_XML: ${{ secrets.MD5_POM_XML }}
         run: |
           echo "$MD5_POM_XML"
+          echo $(md5sum ./pom.xml | cut -c -32)
           if [[ $(md5sum ./pom.xml | cut -c -32) = $MD5_POM_XML ]] 
           then
             echo "pom.xml hash is validated" 
