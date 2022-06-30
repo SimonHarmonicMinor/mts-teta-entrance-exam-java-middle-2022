@@ -218,7 +218,7 @@ class ServerTest extends AbstractServerTest {
     assertListTask(user, List.of(task));
 
     assertEquals("ACCESS_DENIED", deleteTask(user + "_IMPOSTER", task));
-    assertListTask(user, emptyList());
+    assertListTask(user, List.of(task));
   }
 
   private String createTask(String user, String task) {
@@ -238,7 +238,7 @@ class ServerTest extends AbstractServerTest {
   }
 
   private void assertListTask(String user, List<String> expectedTasks) {
-    String listTaskResponse = sendMessage("LIST_TASK " + user);
+    String listTaskResponse = sendMessage(user + " LIST_TASK " + user);
     assertEquals(format("TASKS %s", expectedTasks), listTaskResponse);
   }
 }
