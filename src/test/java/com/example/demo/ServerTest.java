@@ -230,7 +230,7 @@ class ServerTest extends AbstractServerTest {
   }
 
   private String reopenTask(String user, String task) {
-    return sendMessage(format("%S REOPEN_TASK %s", user, task));
+    return sendMessage(format("%s REOPEN_TASK %s", user, task));
   }
 
   private String deleteTask(String user, String task) {
