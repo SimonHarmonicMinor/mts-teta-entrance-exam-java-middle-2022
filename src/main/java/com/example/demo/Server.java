@@ -16,8 +16,10 @@ public class Server {
   private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
   private ServerSocket serverSocket;
+  private TaskController taskController;
 
   public void start() throws IOException {
+    taskController = new TaskController();
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
       while (true) {
@@ -30,9 +32,8 @@ public class Server {
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
             String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            LOG.debug("Request captured: " + line);         
+            serverWriter.write(taskController.processMessage(line));
             serverWriter.flush();
           }
         } catch (Exception e) {
