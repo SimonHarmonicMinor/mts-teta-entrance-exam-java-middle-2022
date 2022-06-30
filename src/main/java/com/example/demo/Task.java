@@ -16,25 +16,24 @@ public class Task {
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-    private String status;
+    private TaskStatus status;
     public Task(String taskName, String ownerName) {
         this.taskName = taskName;
         this.ownerName = ownerName;
-        this.status = "CREATED";
+        this.status = TaskStatus.CREATED;
     }
-
-    public Task(Task t) {
-        this.taskName = t.getTaskName();
-        this.ownerName = t.getOwnerName();
-        this.status = t.getStatus();
-    }
-
-    public String getStatus() {
+    public TaskStatus getStatus() {
         return this.status;
     }
-    public void setStatus(String status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
     
+}
+
+enum TaskStatus {
+    CREATED,
+    CLOSED,
+    DELETED
 }

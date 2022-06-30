@@ -1,100 +1,116 @@
 package com.example.demo;
 
+import java.security.AccessControlException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class TaskController {
 
     private String userName;
-    private String command;
+    private Command command;
     private String argVal;
 
-    private TaskService taskService;
+    private final TaskService taskService = new TaskService();
 
-    public TaskController(){
-
-        taskService = new TaskService();
-
-    }
     public String processMessage(String requestString){
 
-        String result = "";
+        String responseString = "";
 
         try{
             
             parseRequestString(requestString);
 
             switch (command){
-                case "CREATE_TASK":
+                case CREATE_TASK:
                     taskService.createTask(userName, argVal);
-                    result = "CREATED";
+                    responseString = Result.CREATED.name();
                     break;
-                case "CLOSE_TASK":
+                case CLOSE_TASK:
                     taskService.closeTask(userName, argVal);
-                    result = "CLOSED";
+                    responseString = Result.CLOSED.name();
                     break;
-                case "DELETE_TASK":
+                case DELETE_TASK:
                     taskService.deleteTask(userName, argVal);
-                    result = "DELETED";
+                    responseString = Result.DELETED.name();
                     break;
-                case "REOPEN_TASK":
+                case REOPEN_TASK:
                     taskService.reopenTask(userName, argVal);
-                    result = "REOPENED";
+                    responseString = Result.REOPENED.name();
                     break;
-                case "LIST_TASK":
+                case LIST_TASK:
                     ArrayList<String> listTaskName = taskService.getListTask(userName);
-                    result = "TASKS " + listTaskName.toString();
+                    responseString = Result.TASKS.name() + " " + listTaskName.toString();
                     break;
-                case "__DELETE_ALL":
+                case __DELETE_ALL:
                     taskService.deleteAllTasks();
                     break;
             }
 
         }
         catch (IllegalArgumentException e) {
-            result = "WRONG_FORMAT";
+            responseString = Result.WRONG_FORMAT.name();
         }
-        catch (IllegalAccessException e) {
-            result = "ACCESS_DENIED";
+        catch (AccessControlException e) {
+            responseString = Result.ACCESS_DENIED.name();
         }
         catch(Exception e){
-            result = "ERROR";
+            responseString = Result.ERROR.name();
         }
         
-        return result;
+        return responseString;
     }
 
     private void parseRequestString(String requestString){
       
         String[] requestParts = requestString.split(" ");
 
+        Command command;
         
-        if (requestParts.length == 1 && requestParts[0].equals("__DELETE_ALL")){
-            this.command = requestParts[0];
-            return;
+        if (requestParts.length == 1){
+            command = Command.valueOf(requestParts[0]);
+
+            if(command == Command.__DELETE_ALL){
+                this.command = command;
+                return;
+            }
         }
 
-        if (requestParts.length == 2 && requestParts[0].equals("LIST_TASK")){
-            this.command = requestParts[0];
-            this.userName = requestParts[1];
-            return;
-        }
+        if (requestParts.length == 3){
+            command = Command.valueOf(requestParts[1]);
 
-        if (requestParts.length == 3 && (requestParts[1].equals("CREATE_TASK")
-            || requestParts[1].equals("CLOSE_TASK") || requestParts[1].equals("DELETE_TASK") 
-            || requestParts[1].equals("REOPEN_TASK"))){
+            if((command == Command.CREATE_TASK
+                 || command == Command.CLOSE_TASK) 
+                 || command == Command.DELETE_TASK 
+                 || command == Command.REOPEN_TASK
+                 || command == Command.LIST_TASK ){
 
-            this.userName = requestParts[0];
-            this.command = requestParts[1];
-            this.argVal = requestParts[2];
-            return;
+                    this.userName = requestParts[0];
+                    this.command = command;
+                    this.argVal = requestParts[2];
+                    return;
+                 }
 
         }
         
        throw new IllegalArgumentException("Неверный формат запроса");
-
-               
     }
+}
 
+enum Command {
+    CREATE_TASK,
+    CLOSE_TASK,
+    DELETE_TASK,
+    REOPEN_TASK,
+    LIST_TASK,
+    __DELETE_ALL
+}
+
+enum Result{
+    CREATED,
+    CLOSED,
+    DELETED,
+    REOPENED,
+    WRONG_FORMAT,
+    ACCESS_DENIED,
+    ERROR,
+    TASKS
 }
