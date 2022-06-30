@@ -17,7 +17,7 @@ public class FormatService {
             throw new Exception("Incorrect command");
         }
         String arg = req[2];
-       if (Command.CREATE_TASK.equals(command) //|| Command.LIST_TASK.equals(command)
+       if (Command.CREATE_TASK.equals(command) || Command.LIST_TASK.equals(command)
        ) {
             if (arg.isEmpty()) {
                 throw new Exception("No command argument for " + command + "!");
