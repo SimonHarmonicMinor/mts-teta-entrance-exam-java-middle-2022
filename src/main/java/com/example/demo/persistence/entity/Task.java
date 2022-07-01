@@ -1,4 +1,4 @@
-package com.example.demo.persistense.entity;
+package com.example.demo.persistence.entity;
 
 import com.example.demo.enums.ResponseCodes;
 import com.example.demo.enums.TaskStatus;

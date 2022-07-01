@@ -9,7 +9,7 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.example.demo.service.command.CommandService;
+import com.example.demo.services.CommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

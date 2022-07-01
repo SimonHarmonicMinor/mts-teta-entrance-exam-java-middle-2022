@@ -1,10 +1,9 @@
-package com.example.demo.service.command;
+package com.example.demo.services;
 
 import com.example.demo.enums.CommandType;
 import com.example.demo.enums.ResponseCodes;
 import com.example.demo.exception.DemoAppException;
 import com.example.demo.model.Response;
-import com.example.demo.service.task.TaskService;
 
 import java.util.Arrays;
 import java.util.Objects;

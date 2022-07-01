@@ -1,10 +1,10 @@
-package com.example.demo.service.task;
+package com.example.demo.services;
 
 import com.example.demo.enums.ResponseCodes;
 import com.example.demo.enums.TaskStatus;
 import com.example.demo.exception.DemoAppException;
 import com.example.demo.model.Response;
-import com.example.demo.persistense.entity.Task;
+import com.example.demo.persistence.entity.Task;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
