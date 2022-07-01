@@ -4,6 +4,7 @@ import com.example.demo.enums.CommandType;
 import com.example.demo.enums.ResponseCodes;
 import com.example.demo.exception.DemoAppException;
 import com.example.demo.model.Response;
+import com.example.demo.persistence.repository.TaskRepositoryImpl;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -15,27 +16,27 @@ public class CommandService {
     private CommandType command;
     private String arg;
     private Response response;
-    TaskService taskService;
+    TaskRepositoryImpl taskRepositoryImpl;
 
     private void selectCommand() throws Exception {
         switch (command) {
             case CREATE_TASK:
-                taskService.createTask(user, arg, response);
+                taskRepositoryImpl.createTask(user, arg, response);
                 break;
             case CLOSE_TASK:
-                taskService.closeTask(user, arg, response);
+                taskRepositoryImpl.closeTask(user, arg, response);
                 break;
             case DELETE_TASK:
-                taskService.deleteTask(user, arg, response);
+                taskRepositoryImpl.deleteTask(user, arg, response);
                 break;
             case REOPEN_TASK:
-                taskService.reopenTask(user, arg, response);
+                taskRepositoryImpl.reopenTask(user, arg, response);
                 break;
             case LIST_TASK:
-                taskService.getAllUserTasks(arg, response);
+                taskRepositoryImpl.getAllUserTasks(arg, response);
                 break;
             case DELETE_ALL:
-                taskService.deleteAllUserTasks(response);
+                taskRepositoryImpl.deleteAllUserTasks(response);
                 break;
             default:
                 response.setResponseCode(ResponseCodes.ERROR);
@@ -67,7 +68,7 @@ public class CommandService {
         try {
             response = new Response();
             parseCommand(receivedCommand);
-            taskService = new TaskService();
+            taskRepositoryImpl = new TaskRepositoryImpl();
             selectCommand();
         } catch (Exception e) {
             if (Objects.isNull(response.getResponseCode()))

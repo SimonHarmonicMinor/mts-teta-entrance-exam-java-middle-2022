@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.persistence.repository;
 
 import com.example.demo.enums.ResponseCodes;
 import com.example.demo.enums.TaskStatus;
@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class TaskService {
+public class TaskRepositoryImpl implements TaskRepository {
     public static ArrayList<Task> tasks = new ArrayList<>();
 
+    @Override
     public void createTask(String userName, String taskName, Response response) {
         try {
             if (tasks.stream().anyMatch(x -> x.getName().equals(taskName) && !x.getStatus().equals(TaskStatus.DELETED)))
@@ -24,7 +25,8 @@ public class TaskService {
         }
     }
 
-   public void closeTask(String userName, String taskName, Response response) throws Exception {
+    @Override
+    public void closeTask(String userName, String taskName, Response response) throws Exception {
        Supplier<Stream<Task>> userTask = () -> tasks.stream()
                .filter(x -> !x.getStatus().equals(TaskStatus.DELETED) && x.getName().equals(taskName));
         if (userTask.get().count() == 0) {
@@ -44,6 +46,7 @@ public class TaskService {
        response.setResponseCode(ResponseCodes.ERROR);
     }
 
+    @Override
     public void deleteTask(String userName, String taskName, Response response) throws Exception {
         Supplier<Stream<Task>> userTask = () -> tasks.stream()
                 .filter(x -> !x.getStatus().equals(TaskStatus.DELETED)
@@ -60,6 +63,7 @@ public class TaskService {
         response.setResponseCode(ResponseCodes.DELETED);
     }
 
+    @Override
     public void reopenTask(String userName, String taskName, Response response) throws Exception {
         Supplier<Stream<Task>> userTask = () -> tasks.stream()
                 .filter(x -> !x.getStatus().equals(TaskStatus.DELETED)
@@ -82,6 +86,7 @@ public class TaskService {
         response.setResponseCode(ResponseCodes.ERROR);
     }
 
+    @Override
     public void getAllUserTasks(String userName, Response response) {
         Stream<String> userTasks = tasks.stream()
                     .filter(x -> !x.getStatus().equals(TaskStatus.DELETED) && x.getCreatedByUser().equals(userName))
@@ -90,6 +95,7 @@ public class TaskService {
         response.setArgs(userTasks.toArray(String[]::new));
     }
 
+    @Override
     public void deleteAllUserTasks(Response response) {
         tasks.clear();
         response.setResponseCode(ResponseCodes.DELETED);
