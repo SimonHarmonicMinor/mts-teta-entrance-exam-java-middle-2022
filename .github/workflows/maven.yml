@@ -10,25 +10,8 @@ on:
     branches: [ master ]
 
 jobs:
-  check-hash:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Check pom.xml MD5 hash
-        env:
-          MD5_POM_XML: ${{ secrets.MD5_POM_XML }}
-        run: |
-          if [[ $(md5sum ./pom.xml | cut -c -32) = $MD5_POM_XML ]] 
-          then
-            echo "pom.xml hash is validated" 
-          else
-            echo "pom.xml hash value is wrong"
-            exit 125
-          fi
-
   build:
     runs-on: ubuntu-latest
-    needs: check-hash
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
