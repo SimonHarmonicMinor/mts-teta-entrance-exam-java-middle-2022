@@ -8,6 +8,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import com.example.demo.model.CommandResponse;
+import com.example.demo.service.CommandProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +32,12 @@ public class Server {
               Writer serverWriter = new BufferedWriter(
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            String request = serverReader.readLine();
+            LOG.debug("Request captured: " + request);
+            CommandProcessor commandProcessor =  CommandProcessor.getInstance().init(request);
+            String response = commandProcessor.getResponse();
+            serverWriter.write(response);
+            LOG.debug("Response to the request: " + request);
             serverWriter.flush();
           }
         } catch (Exception e) {
