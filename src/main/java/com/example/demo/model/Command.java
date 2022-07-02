@@ -6,6 +6,16 @@ package com.example.demo.model;
 public class Command {
 
     /**
+     * Команды
+     */
+    public static final String CREATE_TASK = "CREATE_TASK";
+    public static final String CLOSE_TASK = "CLOSE_TASK";
+    public static final String DELETE_TASK = "DELETE_TASK";
+    public static final String REOPEN_TASK = "REOPEN_TASK";
+    public static final String LIST_TASK = "LIST_TASK";
+    public static final String __DELETE_ALL = "__DELETE_ALL";
+
+    /**
      * Пользователь от которого выполняется команда
      */
     private String user;

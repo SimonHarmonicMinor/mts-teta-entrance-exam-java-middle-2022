@@ -16,16 +16,6 @@ import java.util.stream.Stream;
 public class TaskService {
 
     /**
-     * Команды
-     */
-    private static final String CREATE_TASK = "CREATE_TASK";
-    private static final String CLOSE_TASK = "CLOSE_TASK";
-    private static final String DELETE_TASK = "DELETE_TASK";
-    private static final String REOPEN_TASK = "REOPEN_TASK";
-    private static final String LIST_TASK = "LIST_TASK";
-    private static final String __DELETE_ALL = "__DELETE_ALL";
-
-    /**
      * Ответы
      */
     private static final String CREATED = "CREATED";
@@ -54,18 +44,18 @@ public class TaskService {
         }
 
         switch (cmd.getCmdName()) {
-            case  CREATE_TASK:
+            case  Command.CREATE_TASK:
                 response = createTask(cmd.getUser(), cmd.getArg());
                 break;
-            case  LIST_TASK:
+            case  Command.LIST_TASK:
                 response = getTaskList(cmd.getArg());
                 break;
-            case CLOSE_TASK:
-            case DELETE_TASK:
-            case REOPEN_TASK:
+            case Command.CLOSE_TASK:
+            case Command.DELETE_TASK:
+            case Command.REOPEN_TASK:
                 response = changeTaskStatus(cmd.getUser(), cmd.getArg(), cmd.getCmdName());
                 break;
-            case __DELETE_ALL:
+            case Command.__DELETE_ALL:
                 taskRepo.deleteAllTasks();
                 response = "ALL_TASKS_DELETED";
                 break;
@@ -103,7 +93,7 @@ public class TaskService {
      */
     private String changeTaskStatus(String user, String taskName, String cmdName) {
 
-        String response;
+        String response = getResponseByCommandName(cmdName);
         String status = getStatusByCommandName(cmdName);
         Task task = taskRepo.findTaskByName(taskName);
 
@@ -113,20 +103,6 @@ public class TaskService {
 
         if (task == null || status.equals(ERROR) || !checkTaskFlow(task, status)) {
             return ERROR;
-        }
-
-        switch (cmdName) {
-            case DELETE_TASK:
-                response = DELETED;
-                break;
-            case REOPEN_TASK:
-                response = REOPENED;
-                break;
-            case CLOSE_TASK:
-                response = CLOSED;
-                break;
-            default:
-                response = ERROR;
         }
 
         try {
@@ -164,18 +140,18 @@ public class TaskService {
                 .collect(Collectors.toList());
 
         //Сперва проверяем команду __DELETE_ALL
-        if (commandAndArgs.size() == 1 && commandAndArgs.get(0).equals(__DELETE_ALL)) {
-            return new Command("", __DELETE_ALL, "", true);
+        if (commandAndArgs.size() == 1 && commandAndArgs.get(0).equals(Command.__DELETE_ALL)) {
+            return new Command("", Command.__DELETE_ALL, "", true);
         }
 
         //Проверяем остальные команды
         if (commandAndArgs.size() == 3) {
             switch (commandAndArgs.get(1)) {
-                case CREATE_TASK:
-                case CLOSE_TASK:
-                case DELETE_TASK:
-                case REOPEN_TASK:
-                case LIST_TASK:
+                case Command.CREATE_TASK:
+                case Command.CLOSE_TASK:
+                case Command.DELETE_TASK:
+                case Command.REOPEN_TASK:
+                case Command.LIST_TASK:
                     return new Command(
                             commandAndArgs.get(0),
                             commandAndArgs.get(1),
@@ -233,18 +209,43 @@ public class TaskService {
         String status;
 
         switch (cmdName) {
-            case CLOSE_TASK:
+            case Command.CLOSE_TASK:
                 status = CLOSED;
                 break;
-            case REOPEN_TASK:
+            case Command.REOPEN_TASK:
                 status = CREATED;
                 break;
-            case DELETE_TASK:
+            case Command.DELETE_TASK:
                 status = DELETED;
                 break;
             default:
                 status = ERROR;
         }
         return status;
+    }
+
+    /**
+     * Возвращает код ответа в зависимости от команды
+     * @param cmdName - имя команды
+     * @return возвращает коды ответов CLOSED DELETED REOPENED ERROR
+     */
+    private String getResponseByCommandName(String cmdName) {
+
+        String response;
+
+        switch (cmdName) {
+            case Command.DELETE_TASK:
+                response = DELETED;
+                break;
+            case Command.REOPEN_TASK:
+                response = REOPENED;
+                break;
+            case Command.CLOSE_TASK:
+                response = CLOSED;
+                break;
+            default:
+                response = ERROR;
+        }
+        return response;
     }
 }
