@@ -36,7 +36,6 @@ public class Server {
             LOG.debug("Request captured: " + request);
             CommandProcessor commandProcessor =  CommandProcessor.getInstance().init(request);
             String response = commandProcessor.getResponse();
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
             serverWriter.write(response);
             LOG.debug("Response to the request: " + request);
             serverWriter.flush();
