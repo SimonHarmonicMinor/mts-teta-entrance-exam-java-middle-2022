@@ -2,12 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.model.Command;
 import com.example.demo.model.Task;
+import com.example.demo.repository.TaskRepo;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +15,9 @@ import java.util.stream.Stream;
  */
 public class TaskService {
 
+    /**
+     * Команды
+     */
     private static final String CREATE_TASK = "CREATE_TASK";
     private static final String CLOSE_TASK = "CLOSE_TASK";
     private static final String DELETE_TASK = "DELETE_TASK";
@@ -24,6 +25,9 @@ public class TaskService {
     private static final String LIST_TASK = "LIST_TASK";
     private static final String __DELETE_ALL = "__DELETE_ALL";
 
+    /**
+     * Ответы
+     */
     private static final String CREATED = "CREATED";
     private static final String DELETED = "DELETED";
     private static final String CLOSED = "CLOSED";
@@ -32,11 +36,7 @@ public class TaskService {
     private static final String ACCESS_DENIED = "ACCESS_DENIED";
     private static final String ERROR = "ERROR";
 
-    //Хранилище задач
-    private final Map<String, Task> taskMap = new HashMap<>();
-
-    //Счетчик ID-шников для задач.
-    private long id = 0;
+    TaskRepo taskRepo = new TaskRepo();
 
     /**
      * Обрабатывает поступивший запрос
@@ -66,7 +66,7 @@ public class TaskService {
                 response = changeTaskStatus(cmd.getUser(), cmd.getArg(), cmd.getCmdName());
                 break;
             case __DELETE_ALL:
-                taskMap.clear();
+                taskRepo.deleteAllTasks();
                 response = "ALL_TASKS_DELETED";
                 break;
             default:
@@ -77,13 +77,19 @@ public class TaskService {
         return response;
     }
 
+    /**
+     * Добавить новую задачу
+     * @param user - пользователь от которого выполняется операция
+     * @param taskName - имя задачи
+     * @return - возвращает статус выполнения операции
+     */
     private String createTask(String user, String taskName) {
 
-        if (isTaskExist(taskName)) {
+        try {
+            taskRepo.addTask(taskName, user);
+        } catch (Exception e) {
             return ERROR;
         }
-
-        taskMap.put(taskName, new Task(nextId(), taskName, user, CREATED, LocalDateTime.now()));
 
         return CREATED;
     }
@@ -99,7 +105,7 @@ public class TaskService {
 
         String response;
         String status = getStatusByCommandName(cmdName);
-        Task task = getTaskByName(taskName);
+        Task task = taskRepo.findTaskByName(taskName);
 
         if (task != null && !checkPermission(task, user)) {
             return ACCESS_DENIED;
@@ -108,8 +114,6 @@ public class TaskService {
         if (task == null || status.equals(ERROR) || !checkTaskFlow(task, status)) {
             return ERROR;
         }
-
-        taskMap.get(taskName).setStatus(status);
 
         switch (cmdName) {
             case DELETE_TASK:
@@ -125,6 +129,12 @@ public class TaskService {
                 response = ERROR;
         }
 
+        try {
+            taskRepo.changeTaskStatus(taskName, status);
+        } catch (Exception e) {
+            response = ERROR;
+        }
+
         return response;
     }
 
@@ -136,26 +146,11 @@ public class TaskService {
     private String getTaskList(String user) {
 
         return "TASKS "
-                + taskMap
-                .values()
+                + taskRepo.findTaskByUser(user)
                 .stream()
-                .filter(t -> t.getUser().equals(user) && !t.getStatus().equals(DELETED))
                 .sorted(Comparator.comparing(Task::getId))
                 .map(Task::getName)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Проверяет, существует ли задача с таким именем не в статусе "DELETED"
-     * @param taskName - имя задачи
-     * @return - true если задача существует
-     *           false если задача не существует
-     */
-    private boolean isTaskExist(String taskName) {
-
-        Task task = getTaskByName(taskName);
-
-        return !(task == null || task.getStatus().equals(DELETED));
     }
 
     /**
@@ -195,17 +190,6 @@ public class TaskService {
     }
 
     /**
-     * Получить задачу по ее названию
-     * @param taskName - название задачи
-     * @return возвращает задачу, если она найдена или null, если не найдена.
-     */
-    private Task getTaskByName(String taskName) {
-
-        return taskMap.get(taskName);
-
-    }
-
-    /**
      * Проверяет разрешения пользователя на возможность закрывать, удалять и заново открывать задачи
      * @param task - задача
      * @param user - пользователь от которого выполняется операция
@@ -237,14 +221,6 @@ public class TaskService {
         }
 
         return true;
-    }
-
-    /**
-     * Выделяет следующий ID для новой задачи
-     * @return - возвращает новый ID
-     */
-    private long nextId() {
-        return ++id;
     }
 
     /**

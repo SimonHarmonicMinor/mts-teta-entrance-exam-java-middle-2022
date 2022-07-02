@@ -9,6 +9,13 @@ import java.util.Objects;
 public class Task {
 
     /**
+     * Статусы задач
+     */
+    public static final String CREATED = "CREATED";
+    public static final String DELETED = "DELETED";
+    public static final String CLOSED = "CLOSED";
+
+    /**
      * Идентификатор задачи
      */
     private long id;
@@ -93,4 +100,5 @@ public class Task {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
