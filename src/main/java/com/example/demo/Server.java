@@ -32,7 +32,9 @@ public class Server {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            // serverWriter.write(line);
+            // теперь будем, если надо, сохранять данные в объектах класса Task и возвращать результат обработки 
+            serverWriter.write(Task.doIt(line));
             serverWriter.flush();
           }
         } catch (Exception e) {
