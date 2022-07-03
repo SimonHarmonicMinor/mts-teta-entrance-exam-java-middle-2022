@@ -220,6 +220,61 @@ class ServerTest extends AbstractServerTest {
     assertEquals("ACCESS_DENIED", deleteTask(user + "_IMPOSTER", task));
     assertListTask(user, List.of(task));
   }
+  
+  //---------------------------------------------------------------------------------------------
+  
+  /**
+   * Тест на ошибку при попытке переоткрыть задачу другого пользователя.
+   *
+   * @param user пользователь
+   * @param task задача
+   * @param user2 пользователь, пытающийся переоткрыть task
+   */  
+  @ParameterizedTest
+  @CsvSource({
+      "xxx, taskxxx, yyy",
+      "123, task123, 321"
+  })  
+  
+  void shouldFailIfUserHasNoRightsToReopenTask(String user, String task, String user2) {
+	    assertEquals("CREATED", createTask(user, task));
+	    assertListTask(user, List.of(task));
+
+	    assertEquals("CLOSED", closeTask(user, task));
+	    assertListTask(user, List.of(task));
+
+	    assertEquals("ACCESS_DENIED", reopenTask(user2, task));
+	    assertListTask(user, List.of(task));
+	  }  
+  
+  /**
+   * Тест на то, что пользователь может получить список задач другого пользователя
+   * постановка это не запрещает
+   *
+   * @param user пользователь
+   * @param task1 задача1
+   * @param task2 задача2
+   * @param task3 задача3
+   * @param user2 пользователь, пытающийся получить список задач пользователя user
+   */
+  
+  @ParameterizedTest
+  @CsvSource({
+      "u1, task_u1, task_u2, task_u3, other_u",
+      "000, t000, t002, t003, 007",
+      "xyz, abc, def, ghy, xyzxyz"
+  })
+  void shouldReturnOtherUsersTask(String user, String task1, String task2, String task3, String user2) {
+	  assertEquals("CREATED", createTask(user, task1));
+	  assertEquals("CREATED", createTask(user, task2));
+	  assertEquals("CREATED", createTask(user, task3));
+	  assertEquals("CLOSED", closeTask(user, task2));
+	  
+	  assertListTask(user, List.of(task1, task2, task3));
+	  assertListTask(user2, List.of(task1, task2, task3), user);
+  }
+  
+  //---------------------------------------------------------------------------------------------
 
   private String createTask(String user, String task) {
     return sendMessage(format("%s CREATE_TASK %s", user, task));
@@ -240,5 +295,11 @@ class ServerTest extends AbstractServerTest {
   private void assertListTask(String user, List<String> expectedTasks) {
     String listTaskResponse = sendMessage(user + " LIST_TASK " + user);
     assertEquals(format("TASKS %s", expectedTasks), listTaskResponse);
-  }
+  } 
+  
+//---------------------------------------------------------------------------------------------
+  private void assertListTask(String user, List<String> expectedTasks, String userWithTasks ) {
+	    String listTaskResponse = sendMessage(user + " LIST_TASK " + userWithTasks);
+	    assertEquals(format("TASKS %s", expectedTasks), listTaskResponse);
+	  }  
 }
