@@ -24,7 +24,7 @@ public class TaskController implements ITaskController {
         if (tasks == null) {
             return Result.ERROR.toString();
         }
-        return Result.TASKS.name() + tasks.toString();
+        return Result.TASKS.name() + " " + tasks.toString();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class TaskController implements ITaskController {
         task = taskService.changeTaskStatusByName(name, Status.CREATED);
         if (task == null)
             return Result.ERROR.toString();
-        return Result.CREATED.toString();
+        return Result.REOPENED.toString();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TaskController implements ITaskController {
             return Result.ERROR.toString();
         }
         tasks.sort(comparing(Task::getCreated));
-        return Result.TASKS.name() + tasks.toString();
+        return Result.TASKS.name() + " " + tasks.toString();
     }
 
 }

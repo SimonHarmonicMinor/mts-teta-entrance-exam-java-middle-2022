@@ -51,7 +51,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return user + ": " + name;
+        return name;
     }
 
 }

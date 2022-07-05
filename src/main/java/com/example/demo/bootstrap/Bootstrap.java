@@ -43,6 +43,8 @@ public class Bootstrap {
                 return taskController.closeTaskByName(arg, user);
             case "REOPEN_TASK":
                 return taskController.reopenTaskByName(arg, user);
+            case "DELETE_TASK":
+                return taskController.removeTaskByName(arg, user);
             case "LIST_TASK":
                 return taskController.showTaskListByUser(arg);
             default:
