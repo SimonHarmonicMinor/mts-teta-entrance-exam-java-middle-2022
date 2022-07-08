@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.utils.RouterService;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -29,10 +30,11 @@ public class Server {
               Writer serverWriter = new BufferedWriter(
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
-            String line = serverReader.readLine();
-            LOG.debug("Request captured: " + line);
-            // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            String request = serverReader.readLine();
+            LOG.debug("Request captured: {}", request);
+            RouterService router = RouterService.getInstance().init(request);
+            String response = router.route();
+            serverWriter.write(response);
             serverWriter.flush();
           }
         } catch (Exception e) {
