@@ -32,8 +32,9 @@ public class Server {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
-            serverWriter.flush();
+            serverWriter.write(RequestHandler.handleRequest(line));
+            //serverWriter.write(line);
+            //serverWriter.flush();
           }
         } catch (Exception e) {
           LOG.error("Error during request proceeding", e);
