@@ -67,16 +67,12 @@ public class TaskManagerImpl implements TaskManagerRepository {
                             task.setStatus(taskStatus);
 
                             return new Response(taskStatus == ETaskStatus.CREATED ? REOPENED.name() : taskStatus.name());
-                        } else {
-                            return new Response(ERROR);
                         }
                     }
                 }
             } else {
                 return new Response(ACCESS_DENIED);
             }
-        } else {
-            return new Response(ERROR);
         }
 
         return new Response(ERROR);
@@ -92,16 +88,12 @@ public class TaskManagerImpl implements TaskManagerRepository {
 
                         if (map.getValue().stream().noneMatch(i -> i.getName().equals(request.getArg()))) {
                             return new Response(DELETED);
-                        } else {
-                            return new Response(ERROR);
                         }
                     }
                 }
             } else {
                 return new Response(ACCESS_DENIED);
             }
-        } else {
-            return new Response(ERROR);
         }
 
         return new Response(ERROR);
@@ -119,8 +111,6 @@ public class TaskManagerImpl implements TaskManagerRepository {
                             map.getValue().add(new Task(request.getArg()));
 
                             return new Response(CREATED);
-                        } else {
-                            return new Response(ERROR);
                         }
                     }
                 }
