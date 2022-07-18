@@ -7,6 +7,9 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import com.example.demo.dto.Request;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -221,6 +224,29 @@ class ServerTest extends AbstractServerTest {
     assertListTask(user, List.of(task));
   }
 
+    /**
+     * Тест на получение задач не созданного пользователя
+     */
+    @Test
+  void shouldFailIfUserWithoutTasks() {
+    assertEquals("ERROR", getTasks("errorUser"));
+  }
+
+    /**
+     * unittest на проверку присвоение данных класса Request
+     */
+    @ParameterizedTest
+    @CsvSource({
+            "__DELETE_ALL user",
+            "user __DELETE_ALL USER",
+            "user CREATE_TASK task task",
+            "CREATE_TASK"
+    })
+  void shouldFailClassRequest(String fullCommand) {
+    Request request = new Request(fullCommand);
+    Assertions.assertFalse(request.getValidate());
+  }
+
   private String createTask(String user, String task) {
     return sendMessage(format("%s CREATE_TASK %s", user, task));
   }
@@ -235,6 +261,10 @@ class ServerTest extends AbstractServerTest {
 
   private String deleteTask(String user, String task) {
     return sendMessage(format("%s DELETE_TASK %s", user, task));
+  }
+
+  private String getTasks(String user) {
+    return sendMessage(format("LIST_TASK %s", user));
   }
 
   private void assertListTask(String user, List<String> expectedTasks) {
