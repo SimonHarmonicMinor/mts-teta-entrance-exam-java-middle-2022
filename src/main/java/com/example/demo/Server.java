@@ -17,6 +17,8 @@ public class Server {
 
   private ServerSocket serverSocket;
 
+  private TaskList storage = TaskList.getReference();
+
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
@@ -26,13 +28,14 @@ public class Server {
           try (
               BufferedReader serverReader = new BufferedReader(
                   new InputStreamReader(connection.getInputStream()));
+
               Writer serverWriter = new BufferedWriter(
                   new OutputStreamWriter(connection.getOutputStream()));
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            serverWriter.write(storage.execute(line));
             serverWriter.flush();
           }
         } catch (Exception e) {
