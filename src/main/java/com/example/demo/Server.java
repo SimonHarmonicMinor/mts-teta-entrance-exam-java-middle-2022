@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.controller.TaskController;
+import com.example.demo.controller.TaskControllerImpl;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,6 +20,8 @@ public class Server {
 
   private ServerSocket serverSocket;
 
+  private final TaskController taskController = new TaskControllerImpl();
+
   public void start() throws IOException {
     serverSocket = new ServerSocket(9090);
     Thread serverThread = new Thread(() -> {
@@ -27,12 +32,12 @@ public class Server {
               BufferedReader serverReader = new BufferedReader(
                   new InputStreamReader(connection.getInputStream()));
               Writer serverWriter = new BufferedWriter(
-                  new OutputStreamWriter(connection.getOutputStream()));
+                  new OutputStreamWriter(connection.getOutputStream()))
           ) {
             String line = serverReader.readLine();
             LOG.debug("Request captured: " + line);
             // В реализации по умолчанию в ответе пишется та же строка, которая пришла в запросе
-            serverWriter.write(line);
+            serverWriter.write(taskController.processMessage(line).toString());
             serverWriter.flush();
           }
         } catch (Exception e) {
